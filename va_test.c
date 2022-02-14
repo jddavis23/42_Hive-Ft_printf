@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/14 14:22:21 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/14 17:21:21 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int	va_test(const char *format, ...)
 				ft_strcpy(&buff[b], str);
 				b += ft_strlen(str);
 			}
+			else if (format[a] == '%')
+			{
+				buff[b] = '%';
+				++b;
+			}
 		}
 		else
 		{
@@ -46,17 +51,17 @@ int	va_test(const char *format, ...)
 		}
 		++a;
 	}
-	buff[a] = '\0';
+	buff[b] = '\0';
 	ft_putstr(buff);
 	va_end(ap);
-	return (a);
+	return (b);
 }
 
 int	main(void)
 {
 	int ret;
 
-	ret = va_test("jfjfkgfggjeff ijdfhfjkfs here\n");
+	ret = va_test("checking");
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);
