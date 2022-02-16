@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/16 12:07:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:56:55 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
+
 
 typedef struct s_length
 {
@@ -48,5 +49,17 @@ typedef struct s_flags
 	t_width	*next;
 }				t_flags;
 
+typedef int ft_undef_behav(t_flags *info);
+
+int	ft_c_behaviour(t_flags *info);
+int	ft_s_behaviour(t_flags *info);
+int	ft_p_behaviour(t_flags *info);
+
+ft_undef_behav *f_array[3] =
+{
+	ft_c_behaviour,
+	ft_s_behaviour,
+	ft_p_behaviour,
+};
 
 #endif

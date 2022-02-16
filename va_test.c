@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/16 13:19:46 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:12:47 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_flags	*ft_create_struct(void)
 }
 
 
-void	ft_true_struct(char *str, char type)
+t_flags	*ft_true_struct(char *str, char type)
 {
 	int	i = 0;
 	t_flags *info;
@@ -158,7 +158,8 @@ void	ft_true_struct(char *str, char type)
 		else if (str[i] == 'l' && str[i + 1] == 'l')
 			info->next->next->next->_ll = 1;
 	}
-	ft_putstr("_space = ");
+	return (info);
+	/*ft_putstr("_space = ");
 	ft_putnbr(info->_space);
 	ft_putchar('\n');
 	ft_putstr("_minus = ");
@@ -191,21 +192,115 @@ void	ft_true_struct(char *str, char type)
 	ft_putstr("_h = ");
 	ft_putnbr(info->next->next->next->_h);
 	ft_putchar('\n');
+	ft_putstr("type specifier = ");
+	ft_putchar(type);
+	ft_putchar('\n');*/
+}
+
+int	ft_c_behaviour(t_flags *info)
+{
+	if (info->_zero == 1)
+		return (-1);
+	if (info->_plus == 1)
+		return (-1);
+	if (info->_space == 1)
+		return (-1);
+	if (info->_hash == 1)
+		return (-1);
+	if (info->next->next->_precision > 0)
+		return (-1);
+	if (info->next->next->next->_ll == 1)
+		return (-1);
+	if (info->next->next->next->_hh == 1)
+		return (-1);
+	if (info->next->next->next->_h == 1)
+		return (-1);
+	return (1);
 }
 
 
-
-
-int	va_test(const char *format)//, ...)
+int	ft_s_behaviour(t_flags *info)
 {
-	//va_list ap;
-	int a = 0;
-	int b = 0;
-	//char buff[100];
-	char *str;
+	if (info->_zero == 1)
+		return (-1);
+	if (info->_plus == 1)
+		return (-1);
+	if (info->_space == 1)
+		return (-1);
+	if (info->_hash == 1)
+		return (-1);
+	if (info->next->next->next->_ll == 1)
+		return (-1);
+	if (info->next->next->next->_hh == 1)
+		return (-1);
+	if (info->next->next->next->_h == 1)
+		return (-1);
+	return (1);
+}
+
+
+int	ft_p_behaviour(t_flags *info)
+{
+	if (info->_zero == 1)
+		return (-1);
+	if (info->_plus == 1)
+		return (-1);
+	if (info->_space == 1)
+		return (-1);
+	if (info->_hash == 1)
+		return (-1);
+	if (info->next->next->_precision > 0)
+		return (-1);
+	if (info->next->next->next->_ll == 1)
+		return (-1);
+	if (info->next->next->next->_hh == 1)
+		return (-1);
+	if (info->next->next->next->_h == 1)
+		return (-1);
+	if (info->next->next->next->_l == 1)
+		return (-1);
+	return (1);
+}
+
+
+t_flags	*ft_do(char *str)
+{
+	t_flags *info;
+
+	info = ft_true_struct(str, str[ft_strlen(str) - 1]);
+	if (str[ft_strlen(str) - 1] == 'c')
+	{
+		if (f_array[0](info) == -1)
+			return (NULL);
+	}
+	if (str[ft_strlen(str) - 1] == 's')
+	{
+		if (f_array[1](info) == -1)
+			return (NULL);
+	}
+	if (str[ft_strlen(str) - 1] == 'p')
+	{
+		if (f_array[2](info) == -1)
+			return (NULL);
+	}
+	ft_strdel(&str);
+	return (info);
+}
+
+int	va_test(const char *format, ...)
+{
+	va_list ap;
+	int		a = 0;
+	int		b = 0;
+	char	buff[100];
+	char	*str;
+	char	*temp;
+	t_flags	*info;
+	char	c;
 
 	str = NULL;
-	//va_start(ap, format);
+	info = NULL;
+	va_start(ap, format);
 	while (format[a] != '\0')
 	{
 		if (format[a] == '%')
@@ -217,34 +312,81 @@ int	va_test(const char *format)//, ...)
 				ft_strdel(&str);
 				return (-1);
 			}
-			ft_true_struct(str, str[ft_strlen(str) - 1]);
-			/*if (format[a] == 'c')
+			info = ft_do(str);
+			if (!info)
+				return (-1);
+			if (str[ft_strlen(str) - 1] == 'c')
 			{
-				buff[b] = (char)va_arg(ap, int);
-				++b;
+				c = (char)va_arg(ap, int);
+				//check what c is
+				if (info->next->_width == 0)
+				{
+					temp = ft_strnew(1);
+					temp[0] = c;
+				}
+				else
+				{
+					temp = (char *) malloc(info->next->_width * sizeof(char));
+					if (info->_minus == 1)
+						temp[0] = c;
+					else
+						temp[info->next->_width - 1] = c;
+					temp[info->next->_width] = '\0';
+				}
+				//ft_putstr(temp);
+				ft_strcat(&buff[b], temp);
+				if (info->next->_width == 0)
+					++b;
+				else
+					b += info->next->_width;
 			}
-			else if (format[a] == 's')
+			/*else if (str[ft_strlen(str) - 1] == 's')
 			{
 				str = va_arg(ap, char*);
 				ft_strcpy(&buff[b], str);
 				b += ft_strlen(str);
 			}
-			else if (format[a] == '%')
+			else if (str[ft_strlen(str) - 1] == 'p')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'd')
+			{
+			
+			}
+			else if (str[ft_strlen(str) - 1] == 'i')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'o')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'u')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'x')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'X')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == 'f')
+			{
+			}
+			else if (str[ft_strlen(str) - 1] == '%')
 			{
 				buff[b] = '%';
 				++b;
 			}*/
 		}
-		//else
-		//{
-			//buff[b] = format[a];
-			//++b;
-		//}
+		else
+		{
+			buff[b] = format[a];
+			++b;
+		}
 		++a;
 	}
-	//buff[b] = '\0';
-	//ft_putstr(buff);
-	//va_end(ap);
+	buff[b] = '\0';
+	ft_putstr(buff);
+	va_end(ap);
 	return (b);
 }
 
@@ -252,7 +394,7 @@ int	main(void)
 {
 	int ret;
 
-	ret = va_test("%#-+0 .67d");
+	ret = va_test("'%8c'  '%-8c'", 't', '8');
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);
