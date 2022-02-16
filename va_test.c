@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/16 11:59:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/16 13:19:46 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,41 +81,116 @@ int	ft_type_plus(const char *forma, char **type_plus)
 
 t_flags	*ft_create_struct(void)
 {
-	t_flags		in_flags;
-	t_width		in_width;
-	t_precision	in_precision;
-	t_length	in_length;
+	t_flags		*in_flags;
+	t_width		*in_width;
+	t_precision	*in_precision;
+	t_length	*in_length;
 
 	in_flags = (t_flags *) malloc(sizeof(t_flags));
-	in_flags._space = 0;
-	in_flags._zero = 0;
-	in_flags._minus = 0;
-	in_flags._plus = 0;
-	in_flags._hash = 0;
+	in_flags->_space = 0;
+	in_flags->_zero = 0;
+	in_flags->_minus = 0;
+	in_flags->_plus = 0;
+	in_flags->_hash = 0;
 	in_width = (t_width *) malloc(sizeof(t_width));
-	in_width._width = 0;
+	in_width->_width = 0;
 	in_precision = (t_precision *) malloc(sizeof(t_precision));
-	in_precision._precision._precision = 0;
+	in_precision->_precision = 0;
 	in_length = (t_length *) malloc(sizeof(t_length));
-	in_length._hh = 0;
-	in_length._h = 0;
-	in_length._ll = 0;
-	in_length._l = 0;
+	in_length->_hh = 0;
+	in_length->_h = 0;
+	in_length->_ll = 0;
+	in_length->_l = 0;
 	in_flags->next = in_width;
 	in_width->next = in_precision;
 	in_precision->next = in_length;
-	in_length->next = NULL;
 	return (in_flags);
 }
 
 
-void	ft_true_struct(char *str)
+void	ft_true_struct(char *str, char type)
 {
 	int	i = 0;
-	int	j = 0;
-	t_flags info;
-
-	if (
+	t_flags *info;
+	
+	info = ft_create_struct();
+	while (str[i] == '0' || str[i] == ' ' || str[i] == '+' || str[i] == '-' || str[i] == '#')
+	{
+		if (str[i] == '0' && info->_minus == 0)
+		   info->_zero = 1;	
+		if (str[i] == '#')
+		   info->_hash = 1;	
+		if (str[i] == ' ' && info->_plus == 0)
+		   info->_space = 1;
+		if (str[i] == '-')
+		{
+			info->_zero = 0;
+			info->_minus = 1;
+		}	
+		if (str[i] == '+')
+		{
+			info->_space = 0;
+			info->_plus = 1;
+		}
+		++i;
+	}
+	if (str[i] >= '0' && str[i] <= '9')
+	{
+		info->next->_width = ft_atoi(&str[i]);
+		while (str[i] >= '0' && str[i] <= '9')
+			++i;
+	}
+	if (str[i] == '.')
+	{
+		++i;
+		info->next->next->_precision = ft_atoi(&str[i]);
+		while (str[i] >= '0' && str[i] <= '9')
+			++i;
+	}
+	if (str[i] == 'h' || str[i] == 'l')
+	{
+		if (str[i] == 'h' && str[i + 1] == type)
+			info->next->next->next->_h = 1;
+		else if (str[i] == 'l' && str[i + 1] == type)
+			info->next->next->next->_l = 1;
+		else if (str[i] == 'h' && str[i + 1] == 'h')
+			info->next->next->next->_hh = 1;
+		else if (str[i] == 'l' && str[i + 1] == 'l')
+			info->next->next->next->_ll = 1;
+	}
+	ft_putstr("_space = ");
+	ft_putnbr(info->_space);
+	ft_putchar('\n');
+	ft_putstr("_minus = ");
+	ft_putnbr(info->_minus);
+	ft_putchar('\n');
+	ft_putstr("_plus = ");
+	ft_putnbr(info->_plus);
+	ft_putchar('\n');
+	ft_putstr("_hash = ");
+	ft_putnbr(info->_hash);
+	ft_putchar('\n');
+	ft_putstr("_zero = ");
+	ft_putnbr(info->_zero);
+	ft_putchar('\n');
+	ft_putstr("_width = ");
+	ft_putnbr(info->next->_width);
+	ft_putchar('\n');
+	ft_putstr("_precision = ");
+	ft_putnbr(info->next->next->_precision);
+	ft_putchar('\n');
+	ft_putstr("_hh = ");
+	ft_putnbr(info->next->next->next->_hh);
+	ft_putchar('\n');
+	ft_putstr("_ll = ");
+	ft_putnbr(info->next->next->next->_ll);
+	ft_putchar('\n');
+	ft_putstr("_l = ");
+	ft_putnbr(info->next->next->next->_l);
+	ft_putchar('\n');
+	ft_putstr("_h = ");
+	ft_putnbr(info->next->next->next->_h);
+	ft_putchar('\n');
 }
 
 
@@ -142,6 +217,7 @@ int	va_test(const char *format)//, ...)
 				ft_strdel(&str);
 				return (-1);
 			}
+			ft_true_struct(str, str[ft_strlen(str) - 1]);
 			/*if (format[a] == 'c')
 			{
 				buff[b] = (char)va_arg(ap, int);
@@ -176,7 +252,7 @@ int	main(void)
 {
 	int ret;
 
-	ret = va_test("checking %d jfdkd %o");
+	ret = va_test("%#-+0 .67d");
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);
