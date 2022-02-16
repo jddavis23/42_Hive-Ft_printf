@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/15 17:23:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/16 11:59:05 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,45 @@ int	ft_type_plus(const char *forma, char **type_plus)
 	ft_strncpy(*type_plus, forma, i);
 	(*type_plus)[i] = forma[i];
 	return (i);
+}
+
+t_flags	*ft_create_struct(void)
+{
+	t_flags		in_flags;
+	t_width		in_width;
+	t_precision	in_precision;
+	t_length	in_length;
+
+	in_flags = (t_flags *) malloc(sizeof(t_flags));
+	in_flags._space = 0;
+	in_flags._zero = 0;
+	in_flags._minus = 0;
+	in_flags._plus = 0;
+	in_flags._hash = 0;
+	in_width = (t_width *) malloc(sizeof(t_width));
+	in_width._width = 0;
+	in_precision = (t_precision *) malloc(sizeof(t_precision));
+	in_precision._precision._precision = 0;
+	in_length = (t_length *) malloc(sizeof(t_length));
+	in_length._hh = 0;
+	in_length._h = 0;
+	in_length._ll = 0;
+	in_length._l = 0;
+	in_flags->next = in_width;
+	in_width->next = in_precision;
+	in_precision->next = in_length;
+	in_length->next = NULL;
+	return (in_flags);
+}
+
+
+void	ft_true_struct(char *str)
+{
+	int	i = 0;
+	int	j = 0;
+	t_flags info;
+
+	if (
 }
 
 
