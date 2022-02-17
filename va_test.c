@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/16 18:12:47 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/17 13:31:07 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,9 +283,91 @@ t_flags	*ft_do(char *str)
 		if (f_array[2](info) == -1)
 			return (NULL);
 	}
-	ft_strdel(&str);
+	ft_strdel(&str);   //isnt working how i thought it would
 	return (info);
 }
+
+char	*ft_solve_c(t_flags *info, char c)
+{
+	char	*temp;
+	int		i;
+
+	i = 0;
+	temp = NULL;
+	if (info->next->_width == 0)
+	{
+		temp = ft_strnew(1);
+		if (!temp)
+			return (NULL);
+		temp[0] = c;
+	}
+	else
+	{
+		temp = ft_strnew(info->next->_width);
+		if (!temp)
+			return (NULL);
+		if (info->_minus)
+		{
+			temp[i++] = c;
+			while (i < info->next->_width)
+				temp[i++] = ' ';
+		}
+		else
+		{
+			temp[info->next->_width - 1] = c;
+			while (temp[i] != c)
+				temp[i++] = ' ';
+		}
+	}
+	return (temp);
+}
+
+char	*ft_solve_s(t_flags *info, char *str)
+{
+	char	*temp;
+	int		i;
+
+	i = 0;
+	temp = NULL;
+	if (info->next->next->_precision)
+	{
+		if (info->next->next->_precision < (int)ft_strlen(str))
+		{
+			temp = ft_strnew(info->next->next->_precision);
+			ft_strncpy(temp, str, info->next->next->_precision);
+			str = temp;
+		}
+	}
+	if (info->next->_width <= (int)ft_strlen(str))
+	{
+		temp = ft_strdup(str);
+		if (!temp)
+			return (NULL);
+	}
+	else
+	{
+		temp = ft_strnew(info->next->_width);
+		if (!temp)
+			return (NULL);
+		if (info->_minus)
+		{
+			ft_strcat(temp, str);
+			i = ft_strlen(str);
+			while (i < info->next->_width)
+				temp[i++] = ' ';
+		}
+		else
+		{
+			ft_strcpy(&temp[info->next->_width - (int)ft_strlen(str)], str);
+			while (i < (info->next->_width - (int)ft_strlen(str)))
+				temp[i++] = ' ';
+		}
+	}
+	if (info->next->next->_precision)
+		ft_strdel(&str);
+	return (temp);
+}
+
 
 int	va_test(const char *format, ...)
 {
@@ -294,9 +376,7 @@ int	va_test(const char *format, ...)
 	int		b = 0;
 	char	buff[100];
 	char	*str;
-	char	*temp;
 	t_flags	*info;
-	char	c;
 
 	str = NULL;
 	info = NULL;
@@ -317,36 +397,21 @@ int	va_test(const char *format, ...)
 				return (-1);
 			if (str[ft_strlen(str) - 1] == 'c')
 			{
-				c = (char)va_arg(ap, int);
-				//check what c is
-				if (info->next->_width == 0)
-				{
-					temp = ft_strnew(1);
-					temp[0] = c;
-				}
-				else
-				{
-					temp = (char *) malloc(info->next->_width * sizeof(char));
-					if (info->_minus == 1)
-						temp[0] = c;
-					else
-						temp[info->next->_width - 1] = c;
-					temp[info->next->_width] = '\0';
-				}
-				//ft_putstr(temp);
-				ft_strcat(&buff[b], temp);
-				if (info->next->_width == 0)
-					++b;
-				else
-					b += info->next->_width;
-			}
-			/*else if (str[ft_strlen(str) - 1] == 's')
-			{
-				str = va_arg(ap, char*);
+				str = ft_solve_c(info, (char)va_arg(ap, int));
+				if (!str)
+					return (-1);
 				ft_strcpy(&buff[b], str);
 				b += ft_strlen(str);
 			}
-			else if (str[ft_strlen(str) - 1] == 'p')
+			else if (str[ft_strlen(str) - 1] == 's')
+			{
+				str = ft_solve_s(info, va_arg(ap, char*));
+				if (!str)
+					return (-1);
+				ft_strcpy(&buff[b], str);
+				b += ft_strlen(str);
+			}
+			/*else if (str[ft_strlen(str) - 1] == 'p')
 			{
 			}
 			else if (str[ft_strlen(str) - 1] == 'd')
@@ -393,8 +458,10 @@ int	va_test(const char *format, ...)
 int	main(void)
 {
 	int ret;
+	//int *nbr = NULL;
+	//*nbr = 48;
 
-	ret = va_test("'%8c'  '%-8c'", 't', '8');
+	ret = va_test("%c you were closer %10.3s", 'o', "jeff");
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);
