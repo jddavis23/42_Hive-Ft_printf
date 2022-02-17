@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/17 13:31:07 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/17 17:43:53 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,13 +326,16 @@ char	*ft_solve_s(t_flags *info, char *str)
 {
 	char	*temp;
 	int		i;
+	int		checker;
 
 	i = 0;
+	checker = 0;
 	temp = NULL;
 	if (info->next->next->_precision)
 	{
 		if (info->next->next->_precision < (int)ft_strlen(str))
 		{
+			checker = 1;
 			temp = ft_strnew(info->next->next->_precision);
 			ft_strncpy(temp, str, info->next->next->_precision);
 			str = temp;
@@ -363,7 +366,7 @@ char	*ft_solve_s(t_flags *info, char *str)
 				temp[i++] = ' ';
 		}
 	}
-	if (info->next->next->_precision)
+	if (checker == 1)
 		ft_strdel(&str);
 	return (temp);
 }
@@ -461,7 +464,7 @@ int	main(void)
 	//int *nbr = NULL;
 	//*nbr = 48;
 
-	ret = va_test("%c you were closer %10.3s", 'o', "jeff");
+	ret = va_test("%10c you were closer %-10.10s-", 'o', "jeff");
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);

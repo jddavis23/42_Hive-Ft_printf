@@ -6,14 +6,41 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 12:24:16 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/17 12:49:42 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/17 17:36:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "libft/libft.h"
+
+char hex_digit(int v) 
+{
+    if (v >= 0 && v < 10)
+        return '0' + v;
+    else
+        return 'a' + v - 10;
+}
+
+void print_address_hex(void* p0) 
+{
+    int i;
+    uintptr_t p = (uintptr_t)p0;
+
+    ft_putchar('0');
+   	ft_putchar('x');
+    i = (sizeof(p) << 3) - 4;
+	while (i >= 0)
+	{
+        ft_putchar(hex_digit((p >> i) & 0xf));
+		i -= 4;
+    }
+}
 
 int main(void)
-{
+{ 
+	int	i = 2;
+	print_address_hex((void*)&i);
+	/*
 	//int f = 50;
 	//int *nbr = &f;
 	//printf("%*d\n", 1, 242424);
@@ -61,7 +88,7 @@ int main(void)
 	//printf("%#u   %u\n", 97, 97);
 	printf("%#x   %x\n", 67, 67);
 	printf("%#X   %X\n", 0, 0);
-
+	*/
 
 
 	return (0);
