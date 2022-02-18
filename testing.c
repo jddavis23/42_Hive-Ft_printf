@@ -6,22 +6,59 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 12:24:16 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/18 13:45:08 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/18 17:49:55 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft/libft.h"
 
-char hex_digit(int v) 
+/*char hex_digit(int v, char c) 
 {
     if (v >= 0 && v < 10)
         return '0' + v;
     else
-        return 'a' + v - 10;
+	{
+		if (c == 'x')
+        	return 'a' + v - 10;
+		else if (c == 'X')
+        	return 'A' + v - 10;
+	}
+	return ('0');
 }
 
-void print_address_hex(void* p0) 
+char	*ft_convert_hex(int nb, char c)
+{
+	int		count = 0;
+	int		sign = 1;
+	char	*str;
+	int		dup_nb;
+
+	dup_nb = nb;
+	str = NULL;
+	if (nb < 0)
+	{
+		sign = -1;
+		count++;
+	}
+	while (nb > 0)
+	{
+		nb /= 16;
+		count++;
+	}
+	str = ft_strnew(count);
+	if (sign == -1)
+		str[0] = '-';
+	while (dup_nb > 0)
+	{
+		str[--count] = hex_digit(dup_nb % 16, c);
+		dup_nb /= 16;
+	}
+	return (str);
+}*/
+
+
+/*void print_address_hex(void* p0) 
 {
     int i;
     uintptr_t p = (uintptr_t)p0;
@@ -34,42 +71,51 @@ void print_address_hex(void* p0)
         ft_putchar(hex_digit((p >> i) & 0xf));
 		i -= 4;
     }
-}
+}*/
 
 
 
 
-/*int ft_oct(int nb)
+int ft_oct(int nb)
 {
 	int result = 0;
 	int multi = 1;
 
-	if (nb > 7)
+	while (nb > 0)
 	{
-		while (nb > 0)
-		{
-			result += (nb % 8) * multi;
-			nb /= 8;
-			multi *= 10;
-		}
+		result += (nb % 8) * multi;
+		nb /= 8;
+		multi *= 10;
 	}
-	else
-		result = nb;
 	return (result);
-}*/
+}
 
 int main(void)
 {
+	int i = 0;
+
+	while (i <= 128)
+	{
+		//ft_putnbr(ft_oct(i));
+		//printf("   %o", i++);
+	//	ft_putchar('\n');
+		i++;
+	}
+	printf("%o,", 0127);
+
+
+
+
   // int i = 0;
 
 //	while (i < 130)
 	//	printf("%d\n", 0XF);
-	int	i = 2;
+	/*int	i = 2;
 	char c = 'k';
 	print_address_hex((void*)&i);
 	printf("\n%p\n", &i);
 	print_address_hex((void*)&c);
-	printf("\n%p", &c);
+	printf("\n%p", &c);*/
 	/*
 	//int f = 50;
 	//int *nbr = &f;

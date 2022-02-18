@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/17 17:43:53 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/18 17:48:46 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,37 @@ char	*ft_solve_s(t_flags *info, char *str)
 }
 
 
+int ft_oct(int nb)
+{
+	int result = 0;
+	int multi = 1;
+	long lnb = nb;
+	int sign = 1;
+
+	if (lnb < 0)
+	{
+		lnb *= -1;
+		sign = -1;
+	} // dont think this is needed. Make sure and remove
+	while (lnb > 0)
+	{
+		result += (lnb % 8) * multi;
+		lnb /= 8;
+		multi *= 10;
+	}
+	return (result * sign);
+}
+
+char	*ft_solve_o(t_flags *info, int nb)
+{
+	char	*str;
+
+	str = NULL;
+	if (info)
+		str = ft_itoa(ft_oct(nb));
+	return (str);
+}
+
 int	va_test(const char *format, ...)
 {
 	va_list ap;
@@ -423,11 +454,16 @@ int	va_test(const char *format, ...)
 			}
 			else if (str[ft_strlen(str) - 1] == 'i')
 			{
-			}
+			}*/
 			else if (str[ft_strlen(str) - 1] == 'o')
 			{
+				str = ft_solve_o(info, va_arg(ap, int));
+				if (!str)
+					return (-1);
+				ft_strcpy(&buff[b], str);
+				b += ft_strlen(str);
 			}
-			else if (str[ft_strlen(str) - 1] == 'u')
+			/*else if (str[ft_strlen(str) - 1] == 'u')
 			{
 			}
 			else if (str[ft_strlen(str) - 1] == 'x')
@@ -464,7 +500,8 @@ int	main(void)
 	//int *nbr = NULL;
 	//*nbr = 48;
 
-	ret = va_test("%10c you were closer %-10.10s-", 'o', "jeff");
+	ret = va_test("%o", 012);
+
 	ft_putstr("\n");
 	ft_putnbr(ret);
 	return (0);
