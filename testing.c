@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 12:24:16 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/17 17:36:49 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/18 13:45:08 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,40 @@ void print_address_hex(void* p0)
     }
 }
 
+
+
+
+/*int ft_oct(int nb)
+{
+	int result = 0;
+	int multi = 1;
+
+	if (nb > 7)
+	{
+		while (nb > 0)
+		{
+			result += (nb % 8) * multi;
+			nb /= 8;
+			multi *= 10;
+		}
+	}
+	else
+		result = nb;
+	return (result);
+}*/
+
 int main(void)
-{ 
+{
+  // int i = 0;
+
+//	while (i < 130)
+	//	printf("%d\n", 0XF);
 	int	i = 2;
+	char c = 'k';
 	print_address_hex((void*)&i);
+	printf("\n%p\n", &i);
+	print_address_hex((void*)&c);
+	printf("\n%p", &c);
 	/*
 	//int f = 50;
 	//int *nbr = &f;
