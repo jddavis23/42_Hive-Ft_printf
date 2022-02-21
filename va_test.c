@@ -6,12 +6,13 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/21 14:45:13 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/21 18:26:22 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf.h"
+#include <stdio.h>
 
 int	ft_is_type(char c)
 {
@@ -96,6 +97,7 @@ t_flags	*ft_create_struct(void)
 	in_width->_width = 0;
 	in_precision = (t_precision *) malloc(sizeof(t_precision));
 	in_precision->_precision = 0;
+	in_precision->_p_true = 0;
 	in_length = (t_length *) malloc(sizeof(t_length));
 	in_length->_hh = 0;
 	in_length->_h = 0;
@@ -143,6 +145,7 @@ t_flags	*ft_true_struct(char *str, char type)
 	}
 	if (str[i] == '.')
 	{
+		info->next->next->_p_true = 1;
 		++i;
 		info->next->next->_precision = ft_atoi(&str[i]);
 		while (str[i] >= '0' && str[i] <= '9')
@@ -419,16 +422,16 @@ char	*ft_solve_o(t_flags *info, int nb)
 		str = temp;
 		checker = 1;
 	}
+	i = 0;
 	if (info->next->_width > (int)ft_strlen(str))
 	{
-		i = 0;
 		temp = ft_strnew(info->next->_width);
 		if (!temp)
 		{
 			ft_strdel(&str);
 			return (NULL);
 		}
-		if (info->next->next->_precision)
+		if (info->next->next->_p_true)
 		{
 			if (checker == 1)
 			{
@@ -462,11 +465,24 @@ char	*ft_solve_o(t_flags *info, int nb)
 				{
 					while (i < (info->next->_width - (int)ft_strlen(str) - 1))
 						temp[i++] = ' ';
-					temp[i++] = '0';
+					if (info->_hash)
+						temp[i++] = '0';
+					else
+						temp[i++] = ' ';
 					ft_strcpy(&temp[i], str);
 				}
 				str = temp;
 			}
+		}
+	}
+	else
+	{
+		if (checker == 0 && info->_hash)
+		{
+			temp = ft_strnew(ft_strlen(str) + 1);
+			temp[i++] = '0';
+			ft_strcpy(&temp[i], str);
+			str = temp;
 		}
 	}
 	return (str);
@@ -485,7 +501,7 @@ int	ft_solve(int *b, char **buff, va_list *ap, t_flags *info)
 		str = ft_solve_s(info, va_arg(*ap, char*));
 	else if (info->_type == 'o')
 		str = ft_solve_o(info, va_arg(*ap, int));
-	
+	//dont forget to include %%
 	if (!str)
 		return (-1);
 	ft_strcpy(&(*buff)[*b], str);
@@ -543,14 +559,15 @@ int	main(void)
 	//int *nbr = NULL;
 	//*nbr = 48;
 
-	ret = va_test("%-#1.1o  %c", 8, '6');
+	ret = va_test("%o-m", 8);
 	//when there is a full stop (for precision) without a value following, 
 	//code reads as no precision. CHANGE
-	//
+	//i
 	//# is not working when precision is < length of str. CHANGE
 
 	ft_putstr("\n");
-	ft_putnbr(ret);
+	printf("%o-p", 8);
+	//ft_putnbr(ret);
 	return (0);
 }
 

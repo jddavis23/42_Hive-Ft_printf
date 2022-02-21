@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/21 11:00:12 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/21 17:23:43 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_length
 typedef struct s_precision
 {
 	int			_precision;
+	int			_p_true;
 	t_length	*next;
 }				t_precision;
 
