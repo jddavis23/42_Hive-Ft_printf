@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/18 17:48:46 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/21 14:45:13 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ t_flags	*ft_true_struct(char *str, char type)
 	t_flags *info;
 	
 	info = ft_create_struct();
+	info->_type = type;
 	while (str[i] == '0' || str[i] == ' ' || str[i] == '+' || str[i] == '-' || str[i] == '#')
 	{
 		if (str[i] == '0' && info->_minus == 0)
@@ -159,7 +160,11 @@ t_flags	*ft_true_struct(char *str, char type)
 			info->next->next->next->_ll = 1;
 	}
 	return (info);
-	/*ft_putstr("_space = ");
+	/*
+	ft_putstr("_type = ");
+	ft_putchar(info->_type);
+	ft_putchar('\n');
+	ft_putstr("_space = ");
 	ft_putnbr(info->_space);
 	ft_putchar('\n');
 	ft_putstr("_minus = ");
@@ -396,11 +401,96 @@ int ft_oct(int nb)
 char	*ft_solve_o(t_flags *info, int nb)
 {
 	char	*str;
+	char	*temp;
+	int		i;
+	int		checker;
+
+	checker = 0;
+	i = 0;
+	temp = NULL;
+	str = ft_itoa(ft_oct(nb));
+	if (info->next->next->_precision > (int)ft_strlen(str))
+	{
+		temp = ft_strnew(info->next->next->_precision);
+		while (i < (info->next->next->_precision - (int)ft_strlen(str)))
+			temp[i++] = '0';
+		ft_strcpy(&temp[i], str);
+		ft_strdel(&str);
+		str = temp;
+		checker = 1;
+	}
+	if (info->next->_width > (int)ft_strlen(str))
+	{
+		i = 0;
+		temp = ft_strnew(info->next->_width);
+		if (!temp)
+		{
+			ft_strdel(&str);
+			return (NULL);
+		}
+		if (info->next->next->_precision)
+		{
+			if (checker == 1)
+			{
+				if (info->_minus)
+				{
+					i = ft_strlen(str);
+					ft_strcpy(temp, str);
+					while (i < info->next->_width)
+						temp[i++] = ' ';
+				}
+				else
+				{
+					ft_strcpy(&temp[info->next->_width - (int)ft_strlen(str)], str);
+					while (i < (info->next->_width - (int)ft_strlen(str)))
+						temp[i++] = ' ';
+				}
+				str = temp;
+			}
+			else
+			{
+				if (info->_minus)
+				{
+					if (info->_hash)
+						temp[i++] = '0';
+					ft_strcpy(&temp[i], str);
+					i += ft_strlen(str);
+					while (i < info->next->_width)
+						temp[i++] = ' ';
+				}
+				else
+				{
+					while (i < (info->next->_width - (int)ft_strlen(str) - 1))
+						temp[i++] = ' ';
+					temp[i++] = '0';
+					ft_strcpy(&temp[i], str);
+				}
+				str = temp;
+			}
+		}
+	}
+	return (str);
+}
+
+
+
+int	ft_solve(int *b, char **buff, va_list *ap, t_flags *info)
+{
+	char	*str;
 
 	str = NULL;
-	if (info)
-		str = ft_itoa(ft_oct(nb));
-	return (str);
+	if (info->_type == 'c')
+		str = ft_solve_c(info, (char)va_arg(*ap, int));
+	else if (info->_type == 's')
+		str = ft_solve_s(info, va_arg(*ap, char*));
+	else if (info->_type == 'o')
+		str = ft_solve_o(info, va_arg(*ap, int));
+	
+	if (!str)
+		return (-1);
+	ft_strcpy(&(*buff)[*b], str);
+	*b += ft_strlen(str);
+	return (1);
 }
 
 int	va_test(const char *format, ...)
@@ -409,9 +499,11 @@ int	va_test(const char *format, ...)
 	int		a = 0;
 	int		b = 0;
 	char	buff[100];
+	char	*buffi;
 	char	*str;
 	t_flags	*info;
 
+	buffi = buff;
 	str = NULL;
 	info = NULL;
 	va_start(ap, format);
@@ -429,57 +521,8 @@ int	va_test(const char *format, ...)
 			info = ft_do(str);
 			if (!info)
 				return (-1);
-			if (str[ft_strlen(str) - 1] == 'c')
-			{
-				str = ft_solve_c(info, (char)va_arg(ap, int));
-				if (!str)
-					return (-1);
-				ft_strcpy(&buff[b], str);
-				b += ft_strlen(str);
-			}
-			else if (str[ft_strlen(str) - 1] == 's')
-			{
-				str = ft_solve_s(info, va_arg(ap, char*));
-				if (!str)
-					return (-1);
-				ft_strcpy(&buff[b], str);
-				b += ft_strlen(str);
-			}
-			/*else if (str[ft_strlen(str) - 1] == 'p')
-			{
-			}
-			else if (str[ft_strlen(str) - 1] == 'd')
-			{
-			
-			}
-			else if (str[ft_strlen(str) - 1] == 'i')
-			{
-			}*/
-			else if (str[ft_strlen(str) - 1] == 'o')
-			{
-				str = ft_solve_o(info, va_arg(ap, int));
-				if (!str)
-					return (-1);
-				ft_strcpy(&buff[b], str);
-				b += ft_strlen(str);
-			}
-			/*else if (str[ft_strlen(str) - 1] == 'u')
-			{
-			}
-			else if (str[ft_strlen(str) - 1] == 'x')
-			{
-			}
-			else if (str[ft_strlen(str) - 1] == 'X')
-			{
-			}
-			else if (str[ft_strlen(str) - 1] == 'f')
-			{
-			}
-			else if (str[ft_strlen(str) - 1] == '%')
-			{
-				buff[b] = '%';
-				++b;
-			}*/
+			if (ft_solve(&b, &buffi, &ap, info) == -1)
+				return (-1);
 		}
 		else
 		{
@@ -500,7 +543,11 @@ int	main(void)
 	//int *nbr = NULL;
 	//*nbr = 48;
 
-	ret = va_test("%o", 012);
+	ret = va_test("%-#1.1o  %c", 8, '6');
+	//when there is a full stop (for precision) without a value following, 
+	//code reads as no precision. CHANGE
+	//
+	//# is not working when precision is < length of str. CHANGE
 
 	ft_putstr("\n");
 	ft_putnbr(ret);

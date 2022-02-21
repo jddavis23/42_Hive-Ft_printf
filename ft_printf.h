@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/16 16:56:55 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/21 11:00:12 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_flags
 	int		_plus;
 	int		_hash;
 	int		_minus;
+	char	_type;
 	t_width	*next;
 }				t_flags;
 
