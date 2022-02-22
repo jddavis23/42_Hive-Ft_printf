@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/22 13:18:46 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/22 15:23:45 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,10 +490,9 @@ char	*ft_solve_o(t_flags *info, int nb)
 
 
 
-int	ft_solve(char **buff, va_list *ap, t_flags *info)
+int	ft_solve(va_list *ap, t_flags *info)
 {
 	char	*str;
-	char	*temp;
 
 	str = NULL;
 	if (info->_type == 'c')
@@ -505,12 +504,8 @@ int	ft_solve(char **buff, va_list *ap, t_flags *info)
 	//dont forget to include %%
 	if (!str)
 		return (-1);
-	temp = ft_strjoin(*buff, str);
-	ft_strdel(buff);
+	ft_putstr(str);
 	ft_strdel(&str);
-	*buff = temp;
-	//ft_strcpy(&(*buff)[*b], str);
-	//*b += ft_strlen(str);
 	return (1);
 }
 
@@ -519,12 +514,9 @@ int	va_test(const char *format, ...)
 	va_list ap;
 	int		a = 0;
 	int		b = 0;
-	char	*temp;
-	char	*buffi;
 	char	*str;
 	t_flags	*info;
 
-	buffi = ft_strnew(0);
 	str = NULL;
 	info = NULL;
 	va_start(ap, format);
@@ -542,32 +534,26 @@ int	va_test(const char *format, ...)
 			info = ft_do(str);
 			if (!info)
 				return (-1);
-			if (ft_solve(&buffi, &ap, info) == -1)
+			if (ft_solve(&ap, info) == -1)
 				return (-1);
 		}
 		else
-		{
-			//ft_putstr(buffi);
-			//ft_putstr("\n");
-			temp = ft_strnew(ft_strlen_stop(&format[a], '%') + ft_strlen(buffi));
-			ft_strncpy(ft_strcpy(temp, buffi), &format[a], ft_strlen_stop(&format[a], '%'));
-			a += ft_strlen_stop(&format[a], '%');
-		}
+			ft_putchar(format[a]);
+		++a;
 	}
-	ft_putstr(buffi);
 	va_end(ap);
 	return (b);
 }
 
 int	main(void)
 {
-	//int ret = 0;
+	int ret = 0;
 	//int *nbr = NULL;
 	//*nbr = 48;
 
 	printf("TEST %%#5.7o\n");
-	va_test("ghdd%#5.7o-m\n", 8);  //NOT WORKING. ONLY PRINTING NON-FORMAT ARGUMENTS
-	/*printf("%#5.7o-p\n", 8);
+	va_test("%#5.7o-m\n", 8);  //NOT WORKING. ONLY PRINTING NON-FORMAT ARGUMENTS
+	printf("%#5.7o-p\n", 8);
 	va_test("\n\n");
 
 	printf("TEST %%#5.o\n");
@@ -613,7 +599,7 @@ int	main(void)
 	printf("TEST %%-10o\n");
 	ret = va_test("%-10o-m\n", 8);
 	printf("%-10o-p\n", 8);
-	va_test("\n\n");*/
+	va_test("\n\n");
 	return (0);
 }
 
