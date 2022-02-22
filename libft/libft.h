@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:45:35 by jdavis            #+#    #+#             */
-/*   Updated: 2021/12/02 11:21:25 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/22 13:05:19 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void	ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 int		ft_abs(int n);
-int		ft_strlen_stop(char *str, char c);
+int		ft_strlen_stop(const char *str, char c);
 void	ft_double_arrdel(char **arr, int size);
 void	ft_double_voiddel(void **arr, int y);
 

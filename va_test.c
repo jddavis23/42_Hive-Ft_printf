@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/21 18:26:22 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/22 13:18:46 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,9 @@ t_flags	*ft_create_struct(void)
 	in_flags->next = in_width;
 	in_width->next = in_precision;
 	in_precision->next = in_length;
+
+
+
 	return (in_flags);
 }
 
@@ -401,6 +404,29 @@ int ft_oct(int nb)
 	return (result * sign);
 }
 
+int	ft_precision_nb(t_flags *info, char **str)
+{
+	char	*temp;
+	int		i;
+
+	temp = NULL;
+	i = 0;
+	if (info->next->next->_precision > (int)ft_strlen(*str))
+	{
+		temp = ft_strnew(info->next->next->_precision);
+		if (!temp)
+			return (-1);
+		while (i < (info->next->next->_precision - (int)ft_strlen(*str)))
+			temp[i++] = '0';
+		ft_strcpy(&temp[i], *str);
+		ft_strdel(str);
+		*str = temp;
+		return (1);
+	}
+	return (0);
+}
+
+
 char	*ft_solve_o(t_flags *info, int nb)
 {
 	char	*str;
@@ -408,21 +434,10 @@ char	*ft_solve_o(t_flags *info, int nb)
 	int		i;
 	int		checker;
 
-	checker = 0;
 	i = 0;
 	temp = NULL;
 	str = ft_itoa(ft_oct(nb));
-	if (info->next->next->_precision > (int)ft_strlen(str))
-	{
-		temp = ft_strnew(info->next->next->_precision);
-		while (i < (info->next->next->_precision - (int)ft_strlen(str)))
-			temp[i++] = '0';
-		ft_strcpy(&temp[i], str);
-		ft_strdel(&str);
-		str = temp;
-		checker = 1;
-	}
-	i = 0;
+	checker = ft_precision_nb(info, &str);
 	if (info->next->_width > (int)ft_strlen(str))
 	{
 		temp = ft_strnew(info->next->_width);
@@ -431,57 +446,42 @@ char	*ft_solve_o(t_flags *info, int nb)
 			ft_strdel(&str);
 			return (NULL);
 		}
-		if (info->next->next->_p_true)
+		if (info->_minus)
 		{
-			if (checker == 1)
-			{
-				if (info->_minus)
-				{
-					i = ft_strlen(str);
-					ft_strcpy(temp, str);
-					while (i < info->next->_width)
-						temp[i++] = ' ';
-				}
-				else
-				{
-					ft_strcpy(&temp[info->next->_width - (int)ft_strlen(str)], str);
-					while (i < (info->next->_width - (int)ft_strlen(str)))
-						temp[i++] = ' ';
-				}
-				str = temp;
-			}
-			else
-			{
-				if (info->_minus)
-				{
-					if (info->_hash)
-						temp[i++] = '0';
-					ft_strcpy(&temp[i], str);
-					i += ft_strlen(str);
-					while (i < info->next->_width)
-						temp[i++] = ' ';
-				}
-				else
-				{
-					while (i < (info->next->_width - (int)ft_strlen(str) - 1))
-						temp[i++] = ' ';
-					if (info->_hash)
-						temp[i++] = '0';
-					else
-						temp[i++] = ' ';
-					ft_strcpy(&temp[i], str);
-				}
-				str = temp;
-			}
+			if (info->_hash && checker == 0)
+				temp[i++] = '0';
+			ft_strcpy(&temp[i], str);
+			i += ft_strlen(str);
+			while (i < info->next->_width)
+				temp[i++] = ' ';
 		}
+		else if (info->_zero && !info->next->next->_p_true)
+		{
+			while (i < info->next->_width - (int)ft_strlen(str))
+				temp[i++] = '0';
+			ft_strcpy(&temp[i], str);
+		}
+		else
+		{
+			while (i < (info->next->_width - (int)ft_strlen(str) - 1))
+				temp[i++] = ' ';
+			if (info->_hash && checker == 0)
+				temp[i++] = '0';
+			else
+				temp[i++] = ' ';
+			ft_strcpy(&temp[i], str);
+		}
+		ft_strdel(&str);
+		str = temp;
 	}
 	else
 	{
-		if (checker == 0 && info->_hash)
+		if (info->_hash && checker == 0) //change here
 		{
 			temp = ft_strnew(ft_strlen(str) + 1);
 			temp[i++] = '0';
 			ft_strcpy(&temp[i], str);
+			ft_strdel(&str);
 			str = temp;
 		}
 	}
@@ -490,9 +490,10 @@ char	*ft_solve_o(t_flags *info, int nb)
 
 
 
-int	ft_solve(int *b, char **buff, va_list *ap, t_flags *info)
+int	ft_solve(char **buff, va_list *ap, t_flags *info)
 {
 	char	*str;
+	char	*temp;
 
 	str = NULL;
 	if (info->_type == 'c')
@@ -504,8 +505,12 @@ int	ft_solve(int *b, char **buff, va_list *ap, t_flags *info)
 	//dont forget to include %%
 	if (!str)
 		return (-1);
-	ft_strcpy(&(*buff)[*b], str);
-	*b += ft_strlen(str);
+	temp = ft_strjoin(*buff, str);
+	ft_strdel(buff);
+	ft_strdel(&str);
+	*buff = temp;
+	//ft_strcpy(&(*buff)[*b], str);
+	//*b += ft_strlen(str);
 	return (1);
 }
 
@@ -514,12 +519,12 @@ int	va_test(const char *format, ...)
 	va_list ap;
 	int		a = 0;
 	int		b = 0;
-	char	buff[100];
+	char	*temp;
 	char	*buffi;
 	char	*str;
 	t_flags	*info;
 
-	buffi = buff;
+	buffi = ft_strnew(0);
 	str = NULL;
 	info = NULL;
 	va_start(ap, format);
@@ -537,37 +542,78 @@ int	va_test(const char *format, ...)
 			info = ft_do(str);
 			if (!info)
 				return (-1);
-			if (ft_solve(&b, &buffi, &ap, info) == -1)
+			if (ft_solve(&buffi, &ap, info) == -1)
 				return (-1);
 		}
 		else
 		{
-			buff[b] = format[a];
-			++b;
+			//ft_putstr(buffi);
+			//ft_putstr("\n");
+			temp = ft_strnew(ft_strlen_stop(&format[a], '%') + ft_strlen(buffi));
+			ft_strncpy(ft_strcpy(temp, buffi), &format[a], ft_strlen_stop(&format[a], '%'));
+			a += ft_strlen_stop(&format[a], '%');
 		}
-		++a;
 	}
-	buff[b] = '\0';
-	ft_putstr(buff);
+	ft_putstr(buffi);
 	va_end(ap);
 	return (b);
 }
 
 int	main(void)
 {
-	int ret;
+	//int ret = 0;
 	//int *nbr = NULL;
 	//*nbr = 48;
 
-	ret = va_test("%o-m", 8);
-	//when there is a full stop (for precision) without a value following, 
-	//code reads as no precision. CHANGE
-	//i
-	//# is not working when precision is < length of str. CHANGE
+	printf("TEST %%#5.7o\n");
+	va_test("ghdd%#5.7o-m\n", 8);  //NOT WORKING. ONLY PRINTING NON-FORMAT ARGUMENTS
+	/*printf("%#5.7o-p\n", 8);
+	va_test("\n\n");
 
-	ft_putstr("\n");
-	printf("%o-p", 8);
-	//ft_putnbr(ret);
+	printf("TEST %%#5.o\n");
+	ret = va_test("%#5.o-m\n", 8);
+	printf("%#5.o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05.o\n");
+	ret = va_test("%#05.o-m\n", 8);
+	printf("%#05.o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%05.o\n");
+	ret = va_test("%05.o-m\n", 8);
+	printf("%05.o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05o\n");
+	ret = va_test("%#05o-m\n", 8);
+	printf("%#05o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-#5o\n");
+	ret = va_test("%-#5o-m\n", 8);
+	printf("%-#5o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3o\n");
+	ret = va_test("%-5.3o-m\n", 8);
+	printf("%-5.3o-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#10o\n");
+	ret = va_test("%#10o-m\n", 8);
+	printf("%#10o-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-o\n");
+	ret = va_test("%-o-m\n", 8);
+	printf("%-o-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-10o\n");
+	ret = va_test("%-10o-m\n", 8);
+	printf("%-10o-p\n", 8);
+	va_test("\n\n");*/
 	return (0);
 }
 

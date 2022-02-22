@@ -6,11 +6,11 @@
 /*   By: molesen <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 15:07:40 by molesen           #+#    #+#             */
-/*   Updated: 2021/11/17 15:08:14 by molesen          ###   ########.fr       */
+/*   Updated: 2022/02/22 13:03:11 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen_stop(char *str, char c)
+int	ft_strlen_stop(const char *str, char c)
 {
 	int		len;
 
