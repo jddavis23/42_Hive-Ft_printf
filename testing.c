@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 12:24:16 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/21 17:18:44 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/22 17:48:56 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,6 @@ char	*ft_convert_hex(int nb, char c)
 
 	dup_nb = nb;
 	str = NULL;
-	if (nb < 0)
-	{
-		sign = -1;
-		count++;
-	}
 	while (nb > 0)
 	{
 		nb /= 16;

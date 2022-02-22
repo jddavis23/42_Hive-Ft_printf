@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/22 15:23:45 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/22 17:48:39 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,6 +404,47 @@ int ft_oct(int nb)
 	return (result * sign);
 }
 
+char hex_digit(int v, char c) 
+{
+    if (v >= 0 && v < 10)
+        return '0' + v;
+    else
+	{
+		if (c == 'x')
+        	return 'a' + v - 10;
+		else if (c == 'X')
+        	return 'A' + v - 10;
+	}
+	return ('0');
+}
+
+char	*ft_convert_hex(int nb, char c)
+{
+	int		count = 0;
+	char	*str;
+	int		dup_nb;
+
+	dup_nb = nb;
+	str = NULL;
+	if (nb == 0)
+	{
+		str = ft_strdup("0");
+		return (str);
+	}
+	while (nb > 0)
+	{
+		nb /= 16;
+		count++;
+	}
+	str = ft_strnew(count);
+	while (dup_nb > 0)
+	{
+		str[--count] = hex_digit(dup_nb % 16, c);
+		dup_nb /= 16;
+	}
+	return (str);
+}
+
 int	ft_precision_nb(t_flags *info, char **str)
 {
 	char	*temp;
@@ -424,6 +465,89 @@ int	ft_precision_nb(t_flags *info, char **str)
 		return (1);
 	}
 	return (0);
+}
+
+char	*ft_solve_x(t_flags *info, int nb)
+{
+	char	*str;
+	char	*temp;
+	int		i;
+	int		checker;
+	char	c;
+
+	c = info->_type;
+	i = 0;
+	temp = NULL;
+	str = ft_convert_hex(nb, info->_type);
+	checker = ft_precision_nb(info, &str);
+	if (info->next->_width > (int)ft_strlen(str))
+	{
+		temp = ft_strnew(info->next->_width);
+		if (!temp)
+		{
+			ft_strdel(&str);
+			return (NULL);
+		}
+		if (info->_minus)
+		{
+			if (info->_hash && checker == 0)
+			{
+				temp[i++] = '0';
+				temp[i++] = c;
+			}
+			ft_strcpy(&temp[i], str);
+			i += ft_strlen(str);
+			while (i < info->next->_width)
+				temp[i++] = ' ';
+		}
+		else if (info->_zero && !info->next->next->_p_true)
+		{
+			if (info->_hash && checker == 0)
+			{
+				temp[i++] = '0';
+				temp[i++] = c;
+			}
+			while (i < info->next->_width - (int)ft_strlen(str))
+				temp[i++] = '0';
+			ft_strcpy(&temp[i], str);
+		}
+		else
+		{
+			if ((((info->next->_width - (int)ft_strlen(str) - 2)) > 0) && info->_hash)
+			{
+				ft_strdel(&temp);
+				temp = ft_strnew(2 + ft_strlen(str));
+			}//double check no overflow is present
+			while (i < (info->next->_width - (int)ft_strlen(str) - 2))
+				temp[i++] = ' ';
+			if ((info->_hash && checker == 0))// || ft_atoi(str) != 0)
+			{
+				temp[i++] = '0';
+				temp[i++] = c;
+			}
+			else
+			{
+				temp[i++] = ' ';
+				temp[i++] = ' ';
+			}
+			ft_strcpy(&temp[i], str);
+		}
+		ft_strdel(&str);
+		str = temp;
+	}
+	else
+	{
+		if (info->_hash) //change here
+		{
+			temp = ft_strnew(ft_strlen(str) + 2);
+			temp[i++] = '0';
+			temp[i++] = c;
+			ft_strcpy(&temp[i], str);
+			ft_strdel(&str);
+			str = temp;
+		}
+	}
+	return (str);
 }
 
 
@@ -476,7 +600,7 @@ char	*ft_solve_o(t_flags *info, int nb)
 	}
 	else
 	{
-		if (info->_hash && checker == 0) //change here
+		if (info->_hash && checker == 0) //change here, may not need to check checker
 		{
 			temp = ft_strnew(ft_strlen(str) + 1);
 			temp[i++] = '0';
@@ -501,6 +625,8 @@ int	ft_solve(va_list *ap, t_flags *info)
 		str = ft_solve_s(info, va_arg(*ap, char*));
 	else if (info->_type == 'o')
 		str = ft_solve_o(info, va_arg(*ap, int));
+	else if (info->_type =='x' || info->_type == 'X')
+		str = ft_solve_x(info, va_arg(*ap, int));
 	//dont forget to include %%
 	if (!str)
 		return (-1);
@@ -551,8 +677,10 @@ int	main(void)
 	//int *nbr = NULL;
 	//*nbr = 48;
 
+//############%o######################
+
 	printf("TEST %%#5.7o\n");
-	va_test("%#5.7o-m\n", 8);  //NOT WORKING. ONLY PRINTING NON-FORMAT ARGUMENTS
+	va_test("%#5.7o-m\n", 8);
 	printf("%#5.7o-p\n", 8);
 	va_test("\n\n");
 
@@ -599,6 +727,141 @@ int	main(void)
 	printf("TEST %%-10o\n");
 	ret = va_test("%-10o-m\n", 8);
 	printf("%-10o-p\n", 8);
+	va_test("\n\n");
+
+//#############%x#################
+
+	printf("TEST %%5.3x\n");
+	va_test("%5.3x-m\n", 8);
+	printf("%5.3x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#5.7x\n");
+	va_test("%#5.7x-m\n", 8);
+	printf("%#5.7x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#5.x\n");
+	ret = va_test("%#5.x-m\n", 8);
+	printf("%#5.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05.x\n");
+	ret = va_test("%#05.x-m\n", 8);
+	printf("%#05.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%05.x\n");
+	ret = va_test("%05.x-m\n", 8);
+	printf("%05.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05x\n");
+	ret = va_test("%#05x-m\n", 8);
+	printf("%#05x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-#5x\n");
+	ret = va_test("%-#5x-m\n", 8);
+	printf("%-#5x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3x\n");
+	ret = va_test("%-5.3x-m\n", 8);
+	printf("%-5.3x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#10x\n");
+	ret = va_test("%#10x-m\n", 8);
+	printf("%#10x-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-x\n");
+	ret = va_test("%-x-m\n", 8);
+	printf("%-x-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-10x\n");
+	ret = va_test("%-10x-m\n", 8);
+	printf("%-10x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#2x\n");
+	ret = va_test("%#2x-m THIS ISNT WORKING. CHECK OCTAL TOO\n", 0);
+	printf("%#2x-p\n", 0);
+	va_test("\n\n");
+
+	//#############%X#################
+
+	printf("TEST %%02X\n");
+	ret = va_test("%02X-m\n", 0);
+	printf("%02X-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%5.3X\n");
+	va_test("%5.3X-m\n", 8);
+	printf("%5.3X-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#5.7X\n");
+	va_test("%#5.7X-m\n", 56);
+	printf("%#5.7X-p\n", 56);
+	va_test("\n\n");
+
+	printf("TEST %%#5.X\n");
+	ret = va_test("%#5.X-m\n", 90);
+	printf("%#5.X-p\n", 90);
+	va_test("\n\n");
+
+	printf("TEST %%#05.X\n");
+	ret = va_test("%#05.X-m\n", 12);
+	printf("%#05.X-p\n", 12);
+	va_test("\n\n");
+
+	printf("TEST %%05.X\n");
+	ret = va_test("%05.X-m\n", 123);
+	printf("%05.X-p\n", 123);
+	va_test("\n\n");
+
+	printf("TEST %%#05X\n");
+	ret = va_test("%#05X-m\n", 97);
+	printf("%#05X-p\n", 97);
+	va_test("\n\n");
+
+	printf("TEST %%-#5X\n");
+	ret = va_test("%-#5X-m\n", 53);
+	printf("%-#5X-p\n", 53);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3X\n");
+	ret = va_test("%-5.3X-m\n", 77);
+	printf("%-5.3X-p\n", 77);
+	va_test("\n\n");
+
+	printf("TEST %%#10X\n");
+	ret = va_test("%#10X-m\n", 219);
+	printf("%#10X-p\n", 219);
+	va_test("\n\n");
+	
+	printf("TEST %%-X\n");
+	ret = va_test("%-X-m\n", 0);
+	printf("%-X-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%03X\n");
+	ret = va_test("%03X-m\n", 0);
+	printf("%03X-p\n", 0);
+	va_test("\n\n");
+
+	
+	printf("TEST %%-10X\n");
+	ret = va_test("%-10X-m\n", 1002);
+	printf("%-10X-p\n", 1002);
+	va_test("\n\n");
+
+	printf("TEST %%#2X\n");
+	ret = va_test("%#2X-m\n", 8);
+	printf("%#2X-p\n", 8);
 	va_test("\n\n");
 	return (0);
 }
