@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/22 17:48:39 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/25 12:59:52 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,23 +513,20 @@ char	*ft_solve_x(t_flags *info, int nb)
 		}
 		else
 		{
-			if ((((info->next->_width - (int)ft_strlen(str) - 2)) > 0) && info->_hash)
+			if ((((info->next->_width - (int)ft_strlen(str) - 2)) > 0) && info->_hash && ft_atoi(str) != 0)
 			{
 				ft_strdel(&temp);
 				temp = ft_strnew(2 + ft_strlen(str));
-			}//double check no overflow is present
-			while (i < (info->next->_width - (int)ft_strlen(str) - 2))
+			}
+			while ((i < (info->next->_width - (int)ft_strlen(str) - 2)) || (nb == 0 && i < info->next->_width - 1))
 				temp[i++] = ' ';
-			if ((info->_hash && checker == 0))// || ft_atoi(str) != 0)
+			if ((info->_hash && checker == 0) && nb != 0)
 			{
 				temp[i++] = '0';
 				temp[i++] = c;
 			}
-			else
-			{
+			while (i < info->next->_width - (int)ft_strlen(str))
 				temp[i++] = ' ';
-				temp[i++] = ' ';
-			}
 			ft_strcpy(&temp[i], str);
 		}
 		ft_strdel(&str);
@@ -537,7 +534,7 @@ char	*ft_solve_x(t_flags *info, int nb)
 	}
 	else
 	{
-		if (info->_hash) //change here
+		if (info->_hash && nb != 0) //change here
 		{
 			temp = ft_strnew(ft_strlen(str) + 2);
 			temp[i++] = '0';
@@ -786,9 +783,9 @@ int	main(void)
 	printf("%-10x-p\n", 8);
 	va_test("\n\n");
 
-	printf("TEST %%#2x\n");
-	ret = va_test("%#2x-m THIS ISNT WORKING. CHECK OCTAL TOO\n", 0);
-	printf("%#2x-p\n", 0);
+	printf("TEST %%#x\n");
+	ret = va_test("%#x-m THIS ISNT WORKING. CHECK OCTAL TOO\n", 0);
+	printf("%#x-p\n", 0);
 	va_test("\n\n");
 
 	//#############%X#################
