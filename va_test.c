@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/28 12:03:39 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/02/28 17:37:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ t_flags	*ft_create_struct(void)
 	t_width		*in_width;
 	t_precision	*in_precision;
 	t_length	*in_length;
+	/*
+	 * make all 3 structs in one to avoid having to use "next->"
+	 */
 
 	in_flags = (t_flags *) malloc(sizeof(t_flags));
 	in_flags->_space = 0;
@@ -150,7 +153,9 @@ t_flags	*ft_true_struct(char *str, char type)
 	{
 		info->next->next->_p_true = 1;
 		++i;
-		info->next->next->_precision = ft_atoi(&str[i]);
+		info->next->next->_precision = ft_atoi(&str[i]); //change _p_true to only be true if ft_atoi is zero but '.' is present
+		//if (!info->next->next->_precision)
+		//	info->next->next->_p_true = 1;
 		while (str[i] >= '0' && str[i] <= '9')
 			++i;
 	}
@@ -383,21 +388,6 @@ char	*ft_solve_s(t_flags *info, char *str)
 }
 
 
-int ft_oct(unsigned nb)
-{
-	int result = 0;
-	int multi = 1;
-	int sign = 1;
-
-	while (nb > 0)
-	{
-		result += (nb % 8) * multi;
-		nb /= 8;
-		multi *= 10;
-	}
-	return (result * sign);
-}
-
 char hex_digit(unsigned int v, char c) 
 {
     if (v >= 0 && v < 10)
@@ -438,6 +428,35 @@ char	*ft_convert_hex(unsigned int nb, char c)
 	}
 	return (str);
 }
+
+char	*ft_oct(unsigned int nb)
+{
+	unsigned int	dub_nb = nb;
+	int			count = 0;
+	char		*str;
+
+	if (nb == 0)
+	{
+		str = ft_strdup("0");
+		return (str);
+	}
+	while (nb > 0)
+	{
+		nb /= 8;
+		++count;
+	}
+	str = ft_strnew(count);
+	while (dub_nb > 0)
+	{
+		str[--count] = (dub_nb % 8) + '0';
+		dub_nb /= 8;
+	}
+	return (str);
+}
+
+/*
+ * combine top and buttom
+ */
 
 int	ft_precision_nb(t_flags *info, char **str)
 {
@@ -507,21 +526,24 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 		}
 		else
 		{
-			if ((((info->next->_width - (int)ft_strlen(str) - 2)) > 0) && info->_hash && ft_atoi(str) != 0)
+			if ((((info->next->_width - (int)ft_strlen(str) - 2)) < 0) && info->_hash && nb != 0)
 			{
 				ft_strdel(&temp);
 				temp = ft_strnew(2 + ft_strlen(str));
 			}
 			while ((i < (info->next->_width - (int)ft_strlen(str) - 2)) || (nb == 0 && i < info->next->_width - 1))
 				temp[i++] = ' ';
-			if ((info->_hash && checker == 0) && nb != 0)
+			if ((info->_hash && !checker) && nb != 0)
 			{
 				temp[i++] = '0';
 				temp[i++] = c;
 			}
 			while (i < info->next->_width - (int)ft_strlen(str))
 				temp[i++] = ' ';
-			ft_strcpy(&temp[i], str);
+			if (nb == 0 && !info->next->next->_precision && info->next->next->_p_true)
+				temp[i] = ' ';
+			else	
+				ft_strcpy(&temp[i], str);
 		}
 		ft_strdel(&str);
 		str = temp;
@@ -551,7 +573,7 @@ char	*ft_solve_o(t_flags *info, unsigned int nb)
 
 	i = 0;
 	temp = NULL;
-	str = ft_itoa(ft_oct(nb)); //cant change unsigned int with itoa??
+	str = ft_oct(nb); //cant change unsigned int with itoa??
 	checker = ft_precision_nb(info, &str);
 	if (info->next->_width > (int)ft_strlen(str))
 	{
@@ -584,7 +606,7 @@ char	*ft_solve_o(t_flags *info, unsigned int nb)
 				temp[i++] = '0';
 			else
 				temp[i++] = ' ';
-			if (nb == 0 && info->next->next->_p_true && info->_zero & !info->_hash) //check with the && and zero
+			if (nb == 0 && info->next->next->_p_true && !info->next->next->_precision) //check with the && and zero
 				temp[i] = ' ';
 			else	
 				ft_strcpy(&temp[i], str);
@@ -646,7 +668,7 @@ char	*ft_solve_d(t_flags *info, int nb)
 		{
 			while (i < (info->next->_width - (int)ft_strlen(str)))
 				temp[i++] = ' ';
-			if (nb == 0 && info->next->next->_p_true && info->_zero)
+			if (nb == 0 && !info->next->next->_precision && info->next->next->_p_true)
 				temp[i] = ' ';
 			else	
 				ft_strcpy(&temp[i], str);
@@ -667,6 +689,8 @@ char	*ft_solve_d(t_flags *info, int nb)
 		else if (info->_space && nb >= 0)
 			temp[i++] = ' ';
 		ft_strcpy(&temp[i], str);
+		ft_strdel(&str);
+		str = temp;
 	}
 	return (str);
 }
@@ -682,6 +706,9 @@ int	ft_solve(va_list *ap, t_flags *info)
 		str = ft_solve_c(info, (char)va_arg(*ap, int));
 	else if (info->_type == 's')
 		str = ft_solve_s(info, va_arg(*ap, char*));
+	/*
+	 * combine 'c' and 's'
+	 */
 	else if (info->_type == 'o')
 		str = ft_solve_o(info, va_arg(*ap, unsigned int));
 	else if (info->_type =='x' || info->_type == 'X')
@@ -712,7 +739,7 @@ int	va_test(const char *format, ...)
 		if (format[a] == '%')
 		{
 			++a;
-			a+= ft_type_plus(&format[a], &str);
+			a+= ft_type_plus(&format[a], &str);  //info struct can be created here
 			if (ft_sequence(str) == -1)
 			{
 				ft_strdel(&str);
@@ -735,14 +762,12 @@ int	va_test(const char *format, ...)
 int	main(void)
 {
 	int ret = 0;
-	//int *nbr = NULL;
-	//*nbr = 48;
 
-//############%o######################
+printf("############%%o######################\n");
 
 	printf("TEST %%#5.7o\n");
-	va_test("%#5.7o-m\n", 8);
-	printf("%#5.7o-p\n", 8);
+	va_test("%#5.7o-m\n", 333333333);
+	printf("%#5.7o-p\n", 333333333);
 	va_test("\n\n");
 
 	printf("TEST %%#5.o\n");
@@ -790,7 +815,7 @@ int	main(void)
 	printf("%-10o-p\n", 0);
 	va_test("\n\n");
 
-//#############%x#################
+printf("############%%x######################\n");
 
 	printf("TEST %%5.3x\n");
 	va_test("%5.3x-m\n", 8);
@@ -852,7 +877,7 @@ int	main(void)
 	printf("%#x-p\n", 0);
 	va_test("\n\n");
 
-	//#############%X#################
+printf("############%%X######################\n");
 
 	printf("TEST %%02X\n");
 	ret = va_test("%02X-m\n", 0);
@@ -870,8 +895,8 @@ int	main(void)
 	va_test("\n\n");
 
 	printf("TEST %%#5.X\n");
-	ret = va_test("%#5.X-m\n", 90); //check playing arounbd with _p_true and zero
-	printf("%#5.X-p\n", 90);
+	ret = va_test("%#5.X-m\n", 0); 
+	printf("%#5.X-p\n", 0);
 	va_test("\n\n");
 
 	printf("TEST %%#05.X\n");
@@ -926,7 +951,7 @@ int	main(void)
 	va_test("\n\n");
 	
 	
-	//#############%d#################
+printf("############%%d/i######################\n");
 
 	printf("TEST %%02d\n");
 	ret = va_test("%02d-m\n", 0);
@@ -938,9 +963,9 @@ int	main(void)
 	printf("%5.3d-p\n", 0);
 	va_test("\n\n");
 
-	printf("TEST %%5.7d\n");
-	va_test("%5.7d-m\n", 0);
-	printf("%5.7d-p\n", 0);
+	printf("TEST %%5.1d\n");
+	va_test("%5.1d-m\n", 0);
+	printf("%5.1d-p\n", 0);
 	va_test("\n\n");
 
 	printf("TEST %%5.d\n");
@@ -994,13 +1019,47 @@ int	main(void)
 	printf("%-10i-p\n", 1002);
 	va_test("\n\n");
 
-	printf("TEST %%2i\n");
+	printf("TEST %%+i\n");
+	ret = va_test("%+i-m\n", 8);
+	printf("%+i-p\n", 8);
+	va_test("\n\n");
+	
+	
+	printf("TEST %% i\n");
+	ret = va_test("% i-m\n", 8);
+	printf("% i-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %% 2i\n");
+	ret = va_test("% 2i-m\n", 8);
+	printf("% 2i-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%+2i\n");
 	ret = va_test("%+2i-m\n", 8);
 	printf("%+2i-p\n", 8);
 	va_test("\n\n");
 	
+	printf("TEST %%+i\n");
+	ret = va_test("%+i-m\n", 0);
+	printf("%+i-p\n", 0);
+	va_test("\n\n");
 	
 	
+	printf("TEST %% i\n");
+	ret = va_test("% i-m\n", 0);
+	printf("% i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%05i\n");
+	ret = va_test("%05i-m\n", 0);
+	printf("%05i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%+2i\n");
+	ret = va_test("%+2i-m\n", 0);
+	printf("%+2i-p\n", 0);
+	va_test("\n\n");
 	return (0);
 }
 
