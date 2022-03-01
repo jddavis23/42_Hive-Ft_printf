@@ -6,26 +6,30 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:19:40 by jdavis            #+#    #+#              #
-#    Updated: 2022/02/14 16:33:06 by jdavis           ###   ########.fr        #
+#    Updated: 2022/03/01 18:08:20 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libftprint.a
+NAME = libftprintf.a
 
 INCLUDES = libft/
 
-CC = gcc -Wall -Wextra -Werror
+CC = gcc -Wall -Wextra -Werror -I libft/
 
-SRC = 
+SRC = solve_c_s.c
+SRC += va_test.c 
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
 $(NAME):
-	@make -C libft/ fclean && make -C libft/
-	@$(CC) -c $(SRC) -I ft_printf.h -I $(INCLUDES) -L libft/ -lft
-	@ar -r $(NAME) $(OBJ) -L libft/ -lft
+	#@make -C libft/ fclean && make -C libft/
+	#@$(CC) -c $(SRC) -I ft_printf.h
+	#@ar -r $(NAME) $(OBJ) libft/*.o
+	$(CC) -c -I ./includes $(SRC)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
 
 clean:
 	@rm -f $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/21 17:23:43 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/01 17:19:40 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,6 @@
 # include <stdlib.h>
 # include <stdarg.h>
 
-
-typedef struct s_length
-{
-	int	_hh;
-	int	_h;
-	int	_ll;
-	int	_l;
-}				t_length;
-
-typedef struct s_precision
-{
-	int			_precision;
-	int			_p_true;
-	t_length	*next;
-}				t_precision;
-
-typedef struct s_width
-{
-	int			_width;
-	t_precision	*next;
-}				t_width;
-
 typedef struct s_flags
 {
 	int		_space;
@@ -47,8 +25,17 @@ typedef struct s_flags
 	int		_plus;
 	int		_hash;
 	int		_minus;
+	int		_h_or_o;
+	char	_h_prfx[3];
 	char	_type;
-	t_width	*next;
+	int			_width;
+	int			_precision;
+	int			_p_true;
+	int	_hh;
+	int	_h;
+	int	_ll;
+	int	_l;
+	//t_width	*next;
 }				t_flags;
 
 typedef int ft_undef_behav(t_flags *info);
@@ -64,4 +51,6 @@ ft_undef_behav *f_array[3] =
 	ft_p_behaviour,
 };
 
+char	*ft_solve_c_s(t_flags *info, char *str);
+int		va_test(const char *format, ...); //CHANGE
 #endif
