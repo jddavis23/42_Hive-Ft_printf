@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/28 17:37:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/01 13:42:21 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,42 +303,7 @@ t_flags	*ft_do(char *str)
 	return (info);
 }
 
-char	*ft_solve_c(t_flags *info, char c)
-{
-	char	*temp;
-	int		i;
-
-	i = 0;
-	temp = NULL;
-	if (info->next->_width == 0)
-	{
-		temp = ft_strnew(1);
-		if (!temp)
-			return (NULL);
-		temp[0] = c;
-	}
-	else
-	{
-		temp = ft_strnew(info->next->_width);
-		if (!temp)
-			return (NULL);
-		if (info->_minus)
-		{
-			temp[i++] = c;
-			while (i < info->next->_width)
-				temp[i++] = ' ';
-		}
-		else
-		{
-			temp[info->next->_width - 1] = c;
-			while (temp[i] != c)
-				temp[i++] = ' ';
-		}
-	}
-	return (temp);
-}
-
-char	*ft_solve_s(t_flags *info, char *str)
+char	*ft_solve_c_s(t_flags *info, char *str)
 {
 	char	*temp;
 	int		i;
@@ -347,14 +312,17 @@ char	*ft_solve_s(t_flags *info, char *str)
 	i = 0;
 	checker = 0;
 	temp = NULL;
-	if (info->next->next->_precision)
+	if (info->_type == 's')
 	{
-		if (info->next->next->_precision < (int)ft_strlen(str))
+		if (info->next->next->_precision)
 		{
-			checker = 1;
-			temp = ft_strnew(info->next->next->_precision);
-			ft_strncpy(temp, str, info->next->next->_precision);
-			str = temp;
+			if (info->next->next->_precision < (int)ft_strlen(str))
+			{
+				checker = 1;
+				temp = ft_strnew(info->next->next->_precision);
+				ft_strncpy(temp, str, info->next->next->_precision);
+				str = temp;
+			}
 		}
 	}
 	if (info->next->_width <= (int)ft_strlen(str))
@@ -382,13 +350,13 @@ char	*ft_solve_s(t_flags *info, char *str)
 				temp[i++] = ' ';
 		}
 	}
-	if (checker == 1)
+	if (checker == 1 || info->_type == 'c')
 		ft_strdel(&str);
 	return (temp);
 }
 
 
-char hex_digit(unsigned int v, char c) 
+char ft_char_digit(unsigned int v, char c) 
 {
     if (v >= 0 && v < 10)
         return '0' + v;
@@ -402,7 +370,7 @@ char hex_digit(unsigned int v, char c)
 	return ('0');
 }
 
-char	*ft_convert_hex(unsigned int nb, char c)
+char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 {
 	int		count = 0;
 	char	*str;
@@ -417,46 +385,17 @@ char	*ft_convert_hex(unsigned int nb, char c)
 	}
 	while (nb > 0)
 	{
-		nb /= 16;
+		nb /= choice;
 		count++;
 	}
 	str = ft_strnew(count);
 	while (dup_nb > 0)
 	{
-		str[--count] = hex_digit(dup_nb % 16, c);
-		dup_nb /= 16;
+		str[--count] = ft_char_digit(dup_nb % choice, c);
+		dup_nb /= choice;
 	}
 	return (str);
 }
-
-char	*ft_oct(unsigned int nb)
-{
-	unsigned int	dub_nb = nb;
-	int			count = 0;
-	char		*str;
-
-	if (nb == 0)
-	{
-		str = ft_strdup("0");
-		return (str);
-	}
-	while (nb > 0)
-	{
-		nb /= 8;
-		++count;
-	}
-	str = ft_strnew(count);
-	while (dub_nb > 0)
-	{
-		str[--count] = (dub_nb % 8) + '0';
-		dub_nb /= 8;
-	}
-	return (str);
-}
-
-/*
- * combine top and buttom
- */
 
 int	ft_precision_nb(t_flags *info, char **str)
 {
@@ -480,18 +419,32 @@ int	ft_precision_nb(t_flags *info, char **str)
 	return (0);
 }
 
-char	*ft_solve_x(t_flags *info, unsigned int nb)
+char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 {
 	char	*str;
 	char	*temp;
 	int		i;
 	int		checker;
+	char	hash[3];
 	char	c;
+	int		sub;
+	int		h_or_o;
 
+	sub = 2;
+	h_or_o = 16;
+	if (info->_type == 'o')
+	{
+		h_or_o = 8;
+		sub = 1;
+	}
+	ft_bzero(hash, 3);
+	hash[0] = '0';
+	if (info->_type != 'o')
+		hash[1] = info->_type;
 	c = info->_type;
 	i = 0;
 	temp = NULL;
-	str = ft_convert_hex(nb, info->_type);
+	str = ft_x_o_conv(nb, info->_type, h_or_o);
 	checker = ft_precision_nb(info, &str);
 	if (info->next->_width > (int)ft_strlen(str))
 	{
@@ -503,10 +456,10 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 		}
 		if (info->_minus)
 		{
-			if (info->_hash && checker == 0)
+			if (info->_hash && checker == 0 && nb != 0)
 			{
-				temp[i++] = '0';
-				temp[i++] = c;
+				ft_strcpy(&temp[i], hash);
+				i += ft_strlen(hash);
 			}
 			ft_strcpy(&temp[i], str);
 			i += ft_strlen(str);
@@ -515,10 +468,10 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 		}
 		else if (info->_zero && !info->next->next->_p_true)
 		{
-			if (info->_hash && checker == 0)
+			if (info->_hash && checker == 0 && (info->_type == 'x' || info->_type == 'X'))
 			{
-				temp[i++] = '0';
-				temp[i++] = c;
+				ft_strcpy(&temp[i], hash);
+				i += ft_strlen(hash);
 			}
 			while (i < info->next->_width - (int)ft_strlen(str))
 				temp[i++] = '0';
@@ -526,17 +479,17 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 		}
 		else
 		{
-			if ((((info->next->_width - (int)ft_strlen(str) - 2)) < 0) && info->_hash && nb != 0)
+			if ((((info->next->_width - (int)ft_strlen(str) - sub)) < 0) && info->_hash && nb != 0 && info->_type != 'o')
 			{
 				ft_strdel(&temp);
 				temp = ft_strnew(2 + ft_strlen(str));
 			}
-			while ((i < (info->next->_width - (int)ft_strlen(str) - 2)) || (nb == 0 && i < info->next->_width - 1))
+			while ((i < (info->next->_width - (int)ft_strlen(str) - sub)) || (nb == 0 && i < info->next->_width - 1))
 				temp[i++] = ' ';
 			if ((info->_hash && !checker) && nb != 0)
 			{
-				temp[i++] = '0';
-				temp[i++] = c;
+				ft_strcpy(&temp[i], hash);
+				i += ft_strlen(hash);
 			}
 			while (i < info->next->_width - (int)ft_strlen(str))
 				temp[i++] = ' ';
@@ -552,9 +505,9 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 	{
 		if (info->_hash && nb != 0) //change here
 		{
-			temp = ft_strnew(ft_strlen(str) + 2);
-			temp[i++] = '0';
-			temp[i++] = c;
+			temp = ft_strnew(ft_strlen(str) + sub);
+			ft_strcpy(&temp[i], hash);
+			i += ft_strlen(hash);
 			ft_strcpy(&temp[i], str);
 			ft_strdel(&str);
 			str = temp;
@@ -564,7 +517,7 @@ char	*ft_solve_x(t_flags *info, unsigned int nb)
 }
 
 
-char	*ft_solve_o(t_flags *info, unsigned int nb)
+/*char	*ft_solve_o(t_flags *info, unsigned int nb)
 {
 	char	*str;
 	char	*temp;
@@ -573,7 +526,7 @@ char	*ft_solve_o(t_flags *info, unsigned int nb)
 
 	i = 0;
 	temp = NULL;
-	str = ft_oct(nb); //cant change unsigned int with itoa??
+	str = ft_x_o_conv(nb, info->_type, 8); //cant change unsigned int with itoa??
 	checker = ft_precision_nb(info, &str);
 	if (info->next->_width > (int)ft_strlen(str))
 	{
@@ -626,7 +579,7 @@ char	*ft_solve_o(t_flags *info, unsigned int nb)
 		}
 	}
 	return (str);
-}
+}*/
 
 char	*ft_solve_d(t_flags *info, int nb)
 {
@@ -700,19 +653,23 @@ char	*ft_solve_d(t_flags *info, int nb)
 int	ft_solve(va_list *ap, t_flags *info)
 {
 	char	*str;
+	char	*c_pass;
 
 	str = NULL;
-	if (info->_type == 'c')
-		str = ft_solve_c(info, (char)va_arg(*ap, int));
-	else if (info->_type == 's')
-		str = ft_solve_s(info, va_arg(*ap, char*));
-	/*
-	 * combine 'c' and 's'
-	 */
-	else if (info->_type == 'o')
-		str = ft_solve_o(info, va_arg(*ap, unsigned int));
-	else if (info->_type =='x' || info->_type == 'X')
-		str = ft_solve_x(info, va_arg(*ap, unsigned int));
+	c_pass = NULL;
+	if (info->_type == 'c' || info->_type == 's')
+	{
+		if (info->_type == 's')
+			str = ft_solve_c_s(info, va_arg(*ap, char*));
+		else
+		{
+			c_pass = ft_strnew(1);
+			c_pass[0] = (char)va_arg(*ap, int);
+			str = ft_solve_c_s(info, c_pass);
+		}
+	}
+	else if (info->_type =='x' || info->_type == 'X' || info->_type == 'o')
+		str = ft_solve_o_x(info, va_arg(*ap, unsigned int));
 	else if (info->_type == 'd' || info->_type == 'i')
 		str = ft_solve_d(info, va_arg(*ap, int));
 	//dont forget to include %%
@@ -762,6 +719,95 @@ int	va_test(const char *format, ...)
 int	main(void)
 {
 	int ret = 0;
+
+	printf("############%%c######################\n");
+
+	printf("TEST %%-12c\n");
+	va_test("%-12c-m\n", 'c');
+	printf("%-12c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%5.c\n");
+	ret = va_test("%5.c-m\n", 'c');
+	printf("%5.c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-5c\n");  
+	ret = va_test("%-5c-m\n", 'c');
+	printf("%-5c-p\n", 'c');
+	va_test("\n\n");
+	
+	printf("TEST %%c\n");
+	ret = va_test("%c-m\n", 'c');
+	printf("%c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%1c\n");
+	ret = va_test("%1c-m\n", 'c');
+	printf("%1c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-1c\n");
+	ret = va_test("%-1c-m\n", 'c');
+	printf("%-1c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-c\n");
+	ret = va_test("%-c-m\n", 'c');
+	printf("%-c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("############%%s######################\n");
+
+	printf("TEST %%s\n");
+	va_test("%s-m\n", "this is a string");
+	printf("%s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%.16s\n");
+	ret = va_test("%.16s-m\n", "this is a string");
+	printf("%.16s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%.18s\n");
+	ret = va_test("%.18s-m\n", "this is a string");
+	printf("%.18s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%5.5s\n");
+	ret = va_test("%5.5s-m\n", "this is a string");
+	printf("%5.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%10.5s\n");
+	ret = va_test("%10.5s-m\n", "this is a string");
+	printf("%10.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-20s\n");
+	ret = va_test("%-20s-m\n", "this is a string");
+	printf("%-20s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-20.5s\n");
+	ret = va_test("%-20.5s-m\n", "this is a string");
+	printf("%-20.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-1.1s\n");
+	ret = va_test("%-1.1s-m\n", "this is a string");
+	printf("%-1.1s-p\n", "this is a string");
+	va_test("\n\n");
+	
+	printf("TEST %%-s\n");
+	ret = va_test("%-s-m\n", "this is a string");
+	printf("%-s-p\n", "this is a string");
+	va_test("\n\n");
+	
+	printf("TEST %%-20.20s\n");
+	ret = va_test("%-20.20s-m\n", "this is a string");
+	printf("%-20.20s-p\n", "this is a string");
+	va_test("\n\n");
 
 printf("############%%o######################\n");
 
