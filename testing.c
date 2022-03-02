@@ -6,14 +6,14 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 12:24:16 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/28 11:47:38 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/02 16:49:23 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft/libft.h"
 
-/*char hex_digit(int v, char c) 
+char hex_digit(int v, char c) 
 {
     if (v >= 0 && v < 10)
         return '0' + v;
@@ -50,23 +50,24 @@ char	*ft_convert_hex(int nb, char c)
 		dup_nb /= 16;
 	}
 	return (str);
-}*/
+}
 
 
-/*void print_address_hex(void* p0) 
+void print_address_hex(void* p0) 
 {
     int i;
     uintptr_t p = (uintptr_t)p0;
 
     ft_putchar('0');
    	ft_putchar('x');
-    i = (sizeof(p) << 3) - 4;
+    i = (sizeof(p) << 3) - 20;
+	//printf("i = %lu\n", (sizeof(p) << 3));
 	while (i >= 0)
 	{
-        ft_putchar(hex_digit((p >> i) & 0xf));
+        ft_putchar(hex_digit((p >> i) & 0xf, 'x'));
 		i -= 4;
     }
-}*/
+}
 
 
 
@@ -87,7 +88,7 @@ int ft_oct(int nb)
 
 int main(void)
 {
-	int i = 0;
+	/*int i = 0;
 
 	while (i <= 128)
 	{
@@ -97,25 +98,28 @@ int main(void)
 		i++;
 	}
 	printf("%- +10d", 2);
-
+	*/
 
 
 
   // int i = 0;
 
 //	while (i < 130)
-	//	printf("%d\n", 0XF);
-	/*int	i = 2;
+	//printf("%d\n", 0XF);
+	int	i = 2;
 	char c = 'k';
+	char *s = "here";
 	print_address_hex((void*)&i);
-	printf("\n%p\n", &i);
+	printf("\n%x\n", (uintptr_t)&i); //cast the address of variable to uintptr_t, print hexidecimal values
 	print_address_hex((void*)&c);
-	printf("\n%p", &c);*/
-	/*
-	//int f = 50;
-	//int *nbr = &f;
-	//printf("%*d\n", 1, 242424);
-	//printf("%2$*1$d\n", 1, 242424);
+	printf("\n%p\n", &c);
+	print_address_hex((void*)&s);
+	printf("\n%p", &s);
+	
+	/*int f = 50;
+	int *nbr = &f;
+	printf("%*d\n", 1, 242424);
+	printf("%2$*1$d\n", 1, 242424);
 	printf("\nFLAG = 0\n");
 	printf("%10.1s'    %x\n", "jeff", 012);
 	printf("%0i   %i\n", -1, -1);

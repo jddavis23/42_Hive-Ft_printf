@@ -6,11 +6,20 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:31:58 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/02 11:32:56 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/02 14:52:08 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+void	ft_apply_hash(t_flags *info, int nb, int checker, char **temp, int *i)
+{
+	if (info->_hash && nb != 0 && (!checker || info->_type != 'o'))
+	{
+		ft_strcpy(temp[*i], info->_h_prfx);
+		*i += ft_strlen(info->_h_prfx);
+	}
+}
 
 int	ft_precision_nb(t_flags *info, char **str)
 {
