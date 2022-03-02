@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/01 17:25:37 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/02 11:49:21 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ t_flags	*ft_do(char *str)
 	t_flags *info;
 
 	info = ft_true_struct(str, str[ft_strlen(str) - 1]);
-	if (str[ft_strlen(str) - 1] == 'c')
+	/*if (str[ft_strlen(str) - 1] == 'c')
 	{
 		if (f_array[0](info) == -1)
 			return (NULL);
@@ -249,7 +249,7 @@ t_flags	*ft_do(char *str)
 	{
 		if (f_array[2](info) == -1)
 			return (NULL);
-	}
+	}*/
 	ft_strdel(&str);   //isnt working how i thought it would
 	return (info);
 }
@@ -307,7 +307,7 @@ t_flags	*ft_do(char *str)
 }*/
 
 
-char ft_char_digit(unsigned int v, char c) 
+/*char ft_char_digit(unsigned int v, char c) 
 {
     if (v >= 0 && v < 10)
         return '0' + v;
@@ -319,7 +319,7 @@ char ft_char_digit(unsigned int v, char c)
         	return 'A' + v - 10;
 	}
 	return ('0');
-}
+}*/
 
 char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 {
@@ -348,7 +348,7 @@ char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 	return (str);
 }
 
-int	ft_precision_nb(t_flags *info, char **str)
+/*int	ft_precision_nb(t_flags *info, char **str)
 {
 	char	*temp;
 	int		i;
@@ -368,7 +368,7 @@ int	ft_precision_nb(t_flags *info, char **str)
 		return (1);
 	}
 	return (0);
-}
+}*/
 
 char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 {
@@ -655,3 +655,397 @@ int	va_test(const char *format, ...)
 	return (b);
 }
 
+/*int	main(void)
+{
+	int ret = 0;
+
+	printf("############%%c######################\n");
+
+	printf("TEST %%-12c\n");
+	va_test("%-12c-m\n", 'c');
+	printf("%-12c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%5.c\n");
+	ret = va_test("%5.c-m\n", 'c');
+	printf("%5.c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-5c\n");  
+	ret = va_test("%-5c-m\n", 'c');
+	printf("%-5c-p\n", 'c');
+	va_test("\n\n");
+	
+	printf("TEST %%c\n");
+	ret = va_test("%c-m\n", 'c');
+	printf("%c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%1c\n");
+	ret = va_test("%1c-m\n", 'c');
+	printf("%1c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-1c\n");
+	ret = va_test("%-1c-m\n", 'c');
+	printf("%-1c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("TEST %%-c\n");
+	ret = va_test("%-c-m\n", 'c');
+	printf("%-c-p\n", 'c');
+	va_test("\n\n");
+
+	printf("############%%s######################\n");
+
+	printf("TEST %%s\n");
+	va_test("%s-m\n", "this is a string");
+	printf("%s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%.16s\n");
+	ret = va_test("%.16s-m\n", "this is a string");
+	printf("%.16s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%.18s\n");
+	ret = va_test("%.18s-m\n", "this is a string");
+	printf("%.18s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%5.5s\n");
+	ret = va_test("%5.5s-m\n", "this is a string");
+	printf("%5.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%10.5s\n");
+	ret = va_test("%10.5s-m\n", "this is a string");
+	printf("%10.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-20s\n");
+	ret = va_test("%-20s-m\n", "this is a string");
+	printf("%-20s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-20.5s\n");
+	ret = va_test("%-20.5s-m\n", "this is a string");
+	printf("%-20.5s-p\n", "this is a string");
+	va_test("\n\n");
+
+	printf("TEST %%-1.1s\n");
+	ret = va_test("%-1.1s-m\n", "this is a string");
+	printf("%-1.1s-p\n", "this is a string");
+	va_test("\n\n");
+	
+	printf("TEST %%-s\n");
+	ret = va_test("%-s-m\n", "this is a string");
+	printf("%-s-p\n", "this is a string");
+	va_test("\n\n");
+	
+	printf("TEST %%-20.20s\n");
+	ret = va_test("%-20.20s-m\n", "this is a string");
+	printf("%-20.20s-p\n", "this is a string");
+	va_test("\n\n");
+
+printf("############%%o######################\n");
+
+	printf("TEST %%0#10o\n");
+	va_test("%0#10o-m\n", 0);
+	printf("%0#10o-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%#5.o\n");
+	ret = va_test("%#5.o-m\n", 32);
+	printf("%#5.o-p\n", 32);
+	va_test("\n\n");
+
+	printf("TEST %%#05.o\n");
+	ret = va_test("%#05.o-m\n", 3);
+	printf("%#05.o-p\n", 3);
+	va_test("\n\n");
+
+	printf("TEST %%05.o\n");
+	ret = va_test("%05.o-m\n", 189);
+	printf("%05.o-p\n", 189);
+	va_test("\n\n");
+
+	printf("TEST %%#05o\n");
+	ret = va_test("%#05o-m\n", 2);
+	printf("%#05o-p\n", 2);
+	va_test("\n\n");
+
+	printf("TEST %%-#5o\n");
+	ret = va_test("%-#5o-m\n", 0);
+	printf("%-#5o-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3o\n");
+	ret = va_test("%-5.3o-m\n", 0);
+	printf("%-5.3o-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%#10o\n");
+	ret = va_test("%#10o-m\n", 0);
+	printf("%#10o-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%-o\n");
+	ret = va_test("%-o-m\n", 0);
+	printf("%-o-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%-10o\n");
+	ret = va_test("%-10o-m\n", 0);
+	printf("%-10o-p\n", 0);
+	va_test("\n\n");
+
+printf("############%%x######################\n");
+
+	printf("TEST %%5.3x\n");
+	va_test("%5.3x-m\n", 8);
+	printf("%5.3x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#5.7x\n");
+	va_test("%#5.7x-m\n", 8);
+	printf("%#5.7x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#5.x\n");
+	ret = va_test("%#5.x-m\n", 8);
+	printf("%#5.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05.x\n");
+	ret = va_test("%#05.x-m\n", 8);
+	printf("%#05.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%05.x\n");
+	ret = va_test("%05.x-m\n", 8);
+	printf("%05.x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#05x\n");
+	ret = va_test("%#05x-m\n", 8);
+	printf("%#05x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-#5x\n");
+	ret = va_test("%-#5x-m\n", 8);
+	printf("%-#5x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3x\n");
+	ret = va_test("%-5.3x-m\n", 8);
+	printf("%-5.3x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#10x\n");
+	ret = va_test("%#10x-m\n", 8);
+	printf("%#10x-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-x\n");
+	ret = va_test("%-x-m\n", 8);
+	printf("%-x-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%-10x\n");
+	ret = va_test("%-10x-m\n", 8);
+	printf("%-10x-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#x\n");
+	ret = va_test("%#x-m\n", 0);
+	printf("%#x-p\n", 0);
+	va_test("\n\n");
+
+printf("############%%X######################\n");
+
+	printf("TEST %%-#5.3X\n");
+	ret = va_test("%-#5.3X-m\n", 3);
+	printf("%-#5.3X-p\n", 3);
+	va_test("\n\n");
+	
+	printf("TEST %%5.3X\n");
+	va_test("%5.3X-m\n", 8);
+	printf("%5.3X-p\n", 8);
+	va_test("\n\n");
+
+	printf("TEST %%#10.7X\n");
+	va_test("%#10.7X-m\n", 56);
+	printf("%#10.7X-p\n", 56);
+	va_test("\n\n");
+
+	printf("TEST %%#5.X\n");
+	ret = va_test("%#5.X-m\n", 0); 
+	printf("%#5.X-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%#05.X\n");
+	ret = va_test("%#05.X-m\n", 12);
+	printf("%#05.X-p\n", 12);
+	va_test("\n\n");
+
+	printf("TEST %%05.X\n");
+	ret = va_test("%05.X-m\n", 123);
+	printf("%05.X-p\n", 123);
+	va_test("\n\n");
+
+	printf("TEST %%#05X\n");
+	ret = va_test("%#05X-m\n", 97);
+	printf("%#05X-p\n", 97);
+	va_test("\n\n");
+
+	printf("TEST %%-#5X\n");
+	ret = va_test("%-#5X-m\n", 53);
+	printf("%-#5X-p\n", 53);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3X\n");
+	ret = va_test("%-5.3X-m\n", 77);
+	printf("%-5.3X-p\n", 77);
+	va_test("\n\n");
+
+	printf("TEST %%#10X\n");
+	ret = va_test("%#10X-m\n", 219);
+	printf("%#10X-p\n", 219);
+	va_test("\n\n");
+	
+	printf("TEST %%-X\n");
+	ret = va_test("%-X-m\n", 0);
+	printf("%-X-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%03X\n");
+	ret = va_test("%03X-m\n", 0);
+	printf("%03X-p\n", 0);
+	va_test("\n\n");
+
+	
+	printf("TEST %%-10X\n");
+	ret = va_test("%-10X-m\n", 1002);
+	printf("%-10X-p\n", 1002);
+	va_test("\n\n");
+
+	printf("TEST %%#2X\n");
+	ret = va_test("%#2X-m\n", 8);
+	printf("%#2X-p\n", 8);
+	va_test("\n\n");
+	
+	
+printf("############%%d/i######################\n");
+
+	printf("TEST %%02d\n");
+	ret = va_test("%02d-m\n", 0);
+	printf("%02d-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%5.3d\n");
+	va_test("%5.3d-m\n", 0);
+	printf("%5.3d-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%5.1d\n");
+	va_test("%5.1d-m\n", 0);
+	printf("%5.1d-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%5.d\n");
+	ret = va_test("%5.d-m\n", 0);
+	printf("%5.d-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%05d\n"); //precision dictates if 0 is present or not. CHANGE!!
+	ret = va_test("%05d-m\n", 0);
+	printf("%05d-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%05.d\n");
+	ret = va_test("%05.d-m\n", 0);
+	printf("%05.d-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%05i\n");
+	ret = va_test("%05i-m\n", 0);
+	printf("%05i-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%-5i\n");
+	ret = va_test("%-5i-m\n", 0);
+	printf("%-5i-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%-5.3i\n");
+	ret = va_test("%-5.3i-m\n", 0);
+	printf("%-5.3i-p\n", 0);
+	va_test("\n\n");
+
+	printf("TEST %%10i\n");
+	ret = va_test("%10i-m\n", 0);
+	printf("%10i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%-i\n");
+	ret = va_test("%-i-m\n", 0);
+	printf("%-i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%03i\n");
+	ret = va_test("%03i-m\n", 0);
+	printf("%03i-p\n", 0);
+	va_test("\n\n");
+
+	
+	printf("TEST %%-10i\n");
+	ret = va_test("%-10i-m\n", 1002);
+	printf("%-10i-p\n", 1002);
+	va_test("\n\n");
+
+	printf("TEST %%+i\n");
+	ret = va_test("%+i-m\n", 8);
+	printf("%+i-p\n", 8);
+	va_test("\n\n");
+	
+	
+	printf("TEST %% i\n");
+	ret = va_test("% i-m\n", 8);
+	printf("% i-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %% 2i\n");
+	ret = va_test("% 2i-m\n", 8);
+	printf("% 2i-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%+2i\n");
+	ret = va_test("%+2i-m\n", 8);
+	printf("%+2i-p\n", 8);
+	va_test("\n\n");
+	
+	printf("TEST %%+i\n");
+	ret = va_test("%+i-m\n", 0);
+	printf("%+i-p\n", 0);
+	va_test("\n\n");
+	
+	
+	printf("TEST %% i\n");
+	ret = va_test("% i-m\n", 0);
+	printf("% i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%05i\n");
+	ret = va_test("%05i-m\n", 0);
+	printf("%05i-p\n", 0);
+	va_test("\n\n");
+	
+	printf("TEST %%+2i\n");
+	ret = va_test("%+2i-m\n", 0);
+	printf("%+2i-p\n", 0);
+	va_test("\n\n");
+	return (0);
+}
+
+*/

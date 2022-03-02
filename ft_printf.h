@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/01 17:19:40 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/02 11:52:57 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,23 @@ typedef struct s_flags
 	//t_width	*next;
 }				t_flags;
 
-typedef int ft_undef_behav(t_flags *info);
+//typedef int ft_undef_behav(t_flags *info);
 
-int	ft_c_behaviour(t_flags *info);
-int	ft_s_behaviour(t_flags *info);
-int	ft_p_behaviour(t_flags *info);
+//int	ft_c_behaviour(t_flags *info);
+//int	ft_s_behaviour(t_flags *info);
+//int	ft_p_behaviour(t_flags *info);
 
-ft_undef_behav *f_array[3] =
+/*ft_undef_behav *f_array[3] =
 {
 	ft_c_behaviour,
 	ft_s_behaviour,
 	ft_p_behaviour,
-};
+};*/
 
 char	*ft_solve_c_s(t_flags *info, char *str);
 int		va_test(const char *format, ...); //CHANGE
+int		ft_precision_nb(t_flags *info, char **str);
+char	ft_char_digit(unsigned int v, char c);
+char	*ft_x_o_conv(unsigned int nb, char c, int choice);
+char	*ft_solve_o_x(t_flags *info, unsigned int nb);
 #endif
