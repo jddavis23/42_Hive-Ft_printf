@@ -6,7 +6,7 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:19:40 by jdavis            #+#    #+#              #
-#    Updated: 2022/03/02 11:42:48 by jdavis           ###   ########.fr        #
+#    Updated: 2022/03/03 12:36:49 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ SRC += va_test.c
 SRC += flags_plus.c
 SRC += char_digit.c
 SRC += solve_x_o.c
+SRC += num_to_ascii.c
+SRC += solve_d_i_u.c
 
 OBJ = $(SRC:.c=.o)
 

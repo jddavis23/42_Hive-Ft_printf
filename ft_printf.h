@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/02 14:52:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/03 12:44:17 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ typedef struct s_flags
 	int		_zero;
 	int		_plus;
 	int		_hash;
-	int		_minus;
-	int		_h_or_o;
+	int		_h_sub;
 	char	_h_prfx[3];
+	int		_minus;
+	int		_div;
 	char	_type;
 	int			_width;
 	int			_precision;
 	int			_p_true;
+	int		_p_check;
 	int	_hh;
 	int	_h;
 	int	_ll;
@@ -55,8 +57,9 @@ char	*ft_solve_c_s(t_flags *info, char *str);
 int		va_test(const char *format, ...); //CHANGE
 int		ft_precision_nb(t_flags *info, char **str);
 char	ft_char_digit(unsigned int v, char c);
-char	*ft_x_o_conv(unsigned int nb, char c, int choice);
+char	*ft_num_toa(long long nb, char c, int choice);
 char	*ft_solve_o_x(t_flags *info, unsigned int nb);
-void	ft_apply_hash(t_flags *info, int nb, int checker, char **temp, int *i);
+void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i);
+char	*ft_solve_d_i_u(t_flags *info, long long nb);
 
 #endif

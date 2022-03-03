@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/02 11:49:21 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/03 12:49:03 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,12 @@ t_flags	*ft_create_struct(void)
 	in_flags->_minus = 0;
 	in_flags->_plus = 0;
 	in_flags->_hash = 0;
-	in_flags->_h_or_o = 0;
+	in_flags->_h_sub = 0;
+	in_flags->_div = 0;
 	in_flags->_width = 0;
 	in_flags->_precision = 0;
 	in_flags->_p_true = 0;
+	in_flags->_p_check = 0;
 	in_flags->_hh = 0;
 	in_flags->_h = 0;
 	in_flags->_ll = 0;
@@ -152,15 +154,19 @@ t_flags	*ft_true_struct(char *str, char type)
 	ft_bzero(info->_h_prfx, 3);
 	if (type == 'x' || type == 'X')
 	{
-		info->_h_or_o = 16;
+		info->_div = 16;
+		info->_h_sub = 2;
 		info->_h_prfx[0] = '0';
 		info->_h_prfx[1] = type;
 	}
-	if (type == 'o')
+	else if (type == 'o')
 	{
-		info->_h_or_o = 8;
+		info->_div = 8;
+		info->_h_sub = 1;
 		info->_h_prfx[0] = '0';
 	}
+	else
+		info->_div = 10;
 	return (info);
 }
 
@@ -321,7 +327,7 @@ t_flags	*ft_do(char *str)
 	return ('0');
 }*/
 
-char	*ft_x_o_conv(unsigned int nb, char c, int choice)
+/*char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 {
 	int		count = 0;
 	char	*str;
@@ -346,7 +352,7 @@ char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 		dup_nb /= choice;
 	}
 	return (str);
-}
+}*/
 
 /*int	ft_precision_nb(t_flags *info, char **str)
 {
@@ -370,7 +376,7 @@ char	*ft_x_o_conv(unsigned int nb, char c, int choice)
 	return (0);
 }*/
 
-char	*ft_solve_o_x(t_flags *info, unsigned int nb)
+/*char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 {
 	char	*str;
 	char	*temp;
@@ -383,7 +389,7 @@ char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 		sub = 1;
 	i = 0;
 	temp = NULL;
-	str = ft_x_o_conv(nb, info->_type, info->_h_or_o);
+	str = ft_x_o_conv(nb, info->_type, info->_div);
 	checker = ft_precision_nb(info, &str);
 	if (info->_width > (int)ft_strlen(str))
 	{
@@ -453,7 +459,7 @@ char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 		}
 	}
 	return (str);
-}
+}*/
 
 
 /*char	*ft_solve_o(t_flags *info, unsigned int nb)
@@ -520,7 +526,7 @@ char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 	return (str);
 }*/
 
-char	*ft_solve_d(t_flags *info, int nb)
+/*char	*ft_solve_d_i_u(t_flags *info, int nb)
 {
 	char	*str;
 	char	*temp;
@@ -585,7 +591,7 @@ char	*ft_solve_d(t_flags *info, int nb)
 		str = temp;
 	}
 	return (str);
-}
+}*/
 
 
 
@@ -609,8 +615,8 @@ int	ft_solve(va_list *ap, t_flags *info)
 	}
 	else if (info->_type =='x' || info->_type == 'X' || info->_type == 'o')
 		str = ft_solve_o_x(info, va_arg(*ap, unsigned int));
-	else if (info->_type == 'd' || info->_type == 'i')
-		str = ft_solve_d(info, va_arg(*ap, int));
+	else if (info->_type == 'd' || info->_type == 'i' || info->_type == 'u')
+		str = ft_solve_d_i_u(info, va_arg(*ap, long long));
 	//dont forget to include %%
 	if (!str)
 		return (-1);
