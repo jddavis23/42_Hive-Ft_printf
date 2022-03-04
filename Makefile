@@ -6,7 +6,7 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:19:40 by jdavis            #+#    #+#              #
-#    Updated: 2022/03/03 12:36:49 by jdavis           ###   ########.fr        #
+#    Updated: 2022/03/04 15:14:31 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,13 @@ INCLUDES = libft/
 CC = gcc -Wall -Wextra -Werror -I libft/
 
 SRC = solve_c_s.c
-SRC += va_test.c
+SRC += ft_printf.c
 SRC += flags_plus.c
 SRC += char_digit.c
 SRC += solve_x_o.c
 SRC += num_to_ascii.c
-SRC += solve_d_i_u.c
+SRC += solve_d_i.c
+SRC += solve_u.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -30,8 +31,8 @@ all: $(NAME)
 
 $(NAME):
 	@make -C libft/ fclean && make -C libft/
-	$(CC) -c -I ./includes $(SRC)
-	ar rc $(NAME) $(OBJ) libft/*.o
+	@$(CC) -c -I ./includes $(SRC)
+	@ar rc $(NAME) $(OBJ) libft/*.o
 	ranlib $(NAME)
 
 clean:

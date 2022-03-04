@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/04 12:33:22 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/04 15:13:54 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_flags
 };*/
 
 char	*ft_solve_c_s(t_flags *info, char *str);
-int		va_test(const char *format, ...); //CHANGE
+int		ft_printf(const char *format, ...);
 int		ft_precision_nb(t_flags *info, char **str);
 char	ft_char_digit(unsigned int v, char c);
 char	*ft_num_toa(long long int nb, char c, int choice);

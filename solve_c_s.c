@@ -6,34 +6,67 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/01 17:07:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/04 16:26:11 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_solve_c_s(t_flags *info, char *str)
+static int	ft_precision_s(t_flags *info, char **str)
 {
 	char	*temp;
-	int		i;
-	int		checker;
 
-	i = 0;
-	checker = 0;
 	temp = NULL;
 	if (info->_type == 's')
 	{
 		if (info->_precision)
 		{
-			if (info->_precision < (int)ft_strlen(str))
+			if (info->_precision < (int)ft_strlen(*str))
 			{
-				checker = 1;
 				temp = ft_strnew(info->_precision);
-				ft_strncpy(temp, str, info->_precision);
-				str = temp;
+				ft_strncpy(temp, *str, info->_precision);
+				*str = temp;
+				return (1);
 			}
 		}
 	}
+	return (0);
+}
+
+static char	*ft_width_plus(t_flags *info, char *str)
+{
+	char	*temp;
+	int		i;
+
+	i = 0;
+	temp = NULL;
+	temp = ft_strnew(info->_width);
+	if (!temp)
+		return (NULL);
+	if (info->_minus)
+	{
+		ft_strcat(temp, str);
+		i = ft_strlen(str);
+		while (i < info->_width)
+			temp[i++] = ' ';
+	}
+	else
+	{
+		ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
+		while (i < (info->_width - (int)ft_strlen(str)))
+			temp[i++] = ' ';
+	}
+	return (temp);
+}
+
+char	*ft_solve_c_s(t_flags *info, char *str)
+{
+	char	*temp;
+	int		checker;
+
+	checker = 0;
+	temp = NULL;
+	checker = ft_precision_s(info, &str);
 	if (info->_width <= (int)ft_strlen(str))
 	{
 		temp = ft_strdup(str);
@@ -42,22 +75,9 @@ char	*ft_solve_c_s(t_flags *info, char *str)
 	}
 	else
 	{
-		temp = ft_strnew(info->_width);
+		temp = ft_width_plus(info, str);
 		if (!temp)
 			return (NULL);
-		if (info->_minus)
-		{
-			ft_strcat(temp, str);
-			i = ft_strlen(str);
-			while (i < info->_width)
-				temp[i++] = ' ';
-		}
-		else
-		{
-			ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
-			while (i < (info->_width - (int)ft_strlen(str)))
-				temp[i++] = ' ';
-		}
 	}
 	if (checker == 1 || info->_type == 'c')
 		ft_strdel(&str);
