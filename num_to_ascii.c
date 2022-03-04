@@ -6,27 +6,29 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/03 12:43:50 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/04 12:08:40 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h> //remove
 
-char	*ft_num_toa(long long nb, char c, int choice)
+char	*ft_num_toa(long long int nb, char c, int choice)
 {
 	int		count = 0;
 	char	*str;
-	int		dup_nb;
+	long long int		dup_nb;
 	int		sign;
 
 	sign = 1;
-	dup_nb = nb;
 	str = NULL;
 	if (nb < 0)
 	{
+		nb *= -1;
 		sign = -1;
 		++count;
 	}
+	dup_nb = nb;
 	if (nb == 0)
 	{
 		str = ft_strdup("0");
@@ -43,5 +45,7 @@ char	*ft_num_toa(long long nb, char c, int choice)
 		str[--count] = ft_char_digit(dup_nb % choice, c);
 		dup_nb /= choice;
 	}
+	if (sign == -1)
+		str[count] = '-';
 	return (str);
 }

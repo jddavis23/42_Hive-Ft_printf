@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/03 12:49:03 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/04 12:37:02 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,15 @@ t_flags	*ft_true_struct(char *str, char type)
 			info->_ll = 1;
 	}
 	ft_bzero(info->_h_prfx, 3);
-	if (type == 'x' || type == 'X')
+	if (type == 'x' || type == 'X' || type == 'p')
 	{
 		info->_div = 16;
 		info->_h_sub = 2;
 		info->_h_prfx[0] = '0';
-		info->_h_prfx[1] = type;
+		if (type == 'p')
+			info->_h_prfx[1] = 'x';
+		else
+			info->_h_prfx[1] = type;
 	}
 	else if (type == 'o')
 	{
@@ -593,7 +596,19 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
+char	*ft_solve_p(t_flags *info, uintptr_t addi)
+{
+	char	*str;
+	char	*temp;
 
+	temp = NULL;
+	str = ft_num_toa(addi, 'x', info->_div);
+	temp = ft_strnew(2 + ft_strlen(str));
+	ft_strcat(ft_strcpy(temp, info->_h_prfx), str);
+	ft_strdel(&str);
+	str = temp;
+	return (str);
+}
 
 int	ft_solve(va_list *ap, t_flags *info)
 {
@@ -609,14 +624,18 @@ int	ft_solve(va_list *ap, t_flags *info)
 		else
 		{
 			c_pass = ft_strnew(1);
-			c_pass[0] = (char)va_arg(*ap, int);
+			c_pass[0] = (char)va_arg(*ap, int); //maybe change c_pass into fixed size array
 			str = ft_solve_c_s(info, c_pass);
 		}
 	}
 	else if (info->_type =='x' || info->_type == 'X' || info->_type == 'o')
 		str = ft_solve_o_x(info, va_arg(*ap, unsigned int));
-	else if (info->_type == 'd' || info->_type == 'i' || info->_type == 'u')
-		str = ft_solve_d_i_u(info, va_arg(*ap, long long));
+	else if (info->_type == 'd' || info->_type == 'i')
+		str = ft_solve_d_i(info, va_arg(*ap, int));
+	else if (info->_type == 'u')
+		str = ft_solve_u(info, va_arg(*ap, long long));
+	else if (info->_type == 'p')
+		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	//dont forget to include %%
 	if (!str)
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/03 12:44:17 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/04 12:33:22 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ char	*ft_solve_c_s(t_flags *info, char *str);
 int		va_test(const char *format, ...); //CHANGE
 int		ft_precision_nb(t_flags *info, char **str);
 char	ft_char_digit(unsigned int v, char c);
-char	*ft_num_toa(long long nb, char c, int choice);
+char	*ft_num_toa(long long int nb, char c, int choice);
 char	*ft_solve_o_x(t_flags *info, unsigned int nb);
 void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i);
-char	*ft_solve_d_i_u(t_flags *info, long long nb);
-
+char	*ft_solve_d_i(t_flags *info, int nb);
+char	*ft_solve_u(t_flags *info, long long int nb);
 #endif
