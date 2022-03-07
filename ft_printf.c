@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/04 15:13:22 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/07 13:12:04 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -596,7 +596,7 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
-char	*ft_solve_p(t_flags *info, uintptr_t addi)
+/*char	*ft_solve_p(t_flags *info, uintptr_t addi)
 {
 	char	*str;
 	char	*temp;
@@ -608,7 +608,20 @@ char	*ft_solve_p(t_flags *info, uintptr_t addi)
 	ft_strdel(&str);
 	str = temp;
 	return (str);
-}
+}*/
+
+char	*ft_solve_f(t_flags *info, long double nb)
+{
+	char	*str;
+	char	*temp;
+	int		i;
+
+	i = 0;
+	temp = NULL;
+	str = NULL;
+	str = ft_floating(info, nb);
+
+
 
 int	ft_solve(va_list *ap, t_flags *info)
 {
@@ -636,6 +649,8 @@ int	ft_solve(va_list *ap, t_flags *info)
 		str = ft_solve_u(info, va_arg(*ap, long long));
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
+	else if (info->_type == 'f')
+		str = ft_solve_f(info, va_arg(ap, double)); // FINISH
 	//dont forget to include %%
 	if (!str)
 		return (-1);
@@ -680,397 +695,3 @@ int	ft_printf(const char *format, ...)
 	return (b);
 }
 
-/*int	main(void)
-{
-	int ret = 0;
-
-	printf("############%%c######################\n");
-
-	printf("TEST %%-12c\n");
-	ft_printf("%-12c-m\n", 'c');
-	printf("%-12c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("TEST %%5.c\n");
-	ret = ft_printf("%5.c-m\n", 'c');
-	printf("%5.c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("TEST %%-5c\n");  
-	ret = ft_printf("%-5c-m\n", 'c');
-	printf("%-5c-p\n", 'c');
-	ft_printf("\n\n");
-	
-	printf("TEST %%c\n");
-	ret = ft_printf("%c-m\n", 'c');
-	printf("%c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("TEST %%1c\n");
-	ret = ft_printf("%1c-m\n", 'c');
-	printf("%1c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("TEST %%-1c\n");
-	ret = ft_printf("%-1c-m\n", 'c');
-	printf("%-1c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("TEST %%-c\n");
-	ret = ft_printf("%-c-m\n", 'c');
-	printf("%-c-p\n", 'c');
-	ft_printf("\n\n");
-
-	printf("############%%s######################\n");
-
-	printf("TEST %%s\n");
-	ft_printf("%s-m\n", "this is a string");
-	printf("%s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%.16s\n");
-	ret = ft_printf("%.16s-m\n", "this is a string");
-	printf("%.16s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%.18s\n");
-	ret = ft_printf("%.18s-m\n", "this is a string");
-	printf("%.18s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%5.5s\n");
-	ret = ft_printf("%5.5s-m\n", "this is a string");
-	printf("%5.5s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%10.5s\n");
-	ret = ft_printf("%10.5s-m\n", "this is a string");
-	printf("%10.5s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%-20s\n");
-	ret = ft_printf("%-20s-m\n", "this is a string");
-	printf("%-20s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%-20.5s\n");
-	ret = ft_printf("%-20.5s-m\n", "this is a string");
-	printf("%-20.5s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-	printf("TEST %%-1.1s\n");
-	ret = ft_printf("%-1.1s-m\n", "this is a string");
-	printf("%-1.1s-p\n", "this is a string");
-	ft_printf("\n\n");
-	
-	printf("TEST %%-s\n");
-	ret = ft_printf("%-s-m\n", "this is a string");
-	printf("%-s-p\n", "this is a string");
-	ft_printf("\n\n");
-	
-	printf("TEST %%-20.20s\n");
-	ret = ft_printf("%-20.20s-m\n", "this is a string");
-	printf("%-20.20s-p\n", "this is a string");
-	ft_printf("\n\n");
-
-printf("############%%o######################\n");
-
-	printf("TEST %%0#10o\n");
-	ft_printf("%0#10o-m\n", 0);
-	printf("%0#10o-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%#5.o\n");
-	ret = ft_printf("%#5.o-m\n", 32);
-	printf("%#5.o-p\n", 32);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05.o\n");
-	ret = ft_printf("%#05.o-m\n", 3);
-	printf("%#05.o-p\n", 3);
-	ft_printf("\n\n");
-
-	printf("TEST %%05.o\n");
-	ret = ft_printf("%05.o-m\n", 189);
-	printf("%05.o-p\n", 189);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05o\n");
-	ret = ft_printf("%#05o-m\n", 2);
-	printf("%#05o-p\n", 2);
-	ft_printf("\n\n");
-
-	printf("TEST %%-#5o\n");
-	ret = ft_printf("%-#5o-m\n", 0);
-	printf("%-#5o-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%-5.3o\n");
-	ret = ft_printf("%-5.3o-m\n", 0);
-	printf("%-5.3o-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%#10o\n");
-	ret = ft_printf("%#10o-m\n", 0);
-	printf("%#10o-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-o\n");
-	ret = ft_printf("%-o-m\n", 0);
-	printf("%-o-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-10o\n");
-	ret = ft_printf("%-10o-m\n", 0);
-	printf("%-10o-p\n", 0);
-	ft_printf("\n\n");
-
-printf("############%%x######################\n");
-
-	printf("TEST %%5.3x\n");
-	ft_printf("%5.3x-m\n", 8);
-	printf("%5.3x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#5.7x\n");
-	ft_printf("%#5.7x-m\n", 8);
-	printf("%#5.7x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#5.x\n");
-	ret = ft_printf("%#5.x-m\n", 8);
-	printf("%#5.x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05.x\n");
-	ret = ft_printf("%#05.x-m\n", 8);
-	printf("%#05.x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%05.x\n");
-	ret = ft_printf("%05.x-m\n", 8);
-	printf("%05.x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05x\n");
-	ret = ft_printf("%#05x-m\n", 8);
-	printf("%#05x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%-#5x\n");
-	ret = ft_printf("%-#5x-m\n", 8);
-	printf("%-#5x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%-5.3x\n");
-	ret = ft_printf("%-5.3x-m\n", 8);
-	printf("%-5.3x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#10x\n");
-	ret = ft_printf("%#10x-m\n", 8);
-	printf("%#10x-p\n", 8);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-x\n");
-	ret = ft_printf("%-x-m\n", 8);
-	printf("%-x-p\n", 8);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-10x\n");
-	ret = ft_printf("%-10x-m\n", 8);
-	printf("%-10x-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#x\n");
-	ret = ft_printf("%#x-m\n", 0);
-	printf("%#x-p\n", 0);
-	ft_printf("\n\n");
-
-printf("############%%X######################\n");
-
-	printf("TEST %%-#5.3X\n");
-	ret = ft_printf("%-#5.3X-m\n", 3);
-	printf("%-#5.3X-p\n", 3);
-	ft_printf("\n\n");
-	
-	printf("TEST %%5.3X\n");
-	ft_printf("%5.3X-m\n", 8);
-	printf("%5.3X-p\n", 8);
-	ft_printf("\n\n");
-
-	printf("TEST %%#10.7X\n");
-	ft_printf("%#10.7X-m\n", 56);
-	printf("%#10.7X-p\n", 56);
-	ft_printf("\n\n");
-
-	printf("TEST %%#5.X\n");
-	ret = ft_printf("%#5.X-m\n", 0); 
-	printf("%#5.X-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05.X\n");
-	ret = ft_printf("%#05.X-m\n", 12);
-	printf("%#05.X-p\n", 12);
-	ft_printf("\n\n");
-
-	printf("TEST %%05.X\n");
-	ret = ft_printf("%05.X-m\n", 123);
-	printf("%05.X-p\n", 123);
-	ft_printf("\n\n");
-
-	printf("TEST %%#05X\n");
-	ret = ft_printf("%#05X-m\n", 97);
-	printf("%#05X-p\n", 97);
-	ft_printf("\n\n");
-
-	printf("TEST %%-#5X\n");
-	ret = ft_printf("%-#5X-m\n", 53);
-	printf("%-#5X-p\n", 53);
-	ft_printf("\n\n");
-
-	printf("TEST %%-5.3X\n");
-	ret = ft_printf("%-5.3X-m\n", 77);
-	printf("%-5.3X-p\n", 77);
-	ft_printf("\n\n");
-
-	printf("TEST %%#10X\n");
-	ret = ft_printf("%#10X-m\n", 219);
-	printf("%#10X-p\n", 219);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-X\n");
-	ret = ft_printf("%-X-m\n", 0);
-	printf("%-X-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%03X\n");
-	ret = ft_printf("%03X-m\n", 0);
-	printf("%03X-p\n", 0);
-	ft_printf("\n\n");
-
-	
-	printf("TEST %%-10X\n");
-	ret = ft_printf("%-10X-m\n", 1002);
-	printf("%-10X-p\n", 1002);
-	ft_printf("\n\n");
-
-	printf("TEST %%#2X\n");
-	ret = ft_printf("%#2X-m\n", 8);
-	printf("%#2X-p\n", 8);
-	ft_printf("\n\n");
-	
-	
-printf("############%%d/i######################\n");
-
-	printf("TEST %%02d\n");
-	ret = ft_printf("%02d-m\n", 0);
-	printf("%02d-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%5.3d\n");
-	ft_printf("%5.3d-m\n", 0);
-	printf("%5.3d-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%5.1d\n");
-	ft_printf("%5.1d-m\n", 0);
-	printf("%5.1d-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%5.d\n");
-	ret = ft_printf("%5.d-m\n", 0);
-	printf("%5.d-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%05d\n"); //precision dictates if 0 is present or not. CHANGE!!
-	ret = ft_printf("%05d-m\n", 0);
-	printf("%05d-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%05.d\n");
-	ret = ft_printf("%05.d-m\n", 0);
-	printf("%05.d-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%05i\n");
-	ret = ft_printf("%05i-m\n", 0);
-	printf("%05i-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%-5i\n");
-	ret = ft_printf("%-5i-m\n", 0);
-	printf("%-5i-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%-5.3i\n");
-	ret = ft_printf("%-5.3i-m\n", 0);
-	printf("%-5.3i-p\n", 0);
-	ft_printf("\n\n");
-
-	printf("TEST %%10i\n");
-	ret = ft_printf("%10i-m\n", 0);
-	printf("%10i-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%-i\n");
-	ret = ft_printf("%-i-m\n", 0);
-	printf("%-i-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%03i\n");
-	ret = ft_printf("%03i-m\n", 0);
-	printf("%03i-p\n", 0);
-	ft_printf("\n\n");
-
-	
-	printf("TEST %%-10i\n");
-	ret = ft_printf("%-10i-m\n", 1002);
-	printf("%-10i-p\n", 1002);
-	ft_printf("\n\n");
-
-	printf("TEST %%+i\n");
-	ret = ft_printf("%+i-m\n", 8);
-	printf("%+i-p\n", 8);
-	ft_printf("\n\n");
-	
-	
-	printf("TEST %% i\n");
-	ret = ft_printf("% i-m\n", 8);
-	printf("% i-p\n", 8);
-	ft_printf("\n\n");
-	
-	printf("TEST %% 2i\n");
-	ret = ft_printf("% 2i-m\n", 8);
-	printf("% 2i-p\n", 8);
-	ft_printf("\n\n");
-	
-	printf("TEST %%+2i\n");
-	ret = ft_printf("%+2i-m\n", 8);
-	printf("%+2i-p\n", 8);
-	ft_printf("\n\n");
-	
-	printf("TEST %%+i\n");
-	ret = ft_printf("%+i-m\n", 0);
-	printf("%+i-p\n", 0);
-	ft_printf("\n\n");
-	
-	
-	printf("TEST %% i\n");
-	ret = ft_printf("% i-m\n", 0);
-	printf("% i-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%05i\n");
-	ret = ft_printf("%05i-m\n", 0);
-	printf("%05i-p\n", 0);
-	ft_printf("\n\n");
-	
-	printf("TEST %%+2i\n");
-	ret = ft_printf("%+2i-m\n", 0);
-	printf("%+2i-p\n", 0);
-	ft_printf("\n\n");
-	return (0);
-}
-
-*/
