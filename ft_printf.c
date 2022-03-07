@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/07 13:12:04 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/07 16:46:48 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,6 +610,59 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
+void	ft_floating(t_flags *info, long double nb)
+{
+	int	i;
+	long double dup_nb;
+	char		*str;
+	int			sign;
+	int			count;
+	char		*temp;
+
+	sign = 1;
+	i = 0;
+	str = NULL;
+	temp = NULL;
+	dup_nb = nb;
+	if (info)
+		sign = 1;
+	count = 0;
+	if (nb < 0)
+	{
+		sign *= -1;
+		nb *= -1;
+		++count;
+	}
+	while (nb >= 1)
+	{
+		nb /= 10;
+		++count;
+	}
+	if (nb > 0)
+	{
+		++count;
+		nb *= 100000000000000;
+		while (nb >= 1)
+		{
+			nb /= 10;
+			++count;
+		}
+		++count;
+	}
+	else
+		count += 7;
+	str = ft_strnew(count);
+	temp = ft_itoa(dup_nb);
+	ft_strcat(str, temp);
+	ft_strdel(&temp);
+	//build on
+	ft_putstr(str);
+}
+
+
+
+
+
 char	*ft_solve_f(t_flags *info, long double nb)
 {
 	char	*str;
@@ -619,8 +672,10 @@ char	*ft_solve_f(t_flags *info, long double nb)
 	i = 0;
 	temp = NULL;
 	str = NULL;
-	str = ft_floating(info, nb);
 
+	ft_floating(info, nb);
+	return (str);
+}
 
 
 int	ft_solve(va_list *ap, t_flags *info)
@@ -650,7 +705,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
-		str = ft_solve_f(info, va_arg(ap, double)); // FINISH
+		str = ft_solve_f(info, (long double)va_arg(*ap, double)); // FINISH
 	//dont forget to include %%
 	if (!str)
 		return (-1);
