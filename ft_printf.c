@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/07 16:46:48 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/08 12:15:16 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,22 +610,19 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
-void	ft_floating(t_flags *info, long double nb)
+char	*ft_floating(t_flags *info, long double nb)
 {
 	int	i;
-	long double dup_nb;
+	long long dup_nb;
 	char		*str;
 	int			sign;
 	int			count;
 	char		*temp;
 
 	sign = 1;
-	i = 0;
 	str = NULL;
-	temp = NULL;
 	dup_nb = nb;
-	if (info)
-		sign = 1;
+	temp = ft_num_toa((long long int)nb, info->_type, 10);
 	count = 0;
 	if (nb < 0)
 	{
@@ -638,25 +635,34 @@ void	ft_floating(t_flags *info, long double nb)
 		nb /= 10;
 		++count;
 	}
+	nb = nb * 100; //raise to the power of count or count - 1 if sign == -1
+	nb = (long double)(nb - (int)nb);
 	if (nb > 0)
 	{
 		++count;
-		nb *= 100000000000000;
+		nb *= 10000000;  //should be dependent on precision
+		dup_nb = (long long)nb;
 		while (nb >= 1)
 		{
 			nb /= 10;
 			++count;
 		}
-		++count;
 	}
 	else
 		count += 7;
 	str = ft_strnew(count);
-	temp = ft_itoa(dup_nb);
 	ft_strcat(str, temp);
 	ft_strdel(&temp);
+	i = ft_strlen(str);
+	str[i] = '.';;
+	//printf("count = %d    i = %d\n", count, i);
+	while (--count > i)
+	{
+		str[count] = ft_char_digit((dup_nb % 10), info->_type);
+	   dup_nb /= 10;
+	}	   
 	//build on
-	ft_putstr(str);
+	return (str);
 }
 
 
@@ -673,7 +679,7 @@ char	*ft_solve_f(t_flags *info, long double nb)
 	temp = NULL;
 	str = NULL;
 
-	ft_floating(info, nb);
+	str = ft_floating(info, nb);
 	return (str);
 }
 

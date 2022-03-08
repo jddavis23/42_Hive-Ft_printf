@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/04 12:08:40 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/08 12:01:31 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 		dup_nb /= choice;
 	}
 	if (sign == -1)
-		str[count] = '-';
+		str[0] = '-';
 	return (str);
 }
