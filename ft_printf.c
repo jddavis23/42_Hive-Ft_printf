@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/08 12:15:16 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/08 16:38:30 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,9 +610,72 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
-char	*ft_floating(t_flags *info, long double nb)
+long long int	ft_power(int nb, int power)
 {
-	int	i;
+	long long int result;
+
+	result = 1;
+	if (power == 0)
+		return (1);
+	if (power == 1)
+		return (nb);
+	while (power >= 1)
+	{
+		result *= nb;
+		--power;
+	}
+	return (result);
+}
+
+
+void	ft_floating(t_flags *info, long double nb)
+{
+	
+	long long int result = 0;
+	int i = 0;
+	//int sign = 1;
+	long long int int_nb;
+	char	hold[51];
+	char	*str;
+
+	str = NULL;
+	ft_bzero(hold, 51);
+	int_nb = (long long int)nb;
+//	printf("%lld----\n", int_nb);
+	while (i < 50)
+	{
+		hold[i++] = (int_nb % 2) + '0';
+		int_nb /= 2;
+	}
+	//hold[i] = '\0';
+	i = 0;
+	while (i < 50)
+	{
+		result += (hold[i] - '0') * ft_power(2, i);
+		++i;
+	}
+	i = 0;
+	str = ft_num_toa(result, info->_type, 10);
+	nb -= (long long int)nb;
+	ft_bzero(hold, 51);
+	while (i < 50)
+	{
+		hold[i++] = (int)(nb * 2) + '0';
+		nb /= 2;
+	}//add decimal calculation
+	//printf("\n%s---\n", str);
+	//ft_putnbr(result);
+
+	
+	
+	
+	
+	
+	
+	
+	
+	///////////////////////////////////////
+	/*int	i;
 	long long dup_nb;
 	char		*str;
 	int			sign;
@@ -662,7 +725,7 @@ char	*ft_floating(t_flags *info, long double nb)
 	   dup_nb /= 10;
 	}	   
 	//build on
-	return (str);
+	return (str);*/
 }
 
 
@@ -679,7 +742,7 @@ char	*ft_solve_f(t_flags *info, long double nb)
 	temp = NULL;
 	str = NULL;
 
-	str = ft_floating(info, nb);
+	ft_floating(info, nb);
 	return (str);
 }
 
