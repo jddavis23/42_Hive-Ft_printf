@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/08 16:38:30 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/09 13:14:20 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,38 +610,53 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
-long long int	ft_power(int nb, int power)
+long double	ft_power(double nb, int power)
 {
-	long long int result;
+	long double result;
+	long double help = 0;
 
 	result = 1;
 	if (power == 0)
 		return (1);
 	if (power == 1)
 		return (nb);
-	while (power >= 1)
+	if (power >= 0)
 	{
-		result *= nb;
-		--power;
+		while (power >= 1)
+		{
+			result *= nb;
+			--power;
+		}
+		return (result);
 	}
-	return (result);
+	if (power < 0)
+	{
+		while (power <= -1)
+		{
+			help += 1 / ft_power(nb, (power * -1));
+			++power;
+		}
+	}
+	return (help);
 }
 
 
 void	ft_floating(t_flags *info, long double nb)
 {
-	
+	/*
 	long long int result = 0;
+	long double help = 0;
 	int i = 0;
 	//int sign = 1;
-	long long int int_nb;
-	char	hold[51];
+	char	hold[141];
 	char	*str;
+	long int int_nb;
 
 	str = NULL;
-	ft_bzero(hold, 51);
+	ft_bzero(hold, 141);
 	int_nb = (long long int)nb;
-//	printf("%lld----\n", int_nb);
+	if (info)
+		printf("%f----\n", (double)nb);
 	while (i < 50)
 	{
 		hold[i++] = (int_nb % 2) + '0';
@@ -663,19 +678,28 @@ void	ft_floating(t_flags *info, long double nb)
 		hold[i++] = (int)(nb * 2) + '0';
 		nb /= 2;
 	}//add decimal calculation
-	//printf("\n%s---\n", str);
+	i = 0;
+	while (i < 15)
+	{
+		printf("%.10Lf--\n", help);
+		help += (hold[i] - '0') * ft_power(2, (i * -1));
+		if (help +  (hold[i] - '0') * ft_power(2, (i * -1)) > 0.147)
+			break;
+		++i;
+	}	
+	printf("\n%Lf---\n", help);
 	//ft_putnbr(result);
 
 	
 	
-	
+*/	
 	
 	
 	
 	
 	
 	///////////////////////////////////////
-	/*int	i;
+	int	i;
 	long long dup_nb;
 	char		*str;
 	int			sign;
@@ -685,6 +709,7 @@ void	ft_floating(t_flags *info, long double nb)
 	sign = 1;
 	str = NULL;
 	dup_nb = nb;
+	printf("%Lf***\n", nb);
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
 	count = 0;
 	if (nb < 0)
@@ -723,9 +748,10 @@ void	ft_floating(t_flags *info, long double nb)
 	{
 		str[count] = ft_char_digit((dup_nb % 10), info->_type);
 	   dup_nb /= 10;
-	}	   
+	}
+	ft_putstr(str);
 	//build on
-	return (str);*/
+	//return (str);
 }
 
 
