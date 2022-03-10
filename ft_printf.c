@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/10 12:56:36 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/10 16:34:23 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -646,6 +646,7 @@ void	ft_floating(t_flags *info, double nb)
 	if (nb < 0)
 		sign = -1;
 	str = NULL;
+	printf("%f+++++\n", nb);
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
 	if (nb < 0)
 		nb *= -1;
@@ -677,7 +678,7 @@ void	ft_floating(t_flags *info, double nb)
 					else
 					{
 						carry = 0;
-						str[i] = '0';
+						str[i] = '0'; //change to bankers rounding (closest even
 					}
 				}
 			}
