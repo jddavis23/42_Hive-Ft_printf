@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/09 13:14:20 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/10 12:56:36 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -610,10 +610,9 @@ t_flags	*ft_do(char *str)
 	return (str);
 }*/
 
-long double	ft_power(double nb, int power)
+long long int	ft_power(double nb, int power)
 {
-	long double result;
-	long double help = 0;
+	long long int  result;
 
 	result = 1;
 	if (power == 0)
@@ -627,133 +626,65 @@ long double	ft_power(double nb, int power)
 			result *= nb;
 			--power;
 		}
-		return (result);
 	}
-	if (power < 0)
-	{
-		while (power <= -1)
-		{
-			help += 1 / ft_power(nb, (power * -1));
-			++power;
-		}
-	}
-	return (help);
+	return (result);
 }
 
 
-void	ft_floating(t_flags *info, long double nb)
+void	ft_floating(t_flags *info, double nb)
 {
-	/*
-	long long int result = 0;
-	long double help = 0;
-	int i = 0;
-	//int sign = 1;
-	char	hold[141];
-	char	*str;
-	long int int_nb;
-
-	str = NULL;
-	ft_bzero(hold, 141);
-	int_nb = (long long int)nb;
-	if (info)
-		printf("%f----\n", (double)nb);
-	while (i < 50)
-	{
-		hold[i++] = (int_nb % 2) + '0';
-		int_nb /= 2;
-	}
-	//hold[i] = '\0';
-	i = 0;
-	while (i < 50)
-	{
-		result += (hold[i] - '0') * ft_power(2, i);
-		++i;
-	}
-	i = 0;
-	str = ft_num_toa(result, info->_type, 10);
-	nb -= (long long int)nb;
-	ft_bzero(hold, 51);
-	while (i < 50)
-	{
-		hold[i++] = (int)(nb * 2) + '0';
-		nb /= 2;
-	}//add decimal calculation
-	i = 0;
-	while (i < 15)
-	{
-		printf("%.10Lf--\n", help);
-		help += (hold[i] - '0') * ft_power(2, (i * -1));
-		if (help +  (hold[i] - '0') * ft_power(2, (i * -1)) > 0.147)
-			break;
-		++i;
-	}	
-	printf("\n%Lf---\n", help);
-	//ft_putnbr(result);
-
-	
-	
-*/	
-	
-	
-	
-	
-	
-	///////////////////////////////////////
-	int	i;
-	long long dup_nb;
 	char		*str;
-	int			sign;
-	int			count;
+	int			i;
 	char		*temp;
+	char		*full;
+	int			sign;
+	int			carry;
 
+	carry = 0;
+	i = 0;
 	sign = 1;
-	str = NULL;
-	dup_nb = nb;
-	printf("%Lf***\n", nb);
-	temp = ft_num_toa((long long int)nb, info->_type, 10);
-	count = 0;
 	if (nb < 0)
-	{
-		sign *= -1;
+		sign = -1;
+	str = NULL;
+	temp = ft_num_toa((long long int)nb, info->_type, 10);
+	if (nb < 0)
 		nb *= -1;
-		++count;
-	}
-	while (nb >= 1)
+	nb = (nb - (long long)nb);
+	nb *= ft_power(10, info->_precision + 1);  //should be dependent on precision
+	str = ft_num_toa((long long int)nb, info->_type, 10);
+	full = ft_strjoin(".", str);
+	ft_strdel(&str);
+	str = ft_strjoin(temp, full);
+	//free tmep  && full
+	i = ft_strlen(str) - 1;
+	if (str[--i + 1] >= '5')
 	{
-		nb /= 10;
-		++count;
-	}
-	nb = nb * 100; //raise to the power of count or count - 1 if sign == -1
-	nb = (long double)(nb - (int)nb);
-	if (nb > 0)
-	{
-		++count;
-		nb *= 10000000;  //should be dependent on precision
-		dup_nb = (long long)nb;
-		while (nb >= 1)
+		if (sign == 1)
 		{
-			nb /= 10;
-			++count;
+			if (str[i] < '9')
+			{
+				printf("yes\n");
+				str[i] += 1;
+			}
+			else
+			{
+				str[i] = '0';
+				carry = 1;
+				while (str[--i] != '.')
+				{
+					if (str[i] < '9')
+						str[i] += 1;
+					else
+					{
+						carry = 0;
+						str[i] = '0';
+					}
+				}
+			}
 		}
 	}
-	else
-		count += 7;
-	str = ft_strnew(count);
-	ft_strcat(str, temp);
-	ft_strdel(&temp);
-	i = ft_strlen(str);
-	str[i] = '.';;
-	//printf("count = %d    i = %d\n", count, i);
-	while (--count > i)
-	{
-		str[count] = ft_char_digit((dup_nb % 10), info->_type);
-	   dup_nb /= 10;
-	}
-	ft_putstr(str);
-	//build on
-	//return (str);
+	printf("%s-----\n", str);
 }
-
 
 
 
@@ -800,7 +731,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
-		str = ft_solve_f(info, (long double)va_arg(*ap, double)); // FINISH
+		str = ft_solve_f(info, (double)va_arg(*ap, double)); //only works with floats. look into doubles!
 	//dont forget to include %%
 	if (!str)
 		return (-1);
