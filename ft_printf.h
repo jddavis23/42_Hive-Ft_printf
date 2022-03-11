@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/07 11:27:30 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:37:12 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ typedef struct s_flags
 	int		_minus;
 	int		_div;
 	char	_type;
-	int			_width;
-	int			_precision;
-	int			_p_true;
+	int		_width;
+	int		_precision;
+	int		_p_true;
 	int		_p_check;
-	int	_hh;
-	int	_h;
-	int	_ll;
-	int	_l;
-	//t_width	*next;
+	int		_hh;
+	int		_h;
+	int		_ll;
+	int		_l;
+	int		_ret;
 }				t_flags;
 
 //typedef int ft_undef_behav(t_flags *info);

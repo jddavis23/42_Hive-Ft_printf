@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/11 12:54:04 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:30:56 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_is_type(char c)
 	if (c != 'd' && c != 'i' && c != 'o' &&
 			c != 'u' && c != 'x' && c != 'X' &&
 			c != 'c' && c != 's' && c != 'p' &&
-			c != 'f')
+			c != 'f' && c != '%')
 		return (1);
 	return (-1);
 }
@@ -55,9 +55,11 @@ int	ft_type_plus(const char *forma, char **type_plus)
 {
 	int i = 0;
 
-	if (forma[0] == '%')
+	if (forma[0] == '%')  //find out what this is for 
 	{
 		*type_plus = ft_strdup("%");
+		if (!*type_plus)
+			return (-1);
 		return (1);
 	}
 	while (ft_is_type(forma[i]) == 1)
@@ -67,17 +69,22 @@ int	ft_type_plus(const char *forma, char **type_plus)
 			return (-1);
 		++i;
 	}
-	*type_plus = ft_strnew(i + 1);
+	*type_plus = ft_strnew(++i);
+	if (!*type_plus)
+		return (-1);
 	ft_strncpy(*type_plus, forma, i);
-	(*type_plus)[i] = forma[i];
 	return (i);
 }
 
-t_flags	*ft_create_struct(void)
+t_flags	*ft_create_struct(t_flags *in_flags)
 {
-	t_flags		*in_flags;
-
-	in_flags = (t_flags *) malloc(sizeof(t_flags));
+	if (!in_flags)
+	{
+		in_flags = (t_flags *) malloc(sizeof(t_flags));
+		if (!in_flags)
+			return (NULL);
+		in_flags->_ret = 0;
+	}
 	in_flags->_space = 0;
 	in_flags->_zero = 0;
 	in_flags->_minus = 0;
@@ -97,12 +104,13 @@ t_flags	*ft_create_struct(void)
 }
 
 
-t_flags	*ft_true_struct(char *str, char type)
+t_flags	*ft_true_struct(t_flags *info, char *str, char type)
 {
 	int	i = 0;
-	t_flags *info;
 	
-	info = ft_create_struct();
+	info = ft_create_struct(info);
+	if (!info)
+		return (NULL);
 	info->_type = type;
 	while (str[i] == '0' || str[i] == ' ' || str[i] == '+' || str[i] == '-' || str[i] == '#')
 	{
@@ -238,12 +246,9 @@ int	ft_p_behaviour(t_flags *info)
 	return (1);
 }
 
-
-t_flags	*ft_do(char *str)
+t_flags	*ft_do(t_flags *info, char *str)
 {
-	t_flags *info;
-
-	info = ft_true_struct(str, str[ft_strlen(str) - 1]);
+	info = ft_true_struct(info,str, str[ft_strlen(str) - 1]);
 	/*if (str[ft_strlen(str) - 1] == 'c')
 	{
 		if (f_array[0](info) == -1)
@@ -262,353 +267,6 @@ t_flags	*ft_do(char *str)
 	ft_strdel(&str);   //isnt working how i thought it would
 	return (info);
 }
-
-/*char	*ft_solve_c_s(t_flags *info, char *str)
-{
-	char	*temp;
-	int		i;
-	int		checker;
-
-	i = 0;
-	checker = 0;
-	temp = NULL;
-	if (info->_type == 's')
-	{
-		if (info->_precision)
-		{
-			if (info->_precision < (int)ft_strlen(str))
-			{
-				checker = 1;
-				temp = ft_strnew(info->_precision);
-				ft_strncpy(temp, str, info->_precision);
-				str = temp;
-			}
-		}
-	}
-	if (info->_width <= (int)ft_strlen(str))
-	{
-		temp = ft_strdup(str);
-		if (!temp)
-			return (NULL);
-	}
-	else
-	{
-		temp = ft_strnew(info->_width);
-		if (!temp)
-			return (NULL);
-		if (info->_minus)
-		{
-			ft_strcat(temp, str);
-			i = ft_strlen(str);
-			while (i < info->_width)
-				temp[i++] = ' ';
-		}
-		else
-		{
-			ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
-			while (i < (info->_width - (int)ft_strlen(str)))
-				temp[i++] = ' ';
-		}
-	}
-	if (checker == 1 || info->_type == 'c')
-		ft_strdel(&str);
-	return (temp);
-}*/
-
-
-/*char ft_char_digit(unsigned int v, char c) 
-{
-    if (v >= 0 && v < 10)
-        return '0' + v;
-    else
-	{
-		if (c == 'x')
-        	return 'a' + v - 10;
-		else if (c == 'X')
-        	return 'A' + v - 10;
-	}
-	return ('0');
-}*/
-
-/*char	*ft_x_o_conv(unsigned int nb, char c, int choice)
-{
-	int		count = 0;
-	char	*str;
-	int		dup_nb;
-
-	dup_nb = nb;
-	str = NULL;
-	if (nb == 0)
-	{
-		str = ft_strdup("0");
-		return (str);
-	}
-	while (nb > 0)
-	{
-		nb /= choice;
-		count++;
-	}
-	str = ft_strnew(count);
-	while (dup_nb > 0)
-	{
-		str[--count] = ft_char_digit(dup_nb % choice, c);
-		dup_nb /= choice;
-	}
-	return (str);
-}*/
-
-/*int	ft_precision_nb(t_flags *info, char **str)
-{
-	char	*temp;
-	int		i;
-
-	temp = NULL;
-	i = 0;
-	if (info->_precision > (int)ft_strlen(*str))
-	{
-		temp = ft_strnew(info->_precision);
-		if (!temp)
-			return (-1);
-		while (i < (info->_precision - (int)ft_strlen(*str)))
-			temp[i++] = '0';
-		ft_strcpy(&temp[i], *str);
-		ft_strdel(str);
-		*str = temp;
-		return (1);
-	}
-	return (0);
-}*/
-
-/*char	*ft_solve_o_x(t_flags *info, unsigned int nb)
-{
-	char	*str;
-	char	*temp;
-	int		i;
-	int		checker;
-	int		sub;
-
-	sub = 2;
-	if (info->_type == 'o')
-		sub = 1;
-	i = 0;
-	temp = NULL;
-	str = ft_x_o_conv(nb, info->_type, info->_div);
-	checker = ft_precision_nb(info, &str);
-	if (info->_width > (int)ft_strlen(str))
-	{
-		temp = ft_strnew(info->_width);
-		if (!temp)
-		{
-			ft_strdel(&str);
-			return (NULL);
-		}
-		if (info->_minus)
-		{
-			if (info->_hash && nb != 0 && (!checker || info->_type != 'o'))
-			{
-				ft_strcpy(&temp[i], info->_h_prfx);
-				i += ft_strlen(info->_h_prfx);
-			}
-			ft_strcpy(&temp[i], str);
-			i += ft_strlen(str);
-			while (i < info->_width)
-				temp[i++] = ' ';
-		}
-		else if (info->_zero && !info->_p_true)
-		{
-			if (info->_hash && nb != 0 && (info->_type != 'o' || !checker))
-			{
-				ft_strcpy(&temp[i], info->_h_prfx);
-				i += ft_strlen(info->_h_prfx);
-			}
-			while (i < info->_width - (int)ft_strlen(str))
-				temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
-		}
-		else
-		{
-			if ((((info->_width - (int)ft_strlen(str) - sub)) < 0) && info->_hash && nb != 0 && info->_type != 'o')
-			{
-				ft_strdel(&temp);
-				temp = ft_strnew(2 + ft_strlen(str));
-			}
-			while ((i < (info->_width - (int)ft_strlen(str) - sub)) || (nb == 0 && i < info->_width - 1))
-				temp[i++] = ' ';
-			if (info->_hash && nb != 0 && (info->_type != 'o' || !checker))
-			{
-				ft_strcpy(&temp[i], info->_h_prfx);
-				i += ft_strlen(info->_h_prfx);
-			}
-			while (i < info->_width - (int)ft_strlen(str))
-				temp[i++] = ' ';
-			if (nb == 0 && !info->_precision && info->_p_true)
-				temp[i] = ' ';
-			else	
-				ft_strcpy(&temp[i], str);
-		}
-		ft_strdel(&str);
-		str = temp;
-	}
-	else
-	{
-		if (info->_hash && nb != 0) //change here
-		{
-			temp = ft_strnew(ft_strlen(str) + sub);
-			ft_strcpy(&temp[i], info->_h_prfx);
-			i += ft_strlen(info->_h_prfx);
-			ft_strcpy(&temp[i], str);
-			ft_strdel(&str);
-			str = temp;
-		}
-	}
-	return (str);
-}*/
-
-
-/*char	*ft_solve_o(t_flags *info, unsigned int nb)
-{
-	char	*str;
-	char	*temp;
-	int		i;
-	int		checker;
-
-	i = 0;
-	temp = NULL;
-	str = ft_x_o_conv(nb, info->_type, 8); //cant change unsigned int with itoa??
-	checker = ft_precision_nb(info, &str);
-	if (info->_width > (int)ft_strlen(str))
-	{
-		temp = ft_strnew(info->_width);
-		if (!temp)
-		{
-			ft_strdel(&str);
-			return (NULL);
-		}
-		if (info->_minus)
-		{
-			if (info->_hash && checker == 0 && nb != 0)
-				temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
-			i += ft_strlen(str);
-			while (i < info->_width)
-				temp[i++] = ' ';
-		}
-		else if (info->_zero && !info->_p_true)
-		{
-			while (i < info->_width - (int)ft_strlen(str))
-				temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
-		}
-		else
-		{
-			while (i < (info->_width - (int)ft_strlen(str) - 1))
-				temp[i++] = ' ';
-			if (info->_hash && checker == 0 && nb != 0)
-				temp[i++] = '0';
-			else
-				temp[i++] = ' ';
-			if (nb == 0 && info->_p_true && !info->_precision) //check with the && and zero
-				temp[i] = ' ';
-			else	
-				ft_strcpy(&temp[i], str);
-		}
-		ft_strdel(&str);
-		str = temp;
-	}
-	else
-	{
-		if (info->_hash && checker == 0 && nb != 0) //change here, may not need to check checker
-		{
-			temp = ft_strnew(ft_strlen(str) + 1);
-			temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
-			ft_strdel(&str);
-			str = temp;
-		}
-	}
-	return (str);
-}*/
-
-/*char	*ft_solve_d_i_u(t_flags *info, int nb)
-{
-	char	*str;
-	char	*temp;
-	int		i;
-	int		checker;
-
-	i = 0;
-	temp = NULL;
-	str = ft_itoa(nb);
-	checker = ft_precision_nb(info, &str);
-	if (info->_width > (int)ft_strlen(str))
-	{
-		temp = ft_strnew(info->_width);
-		if (!temp)
-		{
-			ft_strdel(&str);
-			return (NULL);
-		}
-		if (info->_plus && nb >= 0)
-			temp[i++] = '+';
-		else if (info->_space && nb >= 0)
-			temp[i++] = ' ';
-		if (info->_minus)
-		{
-			ft_strcpy(&temp[i], str);
-			i += ft_strlen(str);
-			while (i < info->_width)
-				temp[i++] = ' ';
-		}
-		else if (info->_zero && !info->_p_true)
-		{
-			while (i < info->_width - (int)ft_strlen(str))
-				temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
-		}
-		else
-		{
-			while (i < (info->_width - (int)ft_strlen(str)))
-				temp[i++] = ' ';
-			if (nb == 0 && !info->_precision && info->_p_true)
-				temp[i] = ' ';
-			else	
-				ft_strcpy(&temp[i], str);
-		}
-		ft_strdel(&str);
-		str = temp;
-	}
-	else if (info->_plus || info->_space)
-	{
-		temp = ft_strnew(ft_strlen(str) + 1);
-		if (!temp)
-		{
-			ft_strdel(&str);
-			return (NULL);
-		}
-		if (info->_plus && nb >= 0)
-			temp[i++] = '+';
-		else if (info->_space && nb >= 0)
-			temp[i++] = ' ';
-		ft_strcpy(&temp[i], str);
-		ft_strdel(&str);
-		str = temp;
-	}
-	return (str);
-}*/
-
-/*char	*ft_solve_p(t_flags *info, uintptr_t addi)
-{
-	char	*str;
-	char	*temp;
-
-	temp = NULL;
-	str = ft_num_toa(addi, 'x', info->_div);
-	temp = ft_strnew(2 + ft_strlen(str));
-	ft_strcat(ft_strcpy(temp, info->_h_prfx), str);
-	ft_strdel(&str);
-	str = temp;
-	return (str);
-}*/
 
 long long int	ft_power(double nb, int power)
 {
@@ -672,17 +330,25 @@ char	*ft_floating(t_flags *info, double nb)
 	i = 0;
 	str = NULL;
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
+	if (!temp)
+		return (NULL);
 	str = ft_strjoin(temp, ".");
 	ft_strdel(&temp);
+	if (!str)
+		return (NULL);
 	if (nb < 0)
 		nb *= -1;
 	nb = (nb - (long long)nb);
 	nb += 1;
 	nb *= ft_power(10, 18);  //should be dependent on precision
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
+	if (!temp)
+		return (NULL);
 	full = ft_strjoin(str, &temp[1]);
+	ft_strdel(&temp);
+	if (!full)
+		return (NULL);
 	ft_rounder(&full, info);
-	//printf("%s-----\n", full);
 	return (full);
 }
 
@@ -699,6 +365,8 @@ char	*ft_solve_f(t_flags *info, long double nb)
 	temp = NULL;
 	str = NULL;
 	str = ft_floating(info, nb);
+	if (!str)
+		return (NULL);
 	return (str);
 }
 
@@ -731,10 +399,12 @@ int	ft_solve(va_list *ap, t_flags *info)
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
 		str = ft_solve_f(info, (double)va_arg(*ap, double)); //only works with floats. look into doubles!
-	//dont forget to include %%
+	else if (info->_type == '%')
+		str = ft_strdup("%");
 	if (!str)
 		return (-1);
-	ft_putstr(str);
+	info->_ret += write(1, str, ft_strlen(str));
+	//ft_putstr(str);
 	ft_strdel(&str);
 	return (1);
 }
@@ -743,35 +413,40 @@ int	ft_printf(const char *format, ...)
 {
 	va_list ap;
 	int		a = 0;
-	int		b = 0;
 	char	*str;
 	t_flags	*info;
 
 	str = NULL;
-	info = NULL;
+	info = ft_create_struct(NULL);
+	if (!info)
+		return (-1);
 	va_start(ap, format);
 	while (format[a] != '\0')
 	{
 		if (format[a] == '%')
 		{
 			++a;
-			a+= ft_type_plus(&format[a], &str);  //info struct can be created here
+			a+= ft_type_plus(&format[a], &str);
+			//if (!str)
+				//delete info
 			if (ft_sequence(str) == -1)
 			{
 				ft_strdel(&str);
 				return (-1);
 			}
-			info = ft_do(str);
+			info = ft_do(info, str);
 			if (!info)
 				return (-1);
 			if (ft_solve(&ap, info) == -1)
 				return (-1);
 		}
 		else
-			ft_putchar(format[a]);
-		++a;
+		{
+			info->_ret += write(1, &format[a], ft_strlen_stop(&format[a], '%'));
+			a += ft_strlen_stop(&format[a], '%');
+		}
 	}
 	va_end(ap);
-	return (b);
+	return (info->_ret);
 }
 
