@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/11 16:30:56 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:33:42 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,7 +404,6 @@ int	ft_solve(va_list *ap, t_flags *info)
 	if (!str)
 		return (-1);
 	info->_ret += write(1, str, ft_strlen(str));
-	//ft_putstr(str);
 	ft_strdel(&str);
 	return (1);
 }
