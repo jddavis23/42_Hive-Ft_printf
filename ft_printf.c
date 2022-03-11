@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/10 16:34:23 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:54:04 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -630,61 +630,60 @@ long long int	ft_power(double nb, int power)
 	return (result);
 }
 
+void	ft_rounder(char **str, t_flags *info)
+{
+	int	i;
+	int	carry;
 
-void	ft_floating(t_flags *info, double nb)
+	carry = 0;
+	i = ft_strlen_stop(*str, '.') + info->_precision;
+	if ((*str)[i + 1] >= '5')
+	{
+		if ((*str)[i] < '9')
+			(*str)[i] += 1;
+		else
+		{
+			(*str)[i] = '0';
+			carry = 1;
+		}
+	}
+	while (--i >= 0)
+	{
+		if (carry && (*str)[i] != '.')
+		{
+			if ((*str)[i] < '9')
+				(*str)[i] += 1;
+			else
+			{
+				(*str)[i] = '0';
+				carry = 1;
+			}
+		}
+	}
+}
+
+char	*ft_floating(t_flags *info, double nb)
 {
 	char		*str;
 	int			i;
 	char		*temp;
 	char		*full;
-	int			sign;
-	int			carry;
-
-	carry = 0;
+	
 	i = 0;
-	sign = 1;
-	if (nb < 0)
-		sign = -1;
 	str = NULL;
-	printf("%f+++++\n", nb);
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
+	str = ft_strjoin(temp, ".");
+	ft_strdel(&temp);
 	if (nb < 0)
 		nb *= -1;
 	nb = (nb - (long long)nb);
-	nb *= ft_power(10, info->_precision + 1);  //should be dependent on precision
-	str = ft_num_toa((long long int)nb, info->_type, 10);
-	full = ft_strjoin(".", str);
-	ft_strdel(&str);
-	str = ft_strjoin(temp, full);
-	//free tmep  && full
-	i = ft_strlen(str) - 1;
-	if (str[--i + 1] >= '5')
-	{
-		if (sign == 1)
-		{
-			if (str[i] < '9')
-			{
-				printf("yes\n");
-				str[i] += 1;
-			}
-			else
-			{
-				str[i] = '0';
-				carry = 1;
-				while (str[--i] != '.')
-				{
-					if (str[i] < '9')
-						str[i] += 1;
-					else
-					{
-						carry = 0;
-						str[i] = '0'; //change to bankers rounding (closest even
-					}
-				}
-			}
-		}
-	}
-	printf("%s-----\n", str);
+	nb += 1;
+	nb *= ft_power(10, 18);  //should be dependent on precision
+	temp = ft_num_toa((long long int)nb, info->_type, 10);
+	full = ft_strjoin(str, &temp[1]);
+	ft_rounder(&full, info);
+	//printf("%s-----\n", full);
+	return (full);
 }
 
 
@@ -699,8 +698,7 @@ char	*ft_solve_f(t_flags *info, long double nb)
 	i = 0;
 	temp = NULL;
 	str = NULL;
-
-	ft_floating(info, nb);
+	str = ft_floating(info, nb);
 	return (str);
 }
 
