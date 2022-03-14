@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/08 12:01:31 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/14 12:37:30 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 		++count;
 	}
 	dup_nb = nb;
+	//printf("%llu---\n", (uint64_t)dup_nb);
 	if (nb == 0)
 	{
 		str = ft_strdup("0");
@@ -42,7 +43,7 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 	str = ft_strnew(count);
 	while (dup_nb > 0)
 	{
-		str[--count] = ft_char_digit(dup_nb % choice, c);
+		str[--count] = ft_char_digit((char)(dup_nb % choice), c);
 		dup_nb /= choice;
 	}
 	if (sign == -1)

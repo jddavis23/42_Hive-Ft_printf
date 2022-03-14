@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/11 16:33:42 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/14 13:06:03 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,9 +268,9 @@ t_flags	*ft_do(t_flags *info, char *str)
 	return (info);
 }
 
-long long int	ft_power(double nb, int power)
+double	ft_power(double nb, int power)
 {
-	long long int  result;
+	double  result;
 
 	result = 1;
 	if (power == 0)
@@ -329,6 +329,7 @@ char	*ft_floating(t_flags *info, double nb)
 	
 	i = 0;
 	str = NULL;
+	//printf("%f+++\n", (float)nb);
 	temp = ft_num_toa((long long int)nb, info->_type, 10);
 	if (!temp)
 		return (NULL);
