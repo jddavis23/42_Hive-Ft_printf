@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 13:06:03 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/14 16:45:18 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,110 +268,6 @@ t_flags	*ft_do(t_flags *info, char *str)
 	return (info);
 }
 
-double	ft_power(double nb, int power)
-{
-	double  result;
-
-	result = 1;
-	if (power == 0)
-		return (1);
-	if (power == 1)
-		return (nb);
-	if (power >= 0)
-	{
-		while (power >= 1)
-		{
-			result *= nb;
-			--power;
-		}
-	}
-	return (result);
-}
-
-void	ft_rounder(char **str, t_flags *info)
-{
-	int	i;
-	int	carry;
-
-	carry = 0;
-	i = ft_strlen_stop(*str, '.') + info->_precision;
-	if ((*str)[i + 1] >= '5')
-	{
-		if ((*str)[i] < '9')
-			(*str)[i] += 1;
-		else
-		{
-			(*str)[i] = '0';
-			carry = 1;
-		}
-	}
-	while (--i >= 0)
-	{
-		if (carry && (*str)[i] != '.')
-		{
-			if ((*str)[i] < '9')
-				(*str)[i] += 1;
-			else
-			{
-				(*str)[i] = '0';
-				carry = 1;
-			}
-		}
-	}
-}
-
-char	*ft_floating(t_flags *info, double nb)
-{
-	char		*str;
-	int			i;
-	char		*temp;
-	char		*full;
-	
-	i = 0;
-	str = NULL;
-	//printf("%f+++\n", (float)nb);
-	temp = ft_num_toa((long long int)nb, info->_type, 10);
-	if (!temp)
-		return (NULL);
-	str = ft_strjoin(temp, ".");
-	ft_strdel(&temp);
-	if (!str)
-		return (NULL);
-	if (nb < 0)
-		nb *= -1;
-	nb = (nb - (long long)nb);
-	nb += 1;
-	nb *= ft_power(10, 18);  //should be dependent on precision
-	temp = ft_num_toa((long long int)nb, info->_type, 10);
-	if (!temp)
-		return (NULL);
-	full = ft_strjoin(str, &temp[1]);
-	ft_strdel(&temp);
-	if (!full)
-		return (NULL);
-	ft_rounder(&full, info);
-	return (full);
-}
-
-
-
-
-char	*ft_solve_f(t_flags *info, long double nb)
-{
-	char	*str;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	temp = NULL;
-	str = NULL;
-	str = ft_floating(info, nb);
-	if (!str)
-		return (NULL);
-	return (str);
-}
-
-
 int	ft_solve(va_list *ap, t_flags *info)
 {
 	char	*str;
@@ -399,7 +295,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
-		str = ft_solve_f(info, (double)va_arg(*ap, double)); //only works with floats. look into doubles!
+		str = ft_solve_f(info, (double)va_arg(*ap, double)); //doesnt work with max flaot. look into doubles!
 	else if (info->_type == '%')
 		str = ft_strdup("%");
 	if (!str)

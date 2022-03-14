@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 12:37:54 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/14 16:39:02 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i);
 char	*ft_solve_d_i(t_flags *info, int nb);
 char	*ft_solve_u(t_flags *info, long long int nb);
 char	*ft_solve_p(t_flags *info, uintptr_t addi);
+char	*ft_solve_f(t_flags *info, long double nb);
 
 #endif

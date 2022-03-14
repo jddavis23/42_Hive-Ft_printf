@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:45:35 by jdavis            #+#    #+#             */
-/*   Updated: 2022/02/22 13:05:19 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/14 16:33:28 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,7 @@ int		ft_abs(int n);
 int		ft_strlen_stop(const char *str, char c);
 void	ft_double_arrdel(char **arr, int size);
 void	ft_double_voiddel(void **arr, int y);
+void	ft_strrev(char *str, int len);
+double	ft_power(double nb, int power);
 
 #endif

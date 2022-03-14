@@ -6,7 +6,7 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/03 14:05:18 by jdavis            #+#    #+#              #
-#    Updated: 2022/01/04 12:14:35 by molesen          ###   ########.fr        #
+#    Updated: 2022/03/14 16:33:46 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,8 @@ SRC += ft_lstprint.c
 SRC += ft_lstdel_content.c
 SRC += ft_double_arrdel.c
 SRC += ft_double_voiddel.c
+SRC += ft_strrev.c
+SRC += ft_power.c
 
 OBJ = $(SRC:.c=.o)
 
