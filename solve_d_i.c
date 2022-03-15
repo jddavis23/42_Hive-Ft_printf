@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 17:00:46 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/15 13:57:41 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,7 @@ static void ft_width_else(t_flags *info, char **temp, int nb, char *str)
 		(*temp)[i++] = '+';
 	else
 		(*temp)[i++] = ' ';
-	if (nb == 0 && !info->_precision && info->_p_true)
-		(*temp)[i] = ' ';
-	else	
-		ft_strcpy(&((*temp)[i]), str);
+	ft_strcpy(&((*temp)[i]), str);
 }
 
 char	*ft_solve_d_i(t_flags *info, int nb)
@@ -109,7 +106,7 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 	i = 0;
 	temp = NULL;
 	str = ft_itoa(nb);
-	checker = ft_precision_nb(info, &str);
+	checker = ft_precision_nb(info, &str, nb);
 	if (info->_width > (int)ft_strlen(str))
 	{
 		temp = ft_strnew(info->_width);
@@ -131,9 +128,17 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 		{
 			if (info->_plus && nb >= 0)
 				temp[i++] = '+';
+			else if (nb < 0)
+				temp[i++] = '-';
 			while (i < info->_width - (int)ft_strlen(str))
 				temp[i++] = '0';
-			ft_strcpy(&temp[i], str);
+			if (nb < 0)
+			{
+				temp[i++] = '0';
+				ft_strcpy(&temp[i], &str[1]);
+			}
+			else
+				ft_strcpy(&temp[i], str);
 		}
 		else
 			ft_width_else(info, &temp, nb, str);
