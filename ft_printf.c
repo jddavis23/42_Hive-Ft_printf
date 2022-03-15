@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 12:07:26 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/15 17:48:55 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	ft_type_plus(const char *forma, char **type_plus)
 	}
 	while (ft_is_type(forma[i]) == 1)
 	{
-
 		if (forma[i + 1] == '%' || forma[i + 1] == '\0')
 			return (-1);
 		++i;
@@ -186,7 +185,7 @@ t_flags	*ft_do(t_flags *info, char *str)
 		if (f_array[2](info) == -1)
 			return (NULL);
 	}*/
-	ft_strdel(&str);   //isnt working how i thought it would
+	//ft_strdel(&str);   //isnt working how i thought it would
 	return (info);
 }
 
@@ -245,7 +244,8 @@ int	ft_printf(const char *format, ...)
 		{
 			++a;
 			a+= ft_type_plus(&format[a], &str);
-			//if (!str)
+			if (!str)
+				return (-1);
 				//delete info
 			if (ft_sequence(str) == -1)
 			{
@@ -257,6 +257,7 @@ int	ft_printf(const char *format, ...)
 				return (-1);
 			if (ft_solve(&ap, info) == -1)
 				return (-1);
+			ft_strdel(&str);   //isnt working how i thought it would
 		}
 		else
 		{
