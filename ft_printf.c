@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 16:45:18 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/15 10:52:42 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_flags	*ft_create_struct(t_flags *in_flags)
 }
 
 
-t_flags	*ft_true_struct(t_flags *info, char *str, char type)
+/*t_flags	*ft_true_struct(t_flags *info, char *str, char type)
 {
 	int	i = 0;
 	
@@ -179,7 +179,7 @@ t_flags	*ft_true_struct(t_flags *info, char *str, char type)
 	else
 		info->_div = 10;
 	return (info);
-}
+}*/
 
 int	ft_c_behaviour(t_flags *info)
 {
