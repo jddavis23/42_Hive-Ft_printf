@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 11:20:19 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 15:43:12 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,40 @@ static t_flags	*ft_prfx_sub_div(t_flags *info, char type)
 	return (info);
 }
 
-static t_flags	*ft_length_flags(t_flags *info, char *str, int i)
+static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 {
-	if (str[i] == 'h' || str[i] == 'l')
+	if (str[*i] == 'h' || str[*i] == 'l')
 	{
-		if (str[i] == 'h' && str[i + 1] == info->_type)
+		if ((str[*i] == 'h' || str[*i] == 'l') && str[*i + 1] == info->_type)
+		{
+			++*i;
 			info->_h = 1;
-		else if (str[i] == 'l' && str[i + 1] == info->_type)
+		}
+		else if (str[*i] == 'l' && str[*i + 1] == info->_type)
+		{
+			++*i;
 			info->_l = 1;
-		else if (str[i] == 'h' && str[i + 1] == 'h')
+		}
+		else if (str[*i] == 'h' && str[*i + 1] == 'h')
+		{
+			*i += 2;
 			info->_hh = 1;
-		else if (str[i] == 'l' && str[i + 1] == 'l')
+		}
+		else if (str[*i] == 'l' && str[*i + 1] == 'l')
+		{
+			*i += 2;
 			info->_ll = 1;
+		}
+		if (ft_is_type(str[*i] == 1))
+		{
+			free(info);
+			return (NULL);
+		}
 	}
 	return (info);
 }
 
-static t_flags	*ft_first_flags(t_flags *info, char *str, int *i)
+static t_flags	*ft_first_flags(t_flags *info, const char *str, int *i)
 {
 	if (str[*i] == '0' && info->_minus == 0)
 	   info->_zero = 1;	
@@ -74,34 +91,35 @@ static t_flags	*ft_first_flags(t_flags *info, char *str, int *i)
 	return (info);
 }
 
-t_flags	*ft_true_struct(t_flags *info, char *str, char type)
+t_flags	*ft_true_struct(t_flags *info, const char *str, int *i)
 {
-	int	i = 0;
-	
 	info = ft_create_struct(info);
 	if (!info)
 		return (NULL);
-	info->_type = type;
-	while (str[i] == '0' || str[i] == ' ' || str[i] == '+' || str[i] == '-' 
-			|| str[i] == '#')
-		info = ft_first_flags(info, str, &i);
-	if (str[i] >= '0' && str[i] <= '9')
+	while (str[*i] == '0' || str[*i] == ' ' || str[*i] == '+' || str[*i] == '-' 
+			|| str[*i] == '#')
+		info = ft_first_flags(info, str, i);
+	if (str[*i] >= '0' && str[*i] <= '9')
 	{
-		info->_width = ft_atoi(&str[i]);
-		while (str[i] >= '0' && str[i] <= '9')
-			++i;
+		info->_width = ft_atoi(&str[*i]);
+		while (str[*i] >= '0' && str[*i] <= '9')
+			++*i;
 	}
-	if (str[i] == '.')
+	if (str[*i] == '.')
 	{
 		info->_p_true = 1;
-		++i;
-		info->_precision = ft_atoi(&str[i]); //change _p_true to only be true if ft_atoi is zero but '.' is present
+		++*i;
+		info->_precision = ft_atoi(&str[*i]); //change _p_true to only be true if ft_atoi is zero but '.' is present
 		//if (!info->_precision)
 		//	info->_p_true = 1;
-		while (str[i] >= '0' && str[i] <= '9')
-			++i;
+		while (str[*i] >= '0' && str[*i] <= '9')
+			++*i;
 	}
 	info = ft_length_flags(info, str, i);
-	info = ft_prfx_sub_div(info, type);
+	if (!info)
+		return (NULL);
+	info->_type = str[*i];
+	info = ft_prfx_sub_div(info, str[*i]);
+	++*i;
 	return (info);
 }

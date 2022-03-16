@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 13:25:50 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 15:42:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ char	*ft_solve_d_i(t_flags *info, int nb);
 char	*ft_solve_u(t_flags *info, long long int nb);
 char	*ft_solve_p(t_flags *info, uintptr_t addi);
 char	*ft_solve_f(t_flags *info, long double nb);
-t_flags	*ft_true_struct(t_flags *info, char *str, char type);
+t_flags	*ft_true_struct(t_flags *info, const char *str, int *i);
 t_flags	*ft_create_struct(t_flags *info);
+int		ft_is_type(char c);
 
 #endif

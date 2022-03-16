@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/16 11:38:35 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 15:52:34 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,58 +21,6 @@ int	ft_is_type(char c)
 			c != 'f' && c != '%')
 		return (1);
 	return (-1);
-}
-
-int	ft_sequence(char *str)
-{
-	int i = 0;
-
-	while (str[i] == '0' || str[i] == '#' || str[i] == '-' || str[i] == '+' ||
-		   	str[i] == ' ')
-		++i;
-	while (str[i] >= '0' && str[i] <= '9')
-		++i;
-	if (str[i] == '.')
-	{
-		++i;
-		while (str[i] >= '0' && str[i] <= '9')
-			++i;
-	}
-	if (str[i] == 'h' && str[i + 1] != 'h')
-		++i;
-	else if (str[i] == 'l' && str[i + 1] != 'l')
-		++i;
-	else if (str[i] == 'l' && str[i + 1] == 'l')
-		i += 2;
-	else if (str[i] == 'h' && str[i + 1] == 'h')
-		i += 2;
-	if (ft_is_type(str[i]) == 1)
-		return (-1);
-	return (1);
-}
-		
-int	ft_type_plus(const char *forma, char **type_plus)
-{
-	int i = 0;
-
-	if (forma[0] == '%')  //find out what this is for 
-	{
-		*type_plus = ft_strdup("%");
-		if (!*type_plus)
-			return (-1);
-		return (1);
-	}
-	while (ft_is_type(forma[i]) == 1)
-	{
-		if (forma[i + 1] == '\0')
-			return (-1);
-		++i;
-	}
-	*type_plus = ft_strnew(++i);
-	if (!*type_plus)
-		return (-1);
-	ft_strncpy(*type_plus, forma, i);
-	return (i);
 }
 
 t_flags	*ft_create_struct(t_flags *in_flags)
@@ -167,9 +115,9 @@ int	ft_p_behaviour(t_flags *info)
 	return (1);
 }
 
-t_flags	*ft_do(t_flags *info, char *str)
+t_flags	*ft_do(t_flags *info, const char *str, int *i)
 {
-	info = ft_true_struct(info,str, str[ft_strlen(str) - 1]);
+	info = ft_true_struct(info, str, i);
 	/*if (str[ft_strlen(str) - 1] == 'c')
 	{
 		if (f_array[0](info) == -1)
@@ -229,11 +177,10 @@ int	ft_solve(va_list *ap, t_flags *info)
 int	ft_printf(const char *format, ...)
 {
 	va_list ap;
-	int		a = 0;
-	char	*str;
+	int		a;
 	t_flags	*info;
 
-	str = NULL;
+	a = 0;
 	info = ft_create_struct(NULL);
 	if (!info)
 		return (-1);
@@ -243,21 +190,11 @@ int	ft_printf(const char *format, ...)
 		if (format[a] == '%')
 		{
 			++a;
-			a+= ft_type_plus(&format[a], &str);
-			if (!str)
-				return (-1);
-				//delete info
-			if (ft_sequence(str) == -1)
-			{
-				ft_strdel(&str);
-				return (-1);
-			}
-			info = ft_do(info, str);
+			info = ft_do(info, format, &a);
 			if (!info)
 				return (-1);
 			if (ft_solve(&ap, info) == -1)
 				return (-1);
-			ft_strdel(&str);   //isnt working how i thought it would
 		}
 		else
 		{
