@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 15:49:49 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 11:25:41 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 
 	sign = 1;
 	str = NULL;
+	if (c == '%')
+	{
+		str = ft_strdup("%");
+		return (str);
+	}
 	if (nb < 0)
 	{
 		nb *= -1;

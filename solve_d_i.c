@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 13:57:41 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 11:46:17 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void ft_width_else(t_flags *info, char **temp, int nb, char *str)
 	//temp = NULL;
 	while (i < (info->_width - (int)ft_strlen(str) - 1))
 		(*temp)[i++] = ' ';
-	if (info->_plus && nb >= 0)
+	if (info->_plus && nb >= 0 && info->_type != '%')
 		(*temp)[i++] = '+';
 	else
 		(*temp)[i++] = ' ';
@@ -105,8 +105,14 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 
 	i = 0;
 	temp = NULL;
-	str = ft_itoa(nb);
-	checker = ft_precision_nb(info, &str, nb);
+	checker = 0;
+	if (info->_type == '%')
+		str = ft_num_toa(nb, info->_type, 0);
+	else
+	{
+		str = ft_itoa(nb);
+		checker = ft_precision_nb(info, &str, nb);
+	}
 	if (info->_width > (int)ft_strlen(str))
 	{
 		temp = ft_strnew(info->_width);
@@ -117,16 +123,16 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 		}
 		if (info->_minus)
 		{
-			if (info->_plus && nb >= 0)
+			if (info->_plus && nb >= 0 && info->_type != '%')
 				temp[i++] = '+';
 			ft_strcpy(&temp[i], str);
 			i += ft_strlen(str);
 			while (i < info->_width)
 				temp[i++] = ' ';
 		}
-		else if (info->_zero && (!info->_p_true || info->_type == 'f'))
+		else if (info->_zero && (!info->_p_true || info->_type == '%'))
 		{
-			if (info->_plus && nb >= 0)
+			if (info->_plus && nb >= 0 && info->_type != '%')
 				temp[i++] = '+';
 			else if (nb < 0)
 				temp[i++] = '-';
@@ -145,7 +151,7 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 		ft_strdel(&str);
 		str = temp;
 	}
-	else if (info->_plus || info->_space)
+	else if (info->_type != '%' && (info->_plus || info->_space))
 	{
 		temp = ft_strnew(ft_strlen(str) + 1);
 		if (!temp)

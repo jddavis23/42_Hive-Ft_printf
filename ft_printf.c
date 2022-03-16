@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 17:48:55 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/16 11:38:35 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_type_plus(const char *forma, char **type_plus)
 	}
 	while (ft_is_type(forma[i]) == 1)
 	{
-		if (forma[i + 1] == '%' || forma[i + 1] == '\0')
+		if (forma[i + 1] == '\0')
 			return (-1);
 		++i;
 	}
@@ -218,7 +218,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'f')
 		str = ft_solve_f(info, (double)va_arg(*ap, double)); //doesnt work with max flaot. look into doubles!
 	else if (info->_type == '%')
-		str = ft_strdup("%");
+		str = ft_solve_d_i(info, 0);
 	if (!str)
 		return (-1);
 	info->_ret += write(1, str, ft_strlen(str));
@@ -266,6 +266,7 @@ int	ft_printf(const char *format, ...)
 		}
 	}
 	va_end(ap);
+	free(info);
 	return (info->_ret);
 }
 
