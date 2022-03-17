@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 17:40:44 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 17:49:13 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ char	*ft_choice_d_i(t_flags *info, va_list *ap)
 	//if (info->_h)
 	//	return (ft_solve_d_i(info, (short)va_arg(*ap, long long int)));
 	//else
-		return (ft_solve_d_i(info, (long long)va_arg(*ap, long long)));
+		return (ft_solve_d_i(info, (int)va_arg(*ap, long long)));
 }
 
 char	*ft_choice_u(t_flags *info, va_list *ap)
