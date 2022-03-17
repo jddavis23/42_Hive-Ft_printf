@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 17:37:49 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 17:48:29 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ char	*ft_solve_d_i(t_flags *info, long long int nb)
 
 	i = 0;
 
-	printf("%lld#\n", nb);
 	temp = NULL;
 	checker = 0;
 	if (info->_type == '%')
