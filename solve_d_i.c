@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 12:03:42 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 17:37:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void ft_width_else(t_flags *info, char **temp, int nb, char *str)
 	ft_strcpy(&((*temp)[i]), str);
 }
 
-char	*ft_solve_d_i(t_flags *info, int nb)
+char	*ft_solve_d_i(t_flags *info, long long int nb)
 {
 	char	*str;
 	char	*temp;
@@ -104,13 +104,15 @@ char	*ft_solve_d_i(t_flags *info, int nb)
 	int		checker;
 
 	i = 0;
+
+	printf("%lld#\n", nb);
 	temp = NULL;
 	checker = 0;
 	if (info->_type == '%')
 		str = ft_num_toa(nb, info->_type, 0);
 	else
 	{
-		str = ft_itoa(nb);
+		str = ft_num_toa(nb, info->_type, 10);
 		checker = ft_precision_nb(info, &str, nb);
 	}
 	if (info->_width > (int)ft_strlen(str))

@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/16 15:42:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 17:05:25 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ int		ft_printf(const char *format, ...);
 int		ft_precision_nb(t_flags *info, char **str, long long int);
 char	ft_char_digit(unsigned int v, char c);
 char	*ft_num_toa(long long int nb, char c, int choice);
-char	*ft_solve_o_x(t_flags *info, unsigned int nb);
+char	*ft_solve_o_x(t_flags *info, long long unsigned int nb);
 void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i);
-char	*ft_solve_d_i(t_flags *info, int nb);
+char	*ft_solve_d_i(t_flags *info, long long int nb);
 char	*ft_solve_u(t_flags *info, long long int nb);
 char	*ft_solve_p(t_flags *info, uintptr_t addi);
 char	*ft_solve_f(t_flags *info, long double nb);

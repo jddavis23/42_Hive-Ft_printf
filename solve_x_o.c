@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:50:06 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 12:43:22 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 16:10:42 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_width_plus(t_flags *info, unsigned int nb, char *str)
 	return (temp);
 }
 
-char	*ft_solve_o_x(t_flags *info, unsigned int nb)
+char	*ft_solve_o_x(t_flags *info, long long unsigned int nb)
 {
 	char	*str;
 	char	*temp;
@@ -68,7 +68,7 @@ char	*ft_solve_o_x(t_flags *info, unsigned int nb)
 		str = ft_width_plus(info, nb, str);
 	else
 	{
-		if (info->_hash && (nb > 0 || (info->_type == 'o' && info->_p_check))) //change here
+		if (info->_hash && ((nb > 0 && info->_type != 'o') || (info->_type == 'o' && str[0] != '0'))) //change here
 		{
 			temp = ft_strnew(ft_strlen(str) + info->_h_sub);
 			ft_strcpy(&temp[i], info->_h_prfx);

@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 11:10:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 15:32:12 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ static char	*ft_width_plus(t_flags *info, char *str)
 
 	i = 0;
 	temp = NULL;
-	temp = ft_strnew(info->_width);
+	if (str[0] == '\0' && info->_type == 'c')
+		temp = ft_strnew(info->_width - 1);
+	else
+		temp = ft_strnew(info->_width);
 	if (!temp)
 		return (NULL);
 	if (info->_minus)
@@ -54,13 +57,21 @@ static char	*ft_width_plus(t_flags *info, char *str)
 		ft_strcat(temp, str);
 		i = ft_strlen(str);
 		while (i < info->_width)
+		{
+			if (str[0] == '\0' && i == info->_width - 1 && info->_type == 'c')
+				break;
 			temp[i++] = ' ';
+		}
 	}
 	else
 	{
 		ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
 		while (i < (info->_width - (int)ft_strlen(str)))
+		{
+			if (str[0] == '\0' && i == info->_width - 1 && info->_type == 'c')
+				break;
 			temp[i++] = ' ';
+		}
 	}
 	return (temp);
 }
@@ -68,13 +79,12 @@ static char	*ft_width_plus(t_flags *info, char *str)
 char	*ft_solve_c_s(t_flags *info, char *str)
 {
 	char	*temp;
-	int		checker;
 
-	checker = 0;
+	info->_p_check = 0;
 	temp = NULL;
 	if (!str)
 		str = ft_strdup("(null)");
-	checker = ft_precision_s(info, &str);
+	info->_p_check = ft_precision_s(info, &str);
 	if (info->_width <= (int)ft_strlen(str))
 	{
 		temp = ft_strdup(str);
@@ -87,7 +97,7 @@ char	*ft_solve_c_s(t_flags *info, char *str)
 		if (!temp)
 			return (NULL);
 	}
-	if (checker == 1 || info->_type == 'c')
+	if (info->_p_check == 1 || info->_type == 'c')
 		ft_strdel(&str);
 	return (temp);
 }
