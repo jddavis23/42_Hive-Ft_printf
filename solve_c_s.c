@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 10:47:17 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 11:10:05 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ static int	ft_precision_s(t_flags *info, char **str)
 				*str = temp;
 				return (1);
 			}
+		}
+		else if (!info->_precision && info->_p_true)
+		{
+			temp = ft_strnew(0);
+			*str = temp;
+			return (1);
 		}
 	}
 	return (0);

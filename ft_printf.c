@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/16 15:52:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 12:35:43 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ int	ft_solve(va_list *ap, t_flags *info)
 			c_pass = ft_strnew(1);
 			c_pass[0] = (char)va_arg(*ap, int); //maybe change c_pass into fixed size array
 			str = ft_solve_c_s(info, c_pass);
+			if (c_pass[0] == '\0')
+				++info->_ret; 
 		}
 	}
 	else if (info->_type =='x' || info->_type == 'X' || info->_type == 'o')

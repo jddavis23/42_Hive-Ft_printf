@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/15 14:02:47 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/17 12:11:57 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ char	*ft_solve_f(t_flags *info, long double nb)
 				temp[i++] = '+';
 			else if (nb < 0)
 				temp[i++] = '-';
+			else if (info->_space && nb >= 0)
+				temp[i++] = ' ';
 			while (i < info->_width - (int)ft_strlen(str))
 				temp[i++] = '0';
 			if (nb < 0)
