@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 17:49:13 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/18 11:37:05 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,25 +141,38 @@ char	*ft_choice_x_o(t_flags *info, va_list *ap)
 {
 	if (info->_h)
 		return (ft_solve_o_x(info, (unsigned short)va_arg(*ap, long long unsigned int)));
+	else if (info->_hh)
+		return (ft_solve_o_x(info, (unsigned char)va_arg(*ap, long long unsigned int)));
+	else if (info->_l)
+		return (ft_solve_o_x(info, (unsigned long)va_arg(*ap, long long unsigned int)));
 	else
 		return (ft_solve_o_x(info, va_arg(*ap, long long unsigned int)));
 }
 
 char	*ft_choice_d_i(t_flags *info, va_list *ap)
 {
-	//if (info->_h)
-	//	return (ft_solve_d_i(info, (short)va_arg(*ap, long long int)));
-	//else
+	if (info->_h)
+		return (ft_solve_d_i(info, (short)va_arg(*ap, long long int)));
+	else if (info->_ll)
+		return (ft_solve_d_i(info, va_arg(*ap, long long int)));
+	else if (info->_hh)
+		return (ft_solve_d_i(info, (char)va_arg(*ap, long long int)));
+	else if (info->_l)
+		return (ft_solve_d_i(info, (long)va_arg(*ap, long long int)));
+	else
 		return (ft_solve_d_i(info, (int)va_arg(*ap, long long)));
 }
 
 char	*ft_choice_u(t_flags *info, va_list *ap)
 {
-	//if (info->_hh)
-	//	return (ft_solve_d_i(info, (unsigned char)va_arg(*ap, long long int)));
-	//	check max unsigned long
-	//else
-		return (ft_solve_d_i(info, va_arg(*ap, long long int)));
+	if (info->_hh)
+		return (ft_solve_u(info, (unsigned char)va_arg(*ap, long long int)));
+	else if (info->_h)
+		return (ft_solve_u(info, (unsigned short)va_arg(*ap, long long int)));
+	else if (info->_ll)
+		return (ft_solve_u(info, (unsigned long)va_arg(*ap, long long int)));
+	else
+		return (ft_solve_u(info, va_arg(*ap, unsigned long long int)));
 }
 
 int	ft_solve(va_list *ap, t_flags *info)
