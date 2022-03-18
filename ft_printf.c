@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 13:32:39 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/18 11:37:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/18 14:21:09 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,42 +137,32 @@ t_flags	*ft_do(t_flags *info, const char *str, int *i)
 	return (info);
 }
 
-char	*ft_choice_x_o(t_flags *info, va_list *ap)
+char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 {
 	if (info->_h)
-		return (ft_solve_o_x(info, (unsigned short)va_arg(*ap, long long unsigned int)));
+		return (ft_solve_unsigned(info, (unsigned short)va_arg(*ap, long long unsigned int)));
 	else if (info->_hh)
-		return (ft_solve_o_x(info, (unsigned char)va_arg(*ap, long long unsigned int)));
+		return (ft_solve_unsigned(info, (unsigned char)va_arg(*ap, long long unsigned int)));
 	else if (info->_l)
-		return (ft_solve_o_x(info, (unsigned long)va_arg(*ap, long long unsigned int)));
+		return (ft_solve_unsigned(info, (unsigned long)va_arg(*ap, long long unsigned int)));
+	else if (info->_ll)
+		return (ft_solve_unsigned(info, va_arg(*ap, long long unsigned int)));
 	else
-		return (ft_solve_o_x(info, va_arg(*ap, long long unsigned int)));
+		return (ft_solve_unsigned(info, va_arg(*ap, long long unsigned int)));
 }
 
-char	*ft_choice_d_i(t_flags *info, va_list *ap)
+char	*ft_choice_signed(t_flags *info, va_list *ap)
 {
 	if (info->_h)
-		return (ft_solve_d_i(info, (short)va_arg(*ap, long long int)));
+		return (ft_solve_signed(info, (short)va_arg(*ap, long long int)));
 	else if (info->_ll)
-		return (ft_solve_d_i(info, va_arg(*ap, long long int)));
+		return (ft_solve_signed(info, va_arg(*ap, long long int)));
 	else if (info->_hh)
-		return (ft_solve_d_i(info, (char)va_arg(*ap, long long int)));
+		return (ft_solve_signed(info, (char)va_arg(*ap, long long int)));
 	else if (info->_l)
-		return (ft_solve_d_i(info, (long)va_arg(*ap, long long int)));
+		return (ft_solve_signed(info, (long)va_arg(*ap, long long int)));
 	else
-		return (ft_solve_d_i(info, (int)va_arg(*ap, long long)));
-}
-
-char	*ft_choice_u(t_flags *info, va_list *ap)
-{
-	if (info->_hh)
-		return (ft_solve_u(info, (unsigned char)va_arg(*ap, long long int)));
-	else if (info->_h)
-		return (ft_solve_u(info, (unsigned short)va_arg(*ap, long long int)));
-	else if (info->_ll)
-		return (ft_solve_u(info, (unsigned long)va_arg(*ap, long long int)));
-	else
-		return (ft_solve_u(info, va_arg(*ap, unsigned long long int)));
+		return (ft_solve_signed(info, (int)va_arg(*ap, long long)));
 }
 
 int	ft_solve(va_list *ap, t_flags *info)
@@ -195,21 +185,16 @@ int	ft_solve(va_list *ap, t_flags *info)
 				++info->_ret; 
 		}
 	}
-	else if (info->_type =='x' || info->_type == 'X' || info->_type == 'o')
-		str = ft_choice_x_o(info, ap);
-		//str = ft_solve_o_x(info, va_arg(*ap, long long unsigned int));
+	else if (info->_type == 'u' || info->_type =='x' || info->_type == 'X' || info->_type == 'o')
+		str = ft_choice_unsigned(info, ap);
 	else if (info->_type == 'd' || info->_type == 'i')
-		str = ft_choice_d_i(info, ap);
-		//str = ft_solve_d_i(info, va_arg(*ap, long long int));
-	else if (info->_type == 'u')
-		str = ft_choice_u(info, ap);
-		//str = ft_solve_u(info, va_arg(*ap, long long));
+		str = ft_choice_signed(info, ap);
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
 		str = ft_solve_f(info, (double)va_arg(*ap, double)); //doesnt work with max flaot. look into doubles!
 	else if (info->_type == '%')
-		str = ft_solve_d_i(info, 0);
+		str = ft_solve_signed(info, 0);
 	if (!str)
 		return (-1);
 	info->_ret += write(1, str, ft_strlen(str));
@@ -237,7 +222,10 @@ int	ft_printf(const char *format, ...)
 			if (!info)
 				return (-1);
 			if (ft_solve(&ap, info) == -1)
+			{
+				free(info);
 				return (-1);
+			}
 		}
 		else
 		{

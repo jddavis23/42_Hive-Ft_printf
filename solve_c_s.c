@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 15:32:12 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/18 14:51:13 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*ft_solve_c_s(t_flags *info, char *str)
 	info->_p_check = 0;
 	temp = NULL;
 	if (!str)
-		str = ft_strdup("(null)");
+		temp = ft_strdup("(null)");
 	info->_p_check = ft_precision_s(info, &str);
 	if (info->_width <= (int)ft_strlen(str))
 	{
