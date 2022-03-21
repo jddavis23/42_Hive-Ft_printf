@@ -6,13 +6,14 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:50:06 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/18 14:05:59 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/21 11:36:17 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h> //REMOVE
 
-char	*ft_width_plus(t_flags *info, unsigned int nb, char *str)
+static char	*ft_width_plus(t_flags *info, unsigned int nb, char *str)
 {
 	int		i;
 	char	*temp;
@@ -41,9 +42,9 @@ char	*ft_width_plus(t_flags *info, unsigned int nb, char *str)
 		if ((((info->_width - (int)ft_strlen(str) - info->_h_sub)) < 0) && info->_hash)// && nb != 0 && info->_type != 'o')
 		{
 			ft_strdel(&temp);
-			temp = ft_strnew(2 + ft_strlen(str));
+			temp = ft_strnew(ft_strlen(info->_h_prfx) + ft_strlen(str));
 		}
-		while ((i < (info->_width - (int)ft_strlen(str) - info->_h_sub)) || (nb == 0 && i < info->_width - 1))
+		while ((i < (info->_width - (int)ft_strlen(str) - info->_h_sub)) || (nb == 0 && i < info->_width - (int)ft_strlen(str)))
 			temp[i++] = ' ';
 		ft_apply_hash(info, nb, &temp, &i);
 		while (i < info->_width - (int)ft_strlen(str))

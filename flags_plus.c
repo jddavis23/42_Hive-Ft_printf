@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:31:58 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 11:48:10 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/21 13:32:31 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@ void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i)
 	}
 }
 
-int	ft_precision_nb(t_flags *info, char **str, long long  int nb)
+int	ft_precision_nb(t_flags *info, char **str, long long int nb)
 {
 	char	*temp;
 	int		i;
 
 	temp = NULL;
 	i = 0;
-	if (info->_precision > (int)ft_strlen(*str) || (nb < 0 && (int)ft_strlen(*str) == info->_precision))
+	if (info->_precision > (int)ft_strlen(*str)
+		|| (nb < 0 && (int)ft_strlen(*str) == info->_precision))
 	{
 		if (nb < 0)
 			temp = ft_strnew(info->_precision + 1);

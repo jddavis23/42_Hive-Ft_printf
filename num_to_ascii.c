@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/18 13:51:29 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/21 13:50:10 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 char	*ft_num_toa(long long int nb, char c, int choice)
 {
-	int		count = 0;
-	char	*str;
+	int							count;
+	char						*str;
 	unsigned long long int		dup_nb;
-	int		sign;
+	int							sign;
 
 	sign = 1;
 	str = NULL;
+	count = 0;
 	if (c == '%')
 	{
 		str = ft_strdup("%");
@@ -62,10 +63,11 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 
 char	*ft_llu_toa(unsigned long long int nb, char c, int choice)
 {
-	int		count = 0;
-	char	*str;
+	int							count;
+	char						*str;
 	unsigned long long int		dup_nb;
 
+	count = 0;
 	str = NULL;
 	if (nb == 0)
 	{
