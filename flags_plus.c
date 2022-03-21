@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:31:58 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 13:32:31 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/21 17:16:32 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,30 @@ void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i)
 	}
 }
 
+static char	*ft_if_helper_i(t_flags *info, char **temp, long long int nb)
+{
+	if (nb < 0)
+		*temp = ft_strnew(info->_precision + 1);
+	else
+		*temp = ft_strnew(info->_precision);
+	return (*temp);
+}
+
+static int	ft_else_helper(char **str)
+{
+	ft_strdel(str);
+	*str = ft_strnew(0);
+	return (1);
+}
+
+static char	*ft_if_helper_ii(t_flags *info, char *temp, char *str, int *i)
+{
+	while (*i < (info->_precision - (int)ft_strlen(str) + 2))
+		temp[(*i)++] = '0';
+	ft_strcpy(&(temp)[*i], &str[1]);
+	return (temp);
+}
+
 int	ft_precision_nb(t_flags *info, char **str, long long int nb)
 {
 	char	*temp;
@@ -31,22 +55,14 @@ int	ft_precision_nb(t_flags *info, char **str, long long int nb)
 	if (info->_precision > (int)ft_strlen(*str)
 		|| (nb < 0 && (int)ft_strlen(*str) == info->_precision))
 	{
-		if (nb < 0)
-			temp = ft_strnew(info->_precision + 1);
-		else
-			temp = ft_strnew(info->_precision);
-		if (!temp)
+		if (!ft_if_helper_i(info, &temp, nb))
 			return (-1);
 		if (nb < 0)
 			temp[i++] = '-';
 		while (i < (info->_precision - (int)ft_strlen(*str)))
 			temp[i++] = '0';
 		if (nb < 0)
-		{
-			while (i < (info->_precision - (int)ft_strlen(*str) + 2))
-				temp[i++] = '0';
-			ft_strcpy(&temp[i], &(*str)[1]);
-		}
+			temp = ft_if_helper_ii(info, temp, *str, &i);
 		else
 			ft_strcpy(&temp[i], *str);
 		ft_strdel(str);
@@ -54,10 +70,6 @@ int	ft_precision_nb(t_flags *info, char **str, long long int nb)
 		return (1);
 	}
 	else if (!info->_precision && info->_p_true && nb == 0)
-	{
-		ft_strdel(str);
-		*str = ft_strnew(1);
-		return (1);
-	}
+		return (ft_else_helper(str));
 	return (0);
 }

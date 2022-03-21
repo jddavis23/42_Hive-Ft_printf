@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 13:46:18 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/21 17:27:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,7 @@ t_flags	*ft_true_struct(t_flags *info, const char *str, int *i);
 t_flags	*ft_create_struct(t_flags *info);
 int		ft_is_type(char c);
 char	*ft_llu_toa(unsigned long long int nb, char c, int choice);
+char	*ft_choice_unsigned(t_flags *info, va_list *ap);
+char	*ft_choice_signed(t_flags *info, va_list *ap);
 
 #endif
