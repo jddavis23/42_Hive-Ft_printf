@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 13:51:15 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 17:07:03 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	ft_precision_s(t_flags *info, char **str)
 	return (0);
 }
 
+//static void	ft_width_else(
 static char	*ft_width_plus(t_flags *info, char *str)
 {
 	char	*temp;

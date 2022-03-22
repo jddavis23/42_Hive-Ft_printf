@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:34:24 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 13:00:03 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 15:56:34 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 static int	ft_prnt_type(t_flags *info, const char *format, va_list *ap, int *a)
 {
 	++(*a);
-	info = ft_true_struct(info, format, a);
+	info = ft_true_struct(info, format, a, ap);
 	if (!info)
 		return (-1);
 	if (ft_solve(ap, info) == -1)

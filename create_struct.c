@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 10:28:56 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 12:46:02 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 16:33:55 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,14 @@ t_flags	*ft_create_struct(t_flags *in_flags)
 	in_flags->_l = 0;
 	in_flags->_L = 0;
 	return (in_flags);
+}
+
+int	ft_is_type(char c)
+{
+	if (c != 'd' && c != 'i' && c != 'o'
+		&& c != 'u' && c != 'x' && c != 'X'
+		&& c != 'c' && c != 's' && c != 'p'
+		&& c != 'f' && c != '%')
+		return (1);
+	return (-1);
 }

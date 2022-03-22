@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:32:23 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/14 16:32:52 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 16:53:59 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 double	ft_power(double nb, int power)
 {
-	long double  result;
+	long double	result;
 
 	result = 1;
 	if (power == 0)

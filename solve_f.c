@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 14:07:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 15:31:48 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int intToStr(long long unsigned int x, char str[], int d)
     return i;
 }
 
-char	*ft_floating(t_flags *info, double nb)
+char	*ft_floating(t_flags *info, long double nb)
 {
 	char		*str;
 	int			i;
