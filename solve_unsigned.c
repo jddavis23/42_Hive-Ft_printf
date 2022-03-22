@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:50:06 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 11:36:17 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 14:08:20 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ char	*ft_solve_unsigned(t_flags *info, long long unsigned int nb)
 	
 	i = 0;
 	temp = NULL;
+	//printf("%llu----\n", nb);
 	str = ft_llu_toa(nb, info->_type, info->_div);
+	//printf("%s----\n", str);
 	info->_p_check = ft_precision_nb(info, &str, nb);
 	if (info->_width > (int)ft_strlen(str))
 		str = ft_width_plus(info, nb, str);

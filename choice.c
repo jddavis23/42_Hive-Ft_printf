@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 13:01:14 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 14:15:50 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 				va_arg(*ap, long long unsigned int)));
 	else
 		return (ft_solve_unsigned(info,
-				va_arg(*ap, long long unsigned int)));
+				(unsigned)va_arg(*ap, long long unsigned int)));
 }
 
 char	*ft_choice_signed(t_flags *info, va_list *ap)

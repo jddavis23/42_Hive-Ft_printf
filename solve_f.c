@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 13:36:13 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 14:07:34 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*ft_floating(t_flags *info, double nb)
 	ft_strcat(temp, str);
 	//str = ft_num_toa(  test which is more precise
 	intToStr((long long unsigned int)nb, &temp[ft_strlen(str)], info->_precision);
-	printf("%s----\n", temp); //REMOVE
+	//printf("%s----\n", temp); //REMOVE
 	ft_rounder(&temp, info);
 	ft_strdel(&str);
 	return (temp);
