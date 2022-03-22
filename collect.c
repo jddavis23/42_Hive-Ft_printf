@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 10:24:42 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 12:45:26 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 {
 	if ((str[*i] == 'h' || str[*i] == 'l') && ft_is_type(str[*i + 1]) == -1)
 	{
-		++*i;
 		if (str[*i] == 'h')
 			info->_h = 1;
 		else
 			info->_l = 1;
+		++*i;
 	}
 	else if (str[*i] == 'h' && str[*i + 1] == 'h')
 	{
@@ -66,6 +66,11 @@ static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 	{
 		*i += 2;
 		info->_ll = 1;
+	}
+	else if (str[*i] == 'L' && str[*i + 1] == 'f')
+	{
+		++(*i);
+		info->_L = 1;
 	}
 	if (ft_is_type(str[*i]) == 1)
 	{

@@ -6,11 +6,12 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 12:11:57 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 13:36:13 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h> //REMOVE
 
 void	ft_rounder(char **str, t_flags *info)
 {
@@ -30,12 +31,15 @@ void	ft_rounder(char **str, t_flags *info)
 		}
 	}
 	(*str)[i + 1] = '\0';
-	while (--i >= 0)
+	while (--i >= 0 && carry)
 	{
 		if (carry && (*str)[i] != '.')
 		{
 			if ((*str)[i] < '9')
+			{
+				carry = 0;
 				(*str)[i] += 1;
+			}
 			else
 			{
 				(*str)[i] = '0';
@@ -72,10 +76,10 @@ char	*ft_floating(t_flags *info, double nb)
 	i = 0;
 	str = NULL;
 	temp = ft_num_toa((long long unsigned int)nb, info->_type, 10);
-	if (info->_p_true && !info->_precision)
-		return (temp);
 	if (!temp)
 		return (NULL);
+	if (info->_p_true && !info->_precision)
+		return (temp);
 	str = ft_strjoin(temp, ".");
 	ft_strdel(&temp);
 	if (!str)
@@ -92,6 +96,7 @@ char	*ft_floating(t_flags *info, double nb)
 	ft_strcat(temp, str);
 	//str = ft_num_toa(  test which is more precise
 	intToStr((long long unsigned int)nb, &temp[ft_strlen(str)], info->_precision);
+	printf("%s----\n", temp); //REMOVE
 	ft_rounder(&temp, info);
 	ft_strdel(&str);
 	return (temp);

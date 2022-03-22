@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:34:24 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 10:52:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 13:00:03 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
 	else if (info->_type == 'f')
-		str = ft_solve_f(info, (double)va_arg(*ap, double));
+		str = ft_choice_f(info, ap);
 	else if (info->_type == '%')
 		str = ft_solve_signed(info, 0);
 	if (!str)

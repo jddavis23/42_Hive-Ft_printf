@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/18 13:59:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 12:15:40 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ char	*ft_solve_signed(t_flags *info, long long int nb)
 	int		checker;
 
 	i = 0;
-
 	temp = NULL;
 	checker = 0;
 	if (info->_type == '%')

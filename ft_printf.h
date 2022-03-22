@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 17:27:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 13:00:39 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_flags
 	int		_h;
 	int		_ll;
 	int		_l;
+	int		_L;
 	int		_ret;
 }				t_flags;
 
@@ -70,5 +71,6 @@ int		ft_is_type(char c);
 char	*ft_llu_toa(unsigned long long int nb, char c, int choice);
 char	*ft_choice_unsigned(t_flags *info, va_list *ap);
 char	*ft_choice_signed(t_flags *info, va_list *ap);
+char	*ft_choice_f(t_flags *info, va_list *ap);
 
 #endif
