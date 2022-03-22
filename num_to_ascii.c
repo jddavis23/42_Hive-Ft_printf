@@ -6,12 +6,47 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 13:50:10 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 11:49:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdio.h> //remove
+
+static unsigned long int	ft_nb_lt(long long int nb, int *sign, int *count,
+		int in)
+{
+	if (nb < 0)
+	{
+		*sign = -1;
+		if (in == 1)
+			++(*count);
+		return (nb * -1);
+	}
+	else
+		return (nb);
+}
+
+static char	*ft_extr_rtrn(long long int nb, char c, char **str)
+{
+	if (c == '%')
+	{
+		*str = ft_strdup("%");
+		return (*str);
+	}
+	if (nb == 0)
+	{
+		*str = ft_strdup("0");
+		return (*str);
+	}
+	return (NULL);
+}
+
+static void	ft_minus(int sign, char **str)
+{
+	if (sign == -1)
+		(*str)[0] = '-';
+}
 
 char	*ft_num_toa(long long int nb, char c, int choice)
 {
@@ -23,41 +58,22 @@ char	*ft_num_toa(long long int nb, char c, int choice)
 	sign = 1;
 	str = NULL;
 	count = 0;
-	if (c == '%')
-	{
-		str = ft_strdup("%");
+	if (ft_extr_rtrn(nb, c, &str))
 		return (str);
-	}
-	if (nb < 0)
-	{
-		dup_nb = nb * -1;
-		sign = -1;
-		++count;
-	}
-	else
-		dup_nb = nb;
-	if (nb == 0)
-	{
-		str = ft_strdup("0");
-		return (str);
-	}
+	dup_nb = ft_nb_lt(nb, &sign, &count, 1);
 	while (dup_nb > 0)
 	{
 		dup_nb /= choice;
 		count++;
 	}
 	str = ft_strnew(count);
-	if (nb < 0)
-		dup_nb = nb * -1;
-	else
-		dup_nb = nb;
+	dup_nb = ft_nb_lt(nb, &sign, &count, 0);
 	while (dup_nb > 0)
 	{
 		str[--count] = ft_char_digit((char)(dup_nb % choice), c);
 		dup_nb /= choice;
 	}
-	if (sign == -1)
-		str[0] = '-';
+	ft_minus(sign, &str);
 	return (str);
 }
 

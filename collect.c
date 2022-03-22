@@ -6,11 +6,21 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 13:22:04 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/22 10:24:42 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int	ft_is_type(char c)
+{
+	if (c != 'd' && c != 'i' && c != 'o'
+		&& c != 'u' && c != 'x' && c != 'X'
+		&& c != 'c' && c != 's' && c != 'p'
+		&& c != 'f' && c != '%')
+		return (1);
+	return (-1);
+}
 
 static t_flags	*ft_prfx_sub_div(t_flags *info, char type, int *i)
 {
