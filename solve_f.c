@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 15:31:48 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/23 15:55:59 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,20 @@ void	ft_rounder(char **str, t_flags *info)
 	}
 }
 
-int intToStr(long long unsigned int x, char str[], int d)
+char *intToStr(long long unsigned int x, char **temp, int d)
 {
-    int i;
+    int		i;
+	char	*str;
+	char	*hold;
    
 	i = 0;
+	hold = NULL;
+	str = ft_strnew(d + 1);
+	if (!str)
+		return (NULL);
     while (x)
 	{
-        str[i++] = (x % 10) + '0';
+    	str[i++] = (x % 10) + '0';
         x /= 10;
     }
     while (i - 1 < d)
@@ -64,7 +70,10 @@ int intToStr(long long unsigned int x, char str[], int d)
   
     ft_strrev(str, i);
     str[i] = '\0';
-    return i;
+	hold = ft_strjoin(*temp, str);
+	ft_strdel(temp);
+	ft_strdel(&str);
+    return (hold);
 }
 
 char	*ft_floating(t_flags *info, long double nb)
@@ -90,15 +99,8 @@ char	*ft_floating(t_flags *info, long double nb)
 	if (!info->_p_true && !info->_precision)
 		info->_precision = 6;
 	nb *= ft_power(10, info->_precision + 1);	//should be dependent on precision
-	temp = ft_strnew(ft_strlen(str) + info->_precision);
-	if (!temp)
-		return (NULL);
-	ft_strcat(temp, str);
-	//str = ft_num_toa(  test which is more precise
-	intToStr((long long unsigned int)nb, &temp[ft_strlen(str)], info->_precision);
-	//printf("%s----\n", temp); //REMOVE
+	temp = intToStr((long long unsigned int)nb, &str, info->_precision); //&temp[ft_strlen(str)], info->_precision);
 	ft_rounder(&temp, info);
-	ft_strdel(&str);
 	return (temp);
 }
 

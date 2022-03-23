@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/23 12:42:39 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/23 15:35:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,6 @@ typedef struct s_flags
 	int		_ret;
 }				t_flags;
 
-//typedef int ft_undef_behav(t_flags *info);
-
-//int	ft_c_behaviour(t_flags *info);
-//int	ft_s_behaviour(t_flags *info);
-//int	ft_p_behaviour(t_flags *info);
-
-/*ft_undef_behav *f_array[3] =
-{
-	ft_c_behaviour,
-	ft_s_behaviour,
-	ft_p_behaviour,
-};*/
-
 char	*ft_solve_c_s(t_flags *info, char *str);
 int		ft_printf(const char *format, ...);
 int		ft_precision_nb(t_flags *info, char **str, long long int nb);
@@ -62,7 +49,6 @@ char	*ft_num_toa(long long int nb, char c, int choice);
 char	*ft_solve_unsigned(t_flags *info, long long unsigned int nb);
 void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i);
 char	*ft_solve_signed(t_flags *info, long long int nb);
-//char	*ft_solve_u(t_flags *info, long long int nb);
 char	*ft_solve_p(t_flags *info, uintptr_t addi);
 char	*ft_solve_f(t_flags *info, long double nb);
 t_flags	*ft_true_struct(t_flags *info, const char *str, int *i, va_list *ap);
