@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 14:15:50 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/23 12:43:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_choice_signed(t_flags *info, va_list *ap)
 
 char	*ft_choice_f(t_flags *info, va_list *ap)
 {
-	if (info->_L)
+	if (info->_el)
 		return (ft_solve_f(info, (long double)va_arg(*ap, long double)));
 	else if (info->_l)
 		return (ft_solve_f(info, va_arg(*ap, double)));

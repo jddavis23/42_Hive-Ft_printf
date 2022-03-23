@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 17:07:03 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/23 11:26:04 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,32 @@ static int	ft_precision_s(t_flags *info, char **str)
 	return (0);
 }
 
-//static void	ft_width_else(
+static char	*ft_width_helper(t_flags *info, char *temp, char *str, int *i)
+{
+	if (info->_minus)
+	{
+		ft_strcat(temp, str);
+		*i = ft_strlen(str);
+		while (*i < info->_width)
+		{
+			if (str[0] == '\0' && *i == info->_width - 1 && info->_type == 'c')
+				break ;
+			temp[(*i)++] = ' ';
+		}
+	}
+	else
+	{
+		ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
+		while (*i < (info->_width - (int)ft_strlen(str)))
+		{
+			if (str[0] == '\0' && *i == info->_width - 1 && info->_type == 'c')
+				break ;
+			temp[(*i)++] = ' ';
+		}
+	}
+	return (temp);
+}
+
 static char	*ft_width_plus(t_flags *info, char *str)
 {
 	char	*temp;
@@ -53,27 +78,7 @@ static char	*ft_width_plus(t_flags *info, char *str)
 		temp = ft_strnew(info->_width);
 	if (!temp)
 		return (NULL);
-	if (info->_minus)
-	{
-		ft_strcat(temp, str);
-		i = ft_strlen(str);
-		while (i < info->_width)
-		{
-			if (str[0] == '\0' && i == info->_width - 1 && info->_type == 'c')
-				break ;
-			temp[i++] = ' ';
-		}
-	}
-	else
-	{
-		ft_strcpy(&temp[info->_width - (int)ft_strlen(str)], str);
-		while (i < (info->_width - (int)ft_strlen(str)))
-		{
-			if (str[0] == '\0' && i == info->_width - 1 && info->_type == 'c')
-				break ;
-			temp[i++] = ' ';
-		}
-	}
+	temp = ft_width_helper(info, temp, str, &i);
 	return (temp);
 }
 

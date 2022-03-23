@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 16:47:50 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/23 13:43:07 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 			info->_ll = 1;
 	}
 	else if (str[*i] == 'L' && str[*i + 1] == 'f')
-		info->_L = 1;
+		info->_el = 1;
 	while (ft_is_type(str[*i]) == 1 && str[*i] != '\0') //maybe change to spot extra characters
 		++*i;
 	if (ft_is_type(str[*i]) == 1)
@@ -118,8 +118,6 @@ static t_flags	*ft_true_struct_ii(t_flags *info,
 t_flags	*ft_true_struct(t_flags *info, const char *str, int *i, va_list *ap)
 {
 	info = ft_create_struct(info);
-	if (!info)
-		return (NULL);
 	while (str[*i] == '0' || str[*i] == ' ' || str[*i] == '+' || str[*i] == '-'
 		|| str[*i] == '#')
 		info = ft_first_flags(info, str, i);
@@ -129,6 +127,11 @@ t_flags	*ft_true_struct(t_flags *info, const char *str, int *i, va_list *ap)
 		{
 			++*i;
 			info->_width = va_arg(*ap, int);
+			if (info->_width < 0)
+			{
+				info->_width = ft_abs(info->_width);
+				info->_minus = 1;
+			}
 		}
 		else
 		{
@@ -137,8 +140,5 @@ t_flags	*ft_true_struct(t_flags *info, const char *str, int *i, va_list *ap)
 				++*i;
 		}
 	}
-	info = ft_true_struct_ii(info, str, i, ap);
-	if (!info)
-		return (NULL);
-	return (info);
+	return (ft_true_struct_ii(info, str, i, ap));
 }
