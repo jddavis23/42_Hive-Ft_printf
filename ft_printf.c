@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:34:24 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 15:56:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 18:28:11 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ int	ft_solve(va_list *ap, t_flags *info)
 	else if (info->_type == 'u' || info->_type == 'x'
 		|| info->_type == 'X' || info->_type == 'o')
 		str = ft_choice_unsigned(info, ap);
-	else if (info->_type == 'd' || info->_type == 'i')
+	else if (info->_type == 'f' || info->_type == '%' || info->_type == 'd' || info->_type == 'i')
 		str = ft_choice_signed(info, ap);
 	else if (info->_type == 'p')
 		str = ft_solve_p(info, va_arg(*ap, uintptr_t));
-	else if (info->_type == 'f')
-		str = ft_choice_f(info, ap);
-	else if (info->_type == '%')
-		str = ft_solve_signed(info, 0);
+	//else if (info->_type == 'f')
+	//	str = ft_choice_f(info, ap);
+	//else if (info->_type == '%')
+	//	str = ft_solve_signed(info, 0, info->_gt);
 	if (!str)
 		return (-1);
 	info->_ret += write(1, str, ft_strlen(str));

@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 16:35:49 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 13:10:15 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 19:00:52 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,15 @@ static void	ft_else_if(t_flags *info, long double nb, char **str, char **temp)
 	*str = *temp;
 }
 
-char	*ft_solve_f(t_flags *info, long double nb)
+char	*ft_solve_f(t_flags *info, char *str, int nb)
 {
-	char	*str;
+	//char	*str;
 	char	*temp;
 	int		i;
 
 	i = 0;
 	temp = NULL;
-	str = ft_ftoa(info, nb);
+	//str = ft_ftoa(info, nb);
 	if (!str)
 		return (NULL);
 	if (info->_width > (int)ft_strlen(str))

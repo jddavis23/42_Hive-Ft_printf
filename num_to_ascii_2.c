@@ -6,11 +6,12 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:20:01 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 13:14:03 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 18:44:03 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h> //REMOVE
 
 static char	*ft_prcsion_round(long long unsigned int x, char **temp, int d)
 {
@@ -44,7 +45,7 @@ char	*ft_ftoa(t_flags *info, long double nb)
 
 	i = 0;
 	str = NULL;
-	temp = ft_num_toa((long long unsigned int)nb, info->_type, 10);
+	temp = ft_num_toa((long long unsigned int)nb, info, 10);
 	if (!temp)
 		return (NULL);
 	if (info->_p_true && !info->_precision)

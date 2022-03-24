@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/23 12:40:25 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 19:07:20 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*ft_true_width(t_flags *info, char **str, long long int nb)
 		while (i < info->_width)
 			temp[i++] = ' ';
 	}
-	else if (info->_zero && (!info->_p_true || info->_type == '%'))
+	else if (info->_zero && (!info->_p_true || info->_type == '%' || info->_type == 'f'))
 		temp = ft_true_zero(info, temp, *str, nb);
 	else
 		ft_width_else(info, &temp, nb, *str);
@@ -103,20 +103,20 @@ static char	*ft_no_width(t_flags *info, char **str, long long int nb)
 	return (*str);
 }
 
-char	*ft_solve_signed(t_flags *info, long long int nb)
+char	*ft_solve_signed(t_flags *info, char *str, long long int nb)
 {
-	char	*str;
+	//char	*str;
 	int		i;
 	char	*temp;
 
 	i = 0;
-	if (info->_type == '%')
-		str = ft_num_toa(nb, info->_type, 0);
+	/*if (info->_type == '%')
+		str = ft_num_toa(nb, info, 0);
 	else
 	{
-		str = ft_num_toa(nb, info->_type, 10);
-		ft_precision_nb(info, &str, nb);
-	}
+		str = ft_num_toa(nb, info, 10);
+		//ft_precision_nb(info, &str, nb);
+	}*/
 	if (info->_width > (int)ft_strlen(str))
 	{
 		temp = ft_true_width(info, &str, nb);
