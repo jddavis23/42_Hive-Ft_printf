@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/23 13:43:07 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 10:43:59 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ static t_flags	*ft_true_struct_ii(t_flags *info,
 	if (!info)
 		return (NULL);
 	info->_type = str[*i];
+	if (info->_type == 'f' && !info->_p_true)
+		info->_precision = 6;
 	info = ft_prfx_sub_div(info, str[*i], i);
 	return (info);
 }

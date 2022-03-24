@@ -6,12 +6,11 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/22 11:49:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 11:18:37 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h> //remove
 
 static unsigned long int	ft_nb_lt(long long int nb, int *sign, int *count,
 		int in)

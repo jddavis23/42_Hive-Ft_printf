@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 10:36:17 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/23 15:35:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/24 11:17:57 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,7 @@ char	*ft_llu_toa(unsigned long long int nb, char c, int choice);
 char	*ft_choice_unsigned(t_flags *info, va_list *ap);
 char	*ft_choice_signed(t_flags *info, va_list *ap);
 char	*ft_choice_f(t_flags *info, va_list *ap);
+void	ft_rounder(char **str, t_flags *info);
+char	*ft_ftoa(t_flags *info, long double nb);
 
 #endif
