@@ -6,11 +6,12 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 18:12:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/25 13:32:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h> //REMOVE
 
 static unsigned long int	ft_nb_lt(long long int nb, int *sign, int *count,
 		int in)
@@ -83,11 +84,11 @@ char	*ft_num_toa(long long int nb, t_flags *info, int choice)
 		ft_minus(sign, &str);
 	}
 	if (info->_type != 'f')
-		ft_precision_nb(info, &str, nb);
+		info->_p_check = ft_precision_nb(info, &str, nb);
 	return (str);
 }
 
-char	*ft_llu_toa(unsigned long long int nb, char c, int choice)
+char	*ft_llu_toa(unsigned long long int nb, t_flags **info)
 {
 	int							count;
 	char						*str;
@@ -95,22 +96,30 @@ char	*ft_llu_toa(unsigned long long int nb, char c, int choice)
 
 	count = 0;
 	str = NULL;
+	if (nb > 0)
+		(*info)->_gt = 1;
+	else if (nb < 0)
+		(*info)->_gt = -1;
+	else
+		(*info)->_gt = 0;
 	if (nb == 0)
 	{
 		str = ft_strdup("0");
+		(*info)->_p_check = ft_precision_nb((*info), &str, (*info)->_gt);
 		return (str);
 	}
 	dup_nb = nb;
 	while (nb > 0)
 	{
-		nb /= choice;
+		nb /= (*info)->_div;
 		count++;
 	}
 	str = ft_strnew(count);
 	while (dup_nb > 0)
 	{
-		str[--count] = ft_char_digit((char)(dup_nb % choice), c);
-		dup_nb /= choice;
+		str[--count] = ft_char_digit((char)(dup_nb % (*info)->_div), (*info)->_type);
+		dup_nb /= (*info)->_div;
 	}
+	(*info)->_p_check = ft_precision_nb((*info), &str, (*info)->_gt);
 	return (str);
 }

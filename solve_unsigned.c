@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:50:06 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/23 13:26:56 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/25 11:06:51 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,19 @@ static char	*ft_width_plus(t_flags *info, long long unsigned int nb,
 	return (temp);
 }
 
-char	*ft_solve_unsigned(t_flags *info, long long unsigned int nb)
+char	*ft_solve_unsigned(t_flags *info, char *str)//long long unsigned int nb)
 {
-	char	*str;
 	char	*temp;
 	int		i;
 
 	i = 0;
 	temp = NULL;
-	str = ft_llu_toa(nb, info->_type, info->_div);
-	info->_p_check = ft_precision_nb(info, &str, nb);
+	info->_p_check = ft_precision_nb(info, &str, info->_gt);
 	if (info->_width > (int)ft_strlen(str))
-		str = ft_width_plus(info, nb, str);
+		str = ft_width_plus(info, info->_gt, str);
 	else
 	{
-		if (info->_hash && ((nb > 0 && info->_type != 'o')
+		if (info->_hash && ((info->_gt > 0 && info->_type != 'o')
 				|| (info->_type == 'o' && str[0] != '0')))
 		{
 			temp = ft_strnew(ft_strlen(str) + info->_h_sub);

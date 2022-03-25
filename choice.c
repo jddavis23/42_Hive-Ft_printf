@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 19:04:18 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/25 12:39:15 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 
 char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 {
+	char	*str;
+
+	str = NULL;
 	if (info->_h)
-		return (ft_solve_unsigned(info,
-				(unsigned short)va_arg(*ap, long long unsigned int)));
+		str = ft_llu_toa((unsigned short)va_arg(*ap, long long unsigned int), &info);
 	else if (info->_hh)
-		return (ft_solve_unsigned(info,
-				(unsigned char)va_arg(*ap, long long unsigned int)));
+		str = ft_llu_toa((unsigned char)va_arg(*ap, long long unsigned int), &info);
 	else if (info->_l)
-		return (ft_solve_unsigned(info,
-				(unsigned long)va_arg(*ap, long long unsigned int)));
+		str = ft_llu_toa((unsigned long)va_arg(*ap, long long unsigned int), &info);
 	else if (info->_ll)
-		return (ft_solve_unsigned(info,
-				va_arg(*ap, long long unsigned int)));
+		str = ft_llu_toa(va_arg(*ap, long long unsigned int), &info);
 	else
-		return (ft_solve_unsigned(info,
-				(unsigned)va_arg(*ap, long long unsigned int)));
+		str = ft_llu_toa((unsigned)va_arg(*ap, long long unsigned int), &info);
+	if (str)
+		return (ft_solve_signed(info, str, info->_gt));
+	else
+		return (NULL);
 }
 
 char	*ft_choice_signed(t_flags *info, va_list *ap)
