@@ -6,11 +6,26 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:41:52 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 10:44:38 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/28 16:41:26 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+static int	ft_up_down(char **str, int i, int carry)
+{
+	if ((*str)[i] < '9')
+	{
+		carry = 0;
+		(*str)[i] += 1;
+	}
+	else
+	{
+		(*str)[i] = '0';
+		carry = 1;
+	}
+	return (carry);
+}
 
 static void	ft_carry(int i, char **str, int carry)
 {
@@ -20,18 +35,7 @@ static void	ft_carry(int i, char **str, int carry)
 	while (--i >= 0 && carry)
 	{
 		if (carry && (*str)[i] != '.')
-		{
-			if ((*str)[i] < '9')
-			{
-				carry = 0;
-				(*str)[i] += 1;
-			}
-			else
-			{
-				(*str)[i] = '0';
-				carry = 1;
-			}
-		}
+			carry = ft_up_down(str, i, carry);
 	}
 	if (carry)
 	{
@@ -42,23 +46,14 @@ static void	ft_carry(int i, char **str, int carry)
 	}
 }
 
-void	ft_rounder(char **str, t_flags *info)
+void	ft_rounder(char **str, t_flags *info, int option)
 {
 	int	i;
 	int	carry;
 
 	carry = 0;
 	i = ft_strlen_stop(*str, '.') + info->_precision;
-	if ((*str)[i + 1] >= '5')
-	{
-		if ((*str)[i] < '9')
-			(*str)[i] += 1;
-		else
-		{
-			(*str)[i] = '0';
-			carry = 1;
-		}
-	}
-	(*str)[i + 1] = '\0';
+	if ((((*str)[i] - '0') % 2 != 0 && option == 1) || option == 2)
+		carry = ft_up_down(str, i, carry);
 	ft_carry(i, str, carry);
 }

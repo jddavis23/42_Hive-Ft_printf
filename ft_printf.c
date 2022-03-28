@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:34:24 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 11:33:20 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/28 17:06:27 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,8 @@ static char	*ft_c_or_s(t_flags *info, va_list *ap)
 int	ft_solve(va_list *ap, t_flags *info)
 {
 	char	*str;
-	char	*c_pass;
 
 	str = NULL;
-	c_pass = NULL;
 	if (info->_type == 'c' || info->_type == 's')
 		str = ft_c_or_s(info, ap);
 	else if (info->_type == 'u' || info->_type == 'x'
