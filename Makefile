@@ -6,7 +6,7 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:19:40 by jdavis            #+#    #+#              #
-#    Updated: 2022/03/24 11:42:16 by jdavis           ###   ########.fr        #
+#    Updated: 2022/03/28 13:42:13 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,16 +20,16 @@ SRC = solve_c_s.c
 SRC += ft_printf.c
 SRC += flags_plus.c
 SRC += char_digit.c
-SRC += solve_unsigned.c
 SRC += num_to_ascii.c
 SRC += num_to_ascii_2.c
-SRC += solve_signed.c
+SRC += solve_num.c
 SRC += solve_p.c
-SRC += solve_f.c
 SRC += collect.c
 SRC += choice.c
 SRC += create_struct.c
 SRC += rounder.c
+SRC += and_or_type.c
+SRC += width_num.c
 
 OBJ = $(SRC:.c=.o)
 

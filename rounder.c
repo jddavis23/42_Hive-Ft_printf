@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:41:52 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 13:18:28 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/28 10:44:38 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 static void	ft_carry(int i, char **str, int carry)
 {
+	char	*temp;
+
+	temp = NULL;
 	while (--i >= 0 && carry)
 	{
 		if (carry && (*str)[i] != '.')
@@ -29,6 +32,13 @@ static void	ft_carry(int i, char **str, int carry)
 				carry = 1;
 			}
 		}
+	}
+	if (carry)
+	{
+		temp = ft_strnew(ft_strlen(*str) + 1);
+		ft_strcat(ft_strcat(temp, "1"), *str);
+		ft_strdel(str);
+		*str = temp;
 	}
 }
 

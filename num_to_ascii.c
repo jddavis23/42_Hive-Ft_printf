@@ -6,12 +6,11 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/25 13:32:49 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/28 12:46:20 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h> //REMOVE
 
 static unsigned long int	ft_nb_lt(long long int nb, int *sign, int *count,
 		int in)
@@ -32,20 +31,50 @@ static char	*ft_extr_rtrn(long long int nb, char c, char **str)
 	if (c == '%')
 	{
 		*str = ft_strdup("%");
+		if (!*str)
+			return (NULL);
 		return (*str);
 	}
 	if (nb == 0)
 	{
 		*str = ft_strdup("0");
-		//return (*str);
+		if (!*str)
+			return (NULL);
 	}
 	return (NULL);
 }
 
-static void	ft_minus(int sign, char **str)
+static char	*ft_helper(long long int nb, t_flags *info, int count, int choice)
 {
+	char					*str;
+	int						sign;
+	unsigned long long int	dup_nb;
+
+	str = NULL;
+	sign = 1;
+	str = ft_strnew(count);
+	if (!str)
+		return (NULL);
+	dup_nb = ft_nb_lt(nb, &sign, &count, 0);
+	while (dup_nb > 0)
+	{
+		str[--count] = ft_char_digit((char)(dup_nb % choice),
+				info->_type);
+		dup_nb /= choice;
+	}
 	if (sign == -1)
-		(*str)[0] = '-';
+		str[0] = '-';
+	return (str);
+}
+
+static void	ft_struct_nb(t_flags *info, long long int nb)
+{
+	if (nb > 0)
+		info->_gt = 1;
+	else if (nb < 0)
+		info->_gt = -1;
+	else
+		info->_gt = 0;
 }
 
 char	*ft_num_toa(long long int nb, t_flags *info, int choice)
@@ -58,14 +87,11 @@ char	*ft_num_toa(long long int nb, t_flags *info, int choice)
 	sign = 1;
 	str = NULL;
 	count = 0;
-	if (nb > 0)
-		info->_gt = 1;
-	else if (nb < 0)
-		info->_gt = -1;
-	else
-		info->_gt = 0;
-	if (ft_extr_rtrn(nb, info->_type, &str) || info->_type == '%') //nb, info->_type, &str))
+	ft_struct_nb(info, nb);
+	if (ft_extr_rtrn(nb, info->_type, &str) || info->_type == '%')
 		return (str);
+	else if (!str && (info->_type == '%' || nb == 0))
+		return (NULL);
 	dup_nb = ft_nb_lt(nb, &sign, &count, 1);
 	while (dup_nb > 0)
 	{
@@ -73,53 +99,8 @@ char	*ft_num_toa(long long int nb, t_flags *info, int choice)
 		count++;
 	}
 	if (nb != 0)
-	{
-		str = ft_strnew(count);
-		dup_nb = ft_nb_lt(nb, &sign, &count, 0);
-		while (dup_nb > 0)
-		{
-			str[--count] = ft_char_digit((char)(dup_nb % choice), info->_type);
-			dup_nb /= choice;
-		}
-		ft_minus(sign, &str);
-	}
-	if (info->_type != 'f')
+		str = ft_helper(nb, info, count, choice);
+	if (info->_type != 'f' && str)
 		info->_p_check = ft_precision_nb(info, &str, nb);
-	return (str);
-}
-
-char	*ft_llu_toa(unsigned long long int nb, t_flags **info)
-{
-	int							count;
-	char						*str;
-	unsigned long long int		dup_nb;
-
-	count = 0;
-	str = NULL;
-	if (nb > 0)
-		(*info)->_gt = 1;
-	else if (nb < 0)
-		(*info)->_gt = -1;
-	else
-		(*info)->_gt = 0;
-	if (nb == 0)
-	{
-		str = ft_strdup("0");
-		(*info)->_p_check = ft_precision_nb((*info), &str, (*info)->_gt);
-		return (str);
-	}
-	dup_nb = nb;
-	while (nb > 0)
-	{
-		nb /= (*info)->_div;
-		count++;
-	}
-	str = ft_strnew(count);
-	while (dup_nb > 0)
-	{
-		str[--count] = ft_char_digit((char)(dup_nb % (*info)->_div), (*info)->_type);
-		dup_nb /= (*info)->_div;
-	}
-	(*info)->_p_check = ft_precision_nb((*info), &str, (*info)->_gt);
 	return (str);
 }
