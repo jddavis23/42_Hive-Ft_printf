@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:38:07 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/21 11:11:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 11:14:44 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	ft_char_digit(unsigned int v, char c)
 		return ('0' + v);
 	else
 	{
-		if (c == 'x')
+		if (c == 'x' || c == 'p')
 			return ('a' + v - 10);
 		else if (c == 'X')
 			return ('A' + v - 10);

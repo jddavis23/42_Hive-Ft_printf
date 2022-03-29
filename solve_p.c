@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:28:27 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/17 12:33:33 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 12:15:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_solve_p(t_flags *info, uintptr_t addi)
 	char	*temp;
 
 	temp = NULL;
-	str = ft_num_toa(addi, 'x', info->_div);
+	str = ft_num_toa(addi, info, info->_div, 0);
 	if (info->_p_true)
 	{
 		ft_strdel(&str);

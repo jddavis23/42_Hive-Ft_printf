@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/24 10:43:59 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 11:06:25 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,20 @@ static t_flags	*ft_prfx_sub_div(t_flags *info, char type, int *i)
 
 static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 {
-	if ((str[*i] == 'h' || str[*i] == 'l') && ft_is_type(str[*i + 1]) == -1)
-	{
-		if (str[*i] == 'h')
-			info->_h = 1;
-		else
-			info->_l = 1;
-	}
-	else if ((str[*i] == 'h' && str[*i + 1] == 'h')
-		|| (str[*i] == 'l' && str[*i + 1] == 'l'))
-	{
-		if (str[*i] == 'h')
-			info->_hh = 1;
-		else
-			info->_ll = 1;
-	}
+	if (str[*i] == 'h' && ft_is_type(str[*i + 1]) == -1)
+		info->_h = 1;
+	else if (str[*i] == 'l' && ft_is_type(str[*i + 1]) == -1)
+		info->_l = 1;
+	else if (str[*i] == 'h' && str[*i + 1] == 'h')
+		info->_hh = 1;
+	else if (str[*i] == 'l' && str[*i + 1] == 'l')
+		info->_ll = 1;
 	else if (str[*i] == 'L' && str[*i + 1] == 'f')
 		info->_el = 1;
-	while (ft_is_type(str[*i]) == 1 && str[*i] != '\0') //maybe change to spot extra characters
-		++*i;
+	if (info->_h == 1 || info->_l == 1 || info->_el == 1)
+		(*i)++;
+	else if (info->_hh == 1 || info->_ll == 1)
+		*i += 2;
 	if (ft_is_type(str[*i]) == 1)
 	{
 		free(info);
