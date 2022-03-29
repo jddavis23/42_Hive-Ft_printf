@@ -6,11 +6,18 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:57:28 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 17:03:58 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 12:18:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+static int	ft_minus(long double nb)
+{
+	if (nb < 0)
+		return (1);
+	return (0);
+}
 
 static char	*ft_prcsion_round(long long unsigned int x,
 	char **temp, t_flags *info, int option)
@@ -49,14 +56,12 @@ static void	ft_option(long double nb, int *option)
 char	*ft_ftoa(t_flags *info, long double nb)
 {
 	char		*str;
-	int			i;
 	char		*temp;
 	int			option;
 
-	i = 0;
 	str = NULL;
 	option = 0;
-	temp = ft_num_toa((long long unsigned int)nb, info, 10);
+	temp = ft_num_toa((long long unsigned int)nb, info, 10, ft_minus(nb));
 	if (!temp)
 		return (NULL);
 	if (info->_p_true && !info->_precision)

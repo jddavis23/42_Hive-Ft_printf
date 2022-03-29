@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 13:36:26 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 17:05:34 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 10:57:48 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,14 @@ int	ft_if_type_i(t_flags *info)
 	if (info->_type == 'X' || info->_type == 'x' || info->_type == 'o')
 		return (2);
 	return (0);
+}
+
+int	ft_is_type(char c)
+{
+	if (c != 'd' && c != 'i' && c != 'o'
+		&& c != 'u' && c != 'x' && c != 'X'
+		&& c != 'c' && c != 's' && c != 'p'
+		&& c != 'f' && c != '%')
+		return (1);
+	return (-1);
 }

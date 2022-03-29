@@ -6,12 +6,11 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 11:24:42 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 12:16:09 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h> //REMOVE
 
 char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 {
@@ -43,15 +42,15 @@ static char	*ft_int_choice(t_flags *info, va_list *ap)
 
 	str = NULL;
 	if (info->_h)
-		str = ft_num_toa((short int)va_arg(*ap, long long int), info, 10);
+		str = ft_num_toa((short int)va_arg(*ap, long long int), info, 10, 0);
 	else if (info->_ll)
-		str = ft_num_toa(va_arg(*ap, long long int), info, 10);
+		str = ft_num_toa(va_arg(*ap, long long int), info, 10, 0);
 	else if (info->_hh)
-		str = ft_num_toa((char)va_arg(*ap, long long int), info, 10);
+		str = ft_num_toa((char)va_arg(*ap, long long int), info, 10, 0);
 	else if (info->_l)
-		str = ft_num_toa((long)va_arg(*ap, long long int), info, 10);
+		str = ft_num_toa((long)va_arg(*ap, long long int), info, 10, 0);
 	else
-		str = ft_num_toa((int)va_arg(*ap, long long int), info, 10);
+		str = ft_num_toa((int)va_arg(*ap, long long int), info, 10, 0);
 	return (str);
 }
 
@@ -70,7 +69,7 @@ char	*ft_choice_signed(t_flags *info, va_list *ap)
 			str = ft_ftoa(info, va_arg(*ap, double));
 	}
 	else
-		str = ft_num_toa(0, info, 0);
+		str = ft_num_toa(0, info, 0, 0);
 	if (str)
 		return (ft_solve_signed(info, str, info->_gt));
 	else

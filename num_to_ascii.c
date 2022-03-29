@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 12:46:20 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 12:13:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static unsigned long int	ft_nb_lt(long long int nb, int *sign, int *count,
 		return (nb);
 }
 
-static char	*ft_extr_rtrn(long long int nb, char c, char **str)
+static char	*ft_extr_rtrn(long long int nb, char c, char **str, int minus)
 {
 	if (c == '%')
 	{
@@ -37,7 +37,10 @@ static char	*ft_extr_rtrn(long long int nb, char c, char **str)
 	}
 	if (nb == 0)
 	{
-		*str = ft_strdup("0");
+		if (minus == 1)
+			*str = ft_strdup("-0");
+		else
+			*str = ft_strdup("0");
 		if (!*str)
 			return (NULL);
 	}
@@ -77,7 +80,7 @@ static void	ft_struct_nb(t_flags *info, long long int nb)
 		info->_gt = 0;
 }
 
-char	*ft_num_toa(long long int nb, t_flags *info, int choice)
+char	*ft_num_toa(long long int nb, t_flags *info, int choice, int minus)
 {
 	int							count;
 	char						*str;
@@ -88,7 +91,7 @@ char	*ft_num_toa(long long int nb, t_flags *info, int choice)
 	str = NULL;
 	count = 0;
 	ft_struct_nb(info, nb);
-	if (ft_extr_rtrn(nb, info->_type, &str) || info->_type == '%')
+	if (ft_extr_rtrn(nb, info->_type, &str, minus) || info->_type == '%')
 		return (str);
 	else if (!str && (info->_type == '%' || nb == 0))
 		return (NULL);
