@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:57:28 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 12:18:01 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/29 12:57:50 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*ft_ftoa(t_flags *info, long double nb)
 		return (NULL);
 	if (info->_p_true && !info->_precision)
 		return (temp);
-	str = ft_strnew(ft_strlen(temp) + info->_precision + 2);
+	str = ft_strnew(ft_strlen(temp) + info->_precision + 1);
 	ft_strcat(ft_strcat(str, temp), ".");
 	ft_strdel(&temp);
 	if (!str)
