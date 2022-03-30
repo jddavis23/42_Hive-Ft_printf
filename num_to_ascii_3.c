@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:57:28 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 12:57:50 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/30 12:58:33 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_minus(long double nb)
 {
-	if (nb < 0)
+	if (nb < (long double)0 || 1 / nb < 0)
 		return (1);
 	return (0);
 }
@@ -29,7 +29,10 @@ static char	*ft_prcsion_round(long long unsigned int x,
 	str = NULL;
 	str = ft_strnew(info->_precision);
 	if (!str)
+	{
+		ft_strdel(temp);
 		return (NULL);
+	}
 	while (x)
 	{
 		str[i++] = (x % 10) + '0';
@@ -53,29 +56,45 @@ static void	ft_option(long double nb, int *option)
 		*option = 2;
 }
 
+static char	*ft_option_plus(long double nb, char **str, t_flags *info)
+{
+	int	option;
+
+	option = 0;
+	ft_option(nb, &option);
+	if (info->_precision)
+	{
+		if (!ft_prcsion_round((long long unsigned int)nb, str, info, option))
+			return (NULL);
+	}
+	else if (info->_p_true && !info->_precision)
+		ft_rounder(str, info, option);
+	return (*str);
+}
+
 char	*ft_ftoa(t_flags *info, long double nb)
 {
 	char		*str;
 	char		*temp;
-	int			option;
 
 	str = NULL;
-	option = 0;
 	temp = ft_num_toa((long long unsigned int)nb, info, 10, ft_minus(nb));
 	if (!temp)
 		return (NULL);
-	if (info->_p_true && !info->_precision)
-		return (temp);
-	str = ft_strnew(ft_strlen(temp) + info->_precision + 1);
-	ft_strcat(ft_strcat(str, temp), ".");
+	if (info->_p_true && !info->_precision && !info->_hash)
+		return (ft_option_plus(nb, &temp, info));
+	if (info->_hash && info->_p_true && !info->_precision)
+		str = ft_strcat(ft_strcat(ft_strnew(ft_strlen(temp) + 1), temp), ".");
+	else
+	{
+		str = ft_strnew(ft_strlen(temp) + info->_precision + 1);
+		ft_strcat(ft_strcat(str, temp), ".");
+	}
 	ft_strdel(&temp);
 	if (!str)
 		return (NULL);
 	if (nb < 0)
 		nb *= -1;
 	nb = (nb - (long long unsigned int)nb) * ft_power(10, info->_precision);
-	ft_option(nb, &option);
-	if (!ft_prcsion_round((long long unsigned int)nb, &str, info, option))
-		return (NULL);
-	return (str);
+	return (ft_option_plus(nb, &str, info));
 }

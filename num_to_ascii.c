@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:31:41 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 12:13:49 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/30 11:42:48 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ static char	*ft_helper(long long int nb, t_flags *info, int count, int choice)
 	return (str);
 }
 
-static void	ft_struct_nb(t_flags *info, long long int nb)
+static void	ft_struct_nb(t_flags *info, long long int nb, int minus)
 {
 	if (nb > 0)
 		info->_gt = 1;
-	else if (nb < 0)
+	else if (nb < 0 || minus == 1)
 		info->_gt = -1;
 	else
 		info->_gt = 0;
@@ -90,7 +90,7 @@ char	*ft_num_toa(long long int nb, t_flags *info, int choice, int minus)
 	sign = 1;
 	str = NULL;
 	count = 0;
-	ft_struct_nb(info, nb);
+	ft_struct_nb(info, nb, minus);
 	if (ft_extr_rtrn(nb, info->_type, &str, minus) || info->_type == '%')
 		return (str);
 	else if (!str && (info->_type == '%' || nb == 0))

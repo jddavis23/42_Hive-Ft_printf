@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:41:52 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 16:41:26 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/30 12:39:16 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	ft_rounder(char **str, t_flags *info, int option)
 
 	carry = 0;
 	i = ft_strlen_stop(*str, '.') + info->_precision;
+	if (info->_p_true && !info->_precision)
+		--i;
 	if ((((*str)[i] - '0') % 2 != 0 && option == 1) || option == 2)
 		carry = ft_up_down(str, i, carry);
 	ft_carry(i, str, carry);
