@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/30 13:37:08 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/31 11:56:08 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_precision_s(t_flags *info, char **str)
 	temp = NULL;
 	if (info->_type == 's')
 	{
-		if (info->_precision)
+		if (info->_precision > 0)
 		{
 			if (info->_precision < (int)ft_strlen(*str))
 			{
@@ -97,7 +97,7 @@ char	*ft_solve_c_s(t_flags *info, char *str)
 		temp = ft_width_plus(info, str);
 	if (!temp)
 		return (NULL);
-	if (info->_p_check == 1 || info->_type == 'c')
+	if (info->_p_check == 1 || info->_type == 'c' || info->_type == 'p')
 		ft_strdel(&str);
 	return (temp);
 }

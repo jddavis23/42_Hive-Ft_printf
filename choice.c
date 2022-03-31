@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 12:16:09 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/31 11:44:09 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,18 @@ char	*ft_choice_signed(t_flags *info, va_list *ap)
 		return (ft_solve_signed(info, str, info->_gt));
 	else
 		return (NULL);
+}
+
+char	*ft_choice_c_s_p(t_flags *info, va_list *ap, char *c_zero)
+{
+	char	*str;
+
+	str = NULL;
+	if (info->_type == 'c' || info->_type == 's')
+		str = ft_c_or_s(info, ap, c_zero);
+	else
+		str = ft_solve_c_s(info, ft_solve_p(info, va_arg(*ap, uintptr_t)));
+	if (!str)
+		return (NULL);
+	return (str);
 }
