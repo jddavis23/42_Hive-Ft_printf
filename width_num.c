@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 13:41:31 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 14:20:29 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/31 14:44:05 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ char	*ft_true_width(t_flags *info, char **str, long long int nb)
 	if (info->_minus)
 		temp = ft_true_minus(info, temp, *str, nb);
 	else if (info->_zero && (!info->_p_true
-			|| info->_type == '%' || info->_type == 'f'))
+			|| info->_type == '%' || info->_type == 'f'
+			|| (info->_p_true && info->_precision < 0 && !info->_p_check)))
 		temp = ft_true_zero(info, temp, *str, nb);
 	else
 		ft_width_else(info, &temp, nb, *str);

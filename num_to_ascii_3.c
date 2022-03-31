@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:57:28 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/30 12:58:33 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/03/31 14:08:46 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static char	*ft_prcsion_round(long long unsigned int x,
 
 static void	ft_option(long double nb, int *option)
 {
+	if (nb < 0)
+		nb *= -1;
 	if (nb - (long long unsigned int)nb == 0.5)
 		*option = 1;
 	else if (nb - (long long unsigned int)nb > 0.5)
