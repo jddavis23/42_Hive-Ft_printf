@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:34:24 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/31 11:46:46 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/01 10:38:38 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_c_or_s(t_flags *info, va_list *ap, char *c_zero)
 	return (str);
 }
 
-int	ft_solve(va_list *ap, t_flags *info)
+static int	ft_solve(va_list *ap, t_flags *info)
 {
 	char	*str;
 	char	c_zero;
