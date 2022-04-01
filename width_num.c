@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 13:41:31 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/31 14:44:05 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/01 17:17:16 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,8 @@ static void	ft_width_else(t_flags *info, char **temp, int nb, char *str)
 		(*temp)[i++] = ' ';
 	if (info->_plus && nb >= 0 && info->_type != '%' && ft_if_type_i(info) == 1)
 		(*temp)[i++] = '+';
-	else if (info->_type != 'u' && !info->_hash)
-	{
-		if (ft_if_type(info) == 2 && nb == 0)
-			--i;
+	while (i < (info->_width - (int)ft_strlen(str)))
 		(*temp)[i++] = ' ';
-	}
 	ft_strcpy(&((*temp)[i]), str);
 }
 
