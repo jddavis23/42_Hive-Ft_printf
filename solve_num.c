@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:36:00 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/30 10:56:26 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/01 12:10:54 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*ft_solve_signed(t_flags *info, char *str, long long int nb)
 	char	*temp;
 
 	i = 0;
-	if (info->_width > (int)ft_strlen(str))
+	if ((info->_width > (int)ft_strlen(str)))
 	{
 		temp = ft_true_width(info, &str, nb);
 		ft_strdel(&str);
@@ -73,7 +73,7 @@ char	*ft_solve_signed(t_flags *info, char *str, long long int nb)
 		if (info->_type != '%' && (info->_plus || info->_space))
 			str = ft_no_width_signed(info, &str, nb);
 	}
-	else
+	else if (info->_type == 'X' || info->_type == 'x' || info->_type == 'o')
 	{
 		if (info->_hash && ((info->_gt > 0 && info->_type != 'o')
 				|| (info->_type == 'o' && str[0] != '0')))

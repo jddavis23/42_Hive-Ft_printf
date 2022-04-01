@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:31:58 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/28 11:31:44 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/01 13:06:00 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i)
 {
-	if (info->_hash && nb != 0 && (!info->_p_check || info->_type != 'o'
-		) && (info->_type == 'X' || info->_type == 'x' || info->_type
-			== 'u' || info->_type == 'o'))
+	if (info->_hash && ((!info->_p_check && nb != 0) || (info->_type != 'o' \
+		&& nb != 0) || (nb == 0 && info->_type == 'o' && info->_p_check && \
+		!info->_precision)) && (info->_type == 'X' || info->_type == 'x' || \
+		info->_type == 'u' || info->_type == 'o'))
 	{
 		ft_strcpy(&(*temp)[*i], info->_h_prfx);
 		*i += ft_strlen(info->_h_prfx);
