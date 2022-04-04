@@ -6,7 +6,7 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:41:52 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/31 13:44:43 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/04 12:10:05 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static void	ft_carry(int i, char **str, int carry)
 	if (carry)
 	{
 		temp = ft_strnew(ft_strlen(*str) + 1);
+		if (!temp)
+			ft_strdel(str);
 		ft_strcat(ft_strcat(temp, "1"), *str);
 		ft_strdel(str);
 		*str = temp;

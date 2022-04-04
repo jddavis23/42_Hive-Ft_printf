@@ -6,7 +6,7 @@
 #    By: jdavis <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:19:40 by jdavis            #+#    #+#              #
-#    Updated: 2022/03/28 16:58:20 by jdavis           ###   ########.fr        #
+#    Updated: 2022/04/04 12:39:00 by jdavis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC += char_digit.c
 SRC += num_to_ascii.c
 SRC += num_to_ascii_2.c
 SRC += num_to_ascii_3.c
+SRC += num_to_ascii_4.c
 SRC += solve_num.c
 SRC += solve_p.c
 SRC += collect.c
