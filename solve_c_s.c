@@ -6,11 +6,30 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 17:06:38 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/31 11:56:08 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/06 11:29:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+char	*ft_solve_p(t_flags *info, uintptr_t addi)
+{
+	char	*str;
+	char	*temp;
+
+	temp = NULL;
+	str = ft_llu_toa(addi, &info);
+	if (info->_p_true && addi == 0)
+	{
+		ft_strdel(&str);
+		str = ft_strnew(0);
+	}
+	temp = ft_strcat(ft_strcpy(ft_strnew(2 + ft_strlen(str)), info->_h_prfx),
+			str);
+	ft_strdel(&str);
+	str = temp;
+	return (str);
+}
 
 static int	ft_precision_s(t_flags *info, char **str)
 {
