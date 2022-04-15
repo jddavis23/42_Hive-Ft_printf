@@ -6,11 +6,15 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:38:07 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 11:14:44 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/15 14:50:11 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+ * Converting intergers to ascii; base 10 and hexidecimal conversions 
+ */
 
 char	ft_char_digit(unsigned int v, char c)
 {

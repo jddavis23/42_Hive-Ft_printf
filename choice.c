@@ -6,11 +6,18 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 17:28:12 by jdavis            #+#    #+#             */
-/*   Updated: 2022/04/05 12:04:54 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:00:01 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+ * Converting int arhuments into strings before flags and width arguments are
+ * applied.
+ *
+ * Casting unsigned int arguments passed based on length modifiers; h, hh, l, ll
+ */
 
 char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 {
@@ -36,6 +43,10 @@ char	*ft_choice_unsigned(t_flags *info, va_list *ap)
 		return (NULL);
 }
 
+/*
+ * Casting signed int arguments passed based on length modifiers; h, hh, l, ll
+ */
+
 static char	*ft_int_choice(t_flags *info, va_list *ap)
 {
 	char	*str;
@@ -53,6 +64,10 @@ static char	*ft_int_choice(t_flags *info, va_list *ap)
 		str = ft_num_toa((int)va_arg(*ap, long long int), info, 10, 0);
 	return (str);
 }
+
+/*
+ * Casting floating point arguments passed based on length modifiers; l, L.
+ */
 
 char	*ft_choice_signed(t_flags *info, va_list *ap)
 {
@@ -75,6 +90,11 @@ char	*ft_choice_signed(t_flags *info, va_list *ap)
 	else
 		return (NULL);
 }
+
+/*
+ * Handling char, string and pointer arguments passed based on length
+ * modifiers.
+ */
 
 char	*ft_choice_c_s_p(t_flags *info, va_list *ap, char *c_zero)
 {
