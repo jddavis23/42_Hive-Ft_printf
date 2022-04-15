@@ -6,11 +6,17 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:31:58 by jdavis            #+#    #+#             */
-/*   Updated: 2022/04/01 13:06:00 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/15 16:41:48 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+ * Applying 0x or 0 to hex or oct values if "#" is applied to type specifier.
+ * 
+ * Function is used in ft_solve_signed.
+ */
 
 void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i)
 {
@@ -24,6 +30,13 @@ void	ft_apply_hash(t_flags *info, unsigned int nb, char **temp, int *i)
 	}
 }
 
+/*
+ * Dynamically allocating memory for the precision applied string.
+ *
+ * Due to the "-" char id a number is negative, precision is stil applied 
+ * if the incoming string is the same length as the precision value. 
+ */
+
 static char	*ft_if_helper_i(t_flags *info, char **temp, long long int nb)
 {
 	if (nb < 0)
@@ -32,6 +45,10 @@ static char	*ft_if_helper_i(t_flags *info, char **temp, long long int nb)
 		*temp = ft_strnew(info->_precision);
 	return (*temp);
 }
+
+/*
+ * If the number is zero, an empty string is created.
+ */
 
 static int	ft_else_helper(char **str)
 {
@@ -47,6 +64,13 @@ static char	*ft_if_helper_ii(t_flags *info, char *temp, char *str, int *i)
 	ft_strcpy(&(temp)[*i], &str[1]);
 	return (temp);
 }
+
+/*
+ * Applying precision to both signed and unsigned int arguments.
+ *
+ * Precision is applied if the length of string (holding int value) is 
+ * less than precision value.
+ */
 
 int	ft_precision_nb(t_flags *info, char **str, long long int nb)
 {

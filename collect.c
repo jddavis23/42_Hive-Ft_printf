@@ -6,11 +6,19 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 10:51:30 by jdavis            #+#    #+#             */
-/*   Updated: 2022/03/29 11:06:25 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:22:49 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+ * Collecting all arguments applied to type specifiers. If any erroneous or out
+ * of sequence arguments are passed, ft_printf returns -1.
+ *
+ * Assigning values to info struct (_div and _sub) to calculate hex and octal
+ * values. _h_prfx holds prefix, 0x/0 for hex or octal values respectively.  
+ */
 
 static t_flags	*ft_prfx_sub_div(t_flags *info, char type, int *i)
 {
@@ -37,6 +45,10 @@ static t_flags	*ft_prfx_sub_div(t_flags *info, char type, int *i)
 	return (info);
 }
 
+/*
+ * Collecting length specifiers into struct
+ */
+
 static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 {
 	if (str[*i] == 'h' && ft_is_type(str[*i + 1]) == -1)
@@ -61,6 +73,10 @@ static t_flags	*ft_length_flags(t_flags *info, const char *str, int *i)
 	return (info);
 }
 
+/*
+ * Collecting flag modifiers into struct
+ */
+
 static t_flags	*ft_first_flags(t_flags *info, const char *str, int *i)
 {
 	if (str[*i] == '0' && info->_minus == 0)
@@ -82,6 +98,14 @@ static t_flags	*ft_first_flags(t_flags *info, const char *str, int *i)
 	++*i;
 	return (info);
 }
+
+/*
+ * Collecting precision specifiers into struct. Values can be collected either
+ * with "*" wildcard or format string.
+ *
+ * Assigning precision value to 6 if handling floating points and precision is
+ * not specified.
+ */
 
 static t_flags	*ft_true_struct_ii(t_flags *info,
 	const char *str, int *i, va_list *ap)
@@ -111,6 +135,11 @@ static t_flags	*ft_true_struct_ii(t_flags *info,
 	info = ft_prfx_sub_div(info, str[*i], i);
 	return (info);
 }
+
+/*
+ * Collecting flag and width modifiers into struct. Width can be collected with 
+ * "*" wildcard and from format string.
+ */
 
 t_flags	*ft_true_struct(t_flags *info, const char *str, int *i, va_list *ap)
 {

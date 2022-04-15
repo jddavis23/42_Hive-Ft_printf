@@ -6,11 +6,21 @@
 /*   By: jdavis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 10:28:56 by jdavis            #+#    #+#             */
-/*   Updated: 2022/04/04 13:17:35 by jdavis           ###   ########.fr       */
+/*   Updated: 2022/04/15 15:27:17 by jdavis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+ * Creating t_flags srruct to be reused for all type specifiers.
+ * 
+ * On intial call of function, struct is malloc'd and _ret is set to zero.
+ * 
+ * _ret is the final returned value, after the string and arguments are printed.
+ *
+ * After initial call, every other variable is reassigned to zero for reuse. 
+ */
 
 t_flags	*ft_create_struct(t_flags *in_flags)
 {
